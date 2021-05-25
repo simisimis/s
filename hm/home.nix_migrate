@@ -1,0 +1,79 @@
+# Home manager things
+
+{ config, pkgs, ... }:
+let
+  unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
+in
+{
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+  nixpkgs.config.allowUnfree = true;
+  # This value determines the Home Manager release that your
+  # configuration is compatible with. This helps avoid breakage
+  # when a new Home Manager release introduces backwards
+  # incompatible changes.
+  #
+  # You can update Home Manager without changing this value. See
+  # the Home Manager release notes for a list of state version
+  # changes in each release.
+  home.stateVersion = "20.09";
+
+  home.packages = with pkgs; [
+    chromium
+    firefox
+    termite
+    gimp
+    unstable.prusa-slicer
+    speedcrunch
+    zathura
+    feh
+    ranger
+    mpv
+    gnupg
+    rofi
+    gopass
+    discord
+    xdotool
+    xorg.xev
+    xbindkeys
+    cmake
+    zlib
+    zlib.dev
+    scrot
+    kazam
+    unzip
+    element-desktop
+    jq
+    flatpak
+    appimage-run
+    unstable.obs-studio
+    gthumb
+    gphoto2
+    vlc
+    spotify
+    (python38.withPackages(ps: with ps; [ termcolor requests ruamel_yaml pip xdot]))
+    wally-cli
+    freerdp
+  ];
+  xdg.configFile."obs-studio/plugins/obs-v4l2sink/bin/64bit/obs-v4l2sink.so".source =
+    "${pkgs.obs-v4l2sink}/share/obs/obs-plugins/v4l2sink/bin/64bit/v4l2sink.so";
+  programs.git = {
+    enable = true;
+    userName = "Simonas Narbutas";
+    userEmail = config.settings.usr.email;
+    extraConfig = {
+      hub.protocol = "https";
+      github.user = config.settings.usr.username;
+      color.ui = true;
+      pull.rebase = true;
+    };
+  };
+
+  programs.bat.enable = true;
+
+#  programs.gnupg.agent = {
+#    enable = true;
+#    enableSSHSupport = true;
+#    pinentryFlavor = "gtk2";
+#  };
+}
