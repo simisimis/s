@@ -11,6 +11,10 @@ with lib;
           default = "simas";
           type = with types; uniq str;
         };
+        fullName = mkOption {
+          default = "simas";
+          type = with types; uniq str;
+        };
         pwdHash = mkOption {
           default = "hash it with mkpasswd -m sha-512";
           type = with types; uniq str;
@@ -22,6 +26,20 @@ with lib;
         email = mkOption {
           default = "simonas@narbuto.lt";
           type = with types; uniq str;
+        };
+        ssh = {
+          gitea.identityFile = mkOption {
+            default = "~/.ssh/id_rsa_gitea_src_host";
+            type = with types; uniq str;
+          };
+          backute.identityFile = mkOption {
+            default = "~/.ssh/id_rsa_backute_src_host";
+            type = with types; uniq str;
+          };
+          github.identityFile = mkOption {
+            default = "~/.ssh/id_rsa_github_src_host";
+            type = with types; uniq str;
+          };
         };
       };
       hw = {

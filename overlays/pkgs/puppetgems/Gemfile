@@ -1,0 +1,5 @@
+source 'https://rubygems.org' do
+  gem 'puppet-lint'
+  gem 'puppet',  '< 5'
+  gem 'sync'
+end

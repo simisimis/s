@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 let
   unstable = import <nixos-unstable> { config.allowUnfree = true; };
 in
@@ -52,7 +52,7 @@ in
     xkbOptions = "altwin:swap_lalt_lwin,terminate:ctrl_alt_bksp,caps:none,eurosign:e";
     libinput.enable = true;
     wacom.enable = true;
-    libinput.tapping = false;
+    libinput.touchpad.tapping = false;
     windowManager.awesome.enable = true;
   };
 
@@ -75,6 +75,7 @@ in
   fonts.fonts = with pkgs; [
     noto-fonts
     source-code-pro
+    meslo-lg
   ];
 
   # Virtualization
@@ -89,6 +90,7 @@ in
     wget curl
     neovim
     git tig
+    gnupg
 
     #utils
     unzip
@@ -98,23 +100,18 @@ in
     ripgrep
     tree
 
-    #elf shennanigens
-    patchelf
-    nix-index
-    binutils
-    gnumake
-
     linuxPackages.v4l2loopback
 
     #fonts
     source-code-pro
     meslo-lg
+    noto-fonts
  
   ];
 
   environment.variables = { 
     EDITOR = "nvim";
-    VISUAL = "nvim";
+    VISUAL = "nvim"; 
   };
 
   # nix pkgs
@@ -151,7 +148,7 @@ in
 #####################################################
 #  nixpkgs.config.pulseaudio = true;
 #  disabledModules = [ "services/desktops/pipewire.nix" ];
-  # Not strictly required but pipewire will use rtkit if it is present
+#  Not strictly required but pipewire will use rtkit if it is present
 #  security.rtkit.enable = true;
 #  services.pipewire = {
 #    enable = true;
@@ -175,7 +172,7 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "21.05"; # Did you read the comment?
 
 }
 

@@ -1,7 +1,8 @@
 # hm base
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 let
   unstable = import <nixos-unstable> { config.allowUnfree = true; };
+  sysConfig = (import <nixpkgs/nixos> {}).config;
 in
 {
   # Let Home Manager install and manage itself.
@@ -9,107 +10,18 @@ in
 
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
-    xclip
-
-    # dev
-    (python38.withPackages(ps: with ps; [ termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
-    unstable.go unstable.golint dep
-    exercism
-    unstable.prusa-slicer
- 
-    #fonts
-    source-code-pro
-    meslo-lg
-
-    #terminal
-    termite
-
-    #web
-    firefox
-    chromium
-
-    #system manage
+    #system utils
     pulseaudio
-    pavucontrol
     pamixer
 
-    #utils
-    cifs-utils
-    filezilla
-    transmission-gtk
-    gopass
-    freerdp
-    speedcrunch
-    scrot
-    flameshot
+    #dev
+    (python38.withPackages(ps: with ps; [ termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
+    gitAndTools.gitflow
+    jq
 
-    #media
-    gthumb
-    digikam
-    feh
-    gimp
-    obs-studio
-    #ffmpeg-full
-    mpv-unwrapped
-    spotify
-    calibre
-    wally-cli
   ];
 
-  programs.zathura.enable = true;
-  programs.rofi.enable = true;
-  programs.rofi.theme = "Pop-Dark.rasi";
-  programs.termite = {
-    enable = true;
-    font = "Meslo LG S DZ 12";
-    backgroundColor = "rgba(63, 63, 63, 0.5)";
-    scrollbackLines = 10000;
-    foregroundColor = "dedede";
-    foregroundBoldColor = "dedede";
-    cursorColor = "#6f6f6f";
-    colorsExtra = ''
-      # black
-      color0  = #2e3436
-      color8  = #555753
 
-      # red
-      color1  = #fc3e3e
-      color9  = #f06464
-
-      # green
-      color2  = #66b31e`
-      color10 = #8ae234
-
-      # yellow
-      color3  = #f6d922
-      color11 = #fce94f
-
-      # blue
-      color4  = #5183c4
-      color12 = #729fcf
-
-      # magenta
-      color5  = #c36ccf
-      color13 = #c164b6
-
-      # cyan
-      color6  = #19a5a7
-      color14 = #429bf1
-
-      # white
-      color7  = #d3d7cf
-      color15 = #eeeeec
-
-    '';
-  };
-
-  programs.vscode = {
-    enable = true;
-    #package = unstable.vscode-with-extensions;
-    #extensions = [
-    #  vscode-extensions.ms-vscode.Go
-    #];
-  };
 
   programs.gpg.enable = true;
   # services
@@ -140,12 +52,9 @@ in
   programs.ssh = {
     enable = true;
     matchBlocks = {
-      "192.168.178.100" = {
-        user = "simas";
-      };
       "git.narbuto.lt" = {
         user = "git";
-        identityFile = "/home/simas/.ssh/id_rsa_siMOHCTP_gitea";
+        identityFile = sysConfig.settings.usr.ssh.gitea.identityFile;
         extraOptions = {
           AddKeysToAgent = "yes";
           PubKeyAuthentication = "yes";
@@ -365,5 +274,5 @@ in
     url = "ssh://git@git.narbuto.lt:2203/simas/zshd.git";
     ref = "master";
   };
-  home.stateVersion = "20.09";
+  home.stateVersion = "21.05";
 }
