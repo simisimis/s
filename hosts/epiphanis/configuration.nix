@@ -9,6 +9,9 @@
     ./hardware-configuration.nix
   ];
 
+  # import overlays
+  nixpkgs.overlays = [ (import ../../overlays) ];
+
   home-manager.users."${config.settings.usr.name}" = (import ./home.nix) config; #{ inherit config pkgs; };
 
   networking.hostId = config.settings.hw.hostId;
@@ -19,6 +22,7 @@
   #  boot.kernelPackages = pkgs.linuxPackages_5_11;
   boot.kernel.sysctl."net.ipv6.conf.wlp2s0.disable_ipv6" = true;
   boot.kernel.sysctl."net.ipv6.conf.enp0s20f0u1u2u3.disable_ipv6" = true;
+  networking.dhcpcd.wait = "background";
   networking.interfaces.enp0s31f6.useDHCP = true;
   networking.interfaces.enp0s20f0u1u2u3.useDHCP = true;
   networking.interfaces.wlp2s0.useDHCP = true;
@@ -42,6 +46,9 @@
       ctrl_interface_group=wheel
     '';
   };
+
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
 
   # Kerberos
   krb5 = {
@@ -99,6 +106,7 @@
   services.udev.extraRules = ''
   ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="wheel", MODE="0664"
   '';
+  services.openssh.enable = false;
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 8033 ];
 

@@ -10,6 +10,8 @@ in
     ../../hm/base.nix
     ../../hm/workstation.nix
   ];
+  # import overlays
+  nixpkgs.overlays = [ (import ../../overlays) ];
   programs.git = {
     userName = sysConfig.settings.usr.fullName;
     userEmail = sysConfig.settings.usr.email;
@@ -36,7 +38,7 @@ in
 
     #dev
     hiera-eyaml
-    ruby bundix #puppetgems pdk
+    ruby bundix puppetgems pdk
     google-cloud-sdk
     kubectx kubectl k9s stern
     vagrant
@@ -44,6 +46,7 @@ in
     #web
     teams
     zoom-us
+    rambox
 
     unstable.robo3t
     unstable.mongodb-compass

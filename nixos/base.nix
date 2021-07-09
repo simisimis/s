@@ -141,9 +141,6 @@ in
   # started in user sessions.
   # programs.mtr.enable = true;
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
 
 #####################################################
 #  nixpkgs.config.pulseaudio = true;

@@ -184,7 +184,7 @@ in
       #BAT_THEME="dark_neon";
 
       GOPATH = "$HOME/development/go";
-      PATH = "$HOME/.bin:$GOPATH/bin:$PATH";
+      PATH = "$HOME/bin:$GOPATH/bin:$PATH";
     };
     # envExtra
     # profileExtra
