@@ -1,8 +1,7 @@
 # hm base
-{ config, pkgs, ... }:
+{ nixosConfig, config, pkgs, ... }:
 let
   unstable = import <nixos-unstable> { config.allowUnfree = true; };
-  sysConfig = (import <nixpkgs/nixos> {}).config;
 in
 {
   # Let Home Manager install and manage itself.
@@ -54,7 +53,7 @@ in
     matchBlocks = {
       "git.narbuto.lt" = {
         user = "git";
-        identityFile = sysConfig.settings.usr.ssh.gitea.identityFile;
+        identityFile = nixosConfig.settings.usr.ssh.gitea.identityFile;
         extraOptions = {
           AddKeysToAgent = "yes";
           PubKeyAuthentication = "yes";

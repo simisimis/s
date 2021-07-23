@@ -8,11 +8,13 @@
     ../../modules/settings.nix
     ./hardware-configuration.nix
   ];
-
+  nix.extraOptions = ''
+    keep-outputs = true
+    keep-derivations = true
+  '';
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
-
-  home-manager.users."${config.settings.usr.name}" = (import ./home.nix) config; #{ inherit config pkgs; };
+  home-manager.users."${config.settings.usr.name}".imports = [ ./home.nix ];
 
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;
@@ -34,11 +36,11 @@
       Arubaruba = {
         pskRaw = "f8152f56f0c16ecd4d4cf5456200ac7221d5b460b5931c0a72e1c17fbbc25462";
       };
-      blan = {
-        pskRaw = "4085063bc1b97f4766df7ec2ab68e9ccfe4f2319ba0e031fb83dde13013e93f9";
-      };
       internet-only = {
         psk = "KlantVanDeToekomst!";
+      };
+      Interpol = {
+        pskRaw = "359f63d7f718954e1e1feb4e850e70c6a04f775a408617445d2c1696742d1b82";
       };
     };
     extraConfig = ''

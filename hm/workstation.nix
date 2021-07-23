@@ -1,8 +1,7 @@
 # hm workstation
-{ config, pkgs, autoPatchelfHook, ... }:
+{ nixosConfig, config, pkgs, autoPatchelfHook, ... }:
 let
   unstable = import <nixos-unstable> { config.allowUnfree = true; };
-  sysConfig = (import <nixpkgs/nixos> {}).config;
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -133,11 +132,11 @@ in
     matchBlocks = {
       "192.168.178.100" = {
         user = "simas";
-        identityFile = sysConfig.settings.usr.ssh.backute.identityFile;
+        identityFile = nixosConfig.settings.usr.ssh.backute.identityFile;
       };
       "github.com" = {
         user = "git";
-        identityFile = sysConfig.settings.usr.ssh.github.identityFile;
+        identityFile = nixosConfig.settings.usr.ssh.github.identityFile;
         extraOptions = { 
           AddKeysToAgent = "yes";
           PubKeyAuthentication = "yes";

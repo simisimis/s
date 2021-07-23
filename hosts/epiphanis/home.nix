@@ -1,9 +1,7 @@
 # epiphanis specific home manager configuration
-sysConfig:
-{ config, pkgs, ... }:
+{ nixosConfig, config, pkgs, ... }:
 let
   unstable = import <nixos-unstable> { config.allowUnfree = true; };
-  config.settings = sysConfig.settings;
 in
 {
   imports = [
@@ -13,10 +11,10 @@ in
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
   programs.git = {
-    userName = sysConfig.settings.usr.fullName;
-    userEmail = sysConfig.settings.usr.email;
+    userName = nixosConfig.settings.usr.fullName;
+    userEmail = nixosConfig.settings.usr.email;
     extraConfig = {
-      github.user = sysConfig.settings.usr.username;
+      github.user = nixosConfig.settings.usr.username;
       url = {
         "ssh://git@gitlab.tools.bol.com" = {
           insteadOf = "https://gitlab.tools.bol.com";
@@ -27,8 +25,8 @@ in
       };
     };
   };
-  home.username = sysConfig.settings.usr.name;
-  home.homeDirectory = "/home/${config.settings.usr.name}";
+  home.username = nixosConfig.settings.usr.name;
+  home.homeDirectory = "/home/${nixosConfig.settings.usr.name}";
 
   home.packages = with pkgs; [
     #system
@@ -53,35 +51,31 @@ in
 
   ];
   programs.ssh = {
+    extraOptionOverrides = {
+      CanonicalizeHostname = "yes";
+      CanonicalDomains = "bolcom.net bfc.bolcom.net";
+    };
+
+    extraConfig = ''
+      UseRoaming no
+      AddKeysToAgent yes
+    '';
     matchBlocks = {
+      "*.bol.com *.bolcom.net" = {
+        user = nixosConfig.settings.usr.username;
+        extraOptions = {
+          ServerAliveInterval = "120";
+          SendEnv = "BOL_FANCYPROMPT";
+          StrictHostKeyChecking = "no";
+          GSSAPIAuthentication = "yes";
+          GSSAPIDelegateCredentials = "yes";
+        };
+      };
       "gitlab.bol.io" = {
         user = "git";
         identityFile = "~/.ssh/id_rsa_bolcom_io_snarbutas";
         extraOptions = {
-          AddKeysToAgent = "yes";
           PubKeyAuthentication = "yes";
-        };
-      };
-      "adm*.bolcom.net tst*bolcom.net pro*bolcom.net acc*bolcom.net xpr*bolcom.net sbx*bolcom.net shd*bolcom.net dev*bolcom.net" = { # config.lib.hm.dag.entryBefore ["adm* tst* pro* acc* xpr* sbx* shd* dev*"]
-        user = "snarbutas";
-        hostname = "%h";
-        extraOptions = {
-          ServerAliveInterval = "120";
-          SendEnv = "BOL_FANCYPROMPT";
-          GSSAPIAuthentication = "yes";
-          GSSAPIDelegateCredentials = "yes";
-          StrictHostKeyChecking = "no";
-        };
-      };
-      "adm* tst* pro* acc* xpr* sbx* shd* dev*" = {
-        user = "snarbutas";
-        hostname = "%h.bolcom.net";
-        extraOptions = {
-          ServerAliveInterval = "120";
-          SendEnv = "BOL_FANCYPROMPT";
-          GSSAPIAuthentication = "yes";
-          GSSAPIDelegateCredentials = "yes";
-          StrictHostKeyChecking = "no";
         };
       };
     };
