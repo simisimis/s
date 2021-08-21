@@ -50,7 +50,7 @@ in
 
   programs.vscode = {
     enable = true;
-    #package = unstable.vscode-with-extensions;
+    package = unstable.vscode-with-extensions // { pname = "vscode"; };
     #extensions = [
     #  vscode-extensions.ms-vscode.Go
     #];

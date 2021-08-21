@@ -4,10 +4,6 @@ let
   unstable = import <nixos-unstable> { config.allowUnfree = true; };
 in
 {
-  imports = [
-    ../../hm/base.nix
-    ../../hm/workstation.nix
-  ];
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
   programs.git = {
@@ -33,6 +29,7 @@ in
     krb5
     cifs-utils
     openconnect
+    rclone
 
     #dev
     hiera-eyaml
@@ -44,7 +41,7 @@ in
     #web
     teams
     zoom-us
-    rambox
+    unstable.rambox
 
     unstable.robo3t
     unstable.mongodb-compass

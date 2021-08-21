@@ -14,17 +14,20 @@
   '';
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
-  home-manager.users."${config.settings.usr.name}".imports = [ ./home.nix ];
+  home-manager.users."${config.settings.usr.name}".imports = [ 
+    ./home.nix
+    ../../hm/base.nix
+    ../../hm/workstation.nix
+  ];
 
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;
   networking.interfaces.enp5s0.useDHCP = true;
 
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
   #  boot.kernelPackages = pkgs.linuxPackages_5_11;
   boot.kernel.sysctl."net.ipv6.conf.wlp2s0.disable_ipv6" = true;
   boot.kernel.sysctl."net.ipv6.conf.enp0s20f0u1u2u3.disable_ipv6" = true;
-  networking.dhcpcd.wait = "background";
   networking.interfaces.enp0s31f6.useDHCP = true;
   networking.interfaces.enp0s20f0u1u2u3.useDHCP = true;
   networking.interfaces.wlp2s0.useDHCP = true;
