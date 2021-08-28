@@ -7,6 +7,7 @@ in
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     #utils
+    arandr
     pavucontrol
     gopass
     freerdp
@@ -144,4 +145,24 @@ in
       };
     };
   };
+  home.file.".config/awesome".source = builtins.fetchGit {
+    url = "ssh://git@git.narbuto.lt:2203/simas/awesome.git";
+    ref = "master";
+  };
+  home.file."bin".source = builtins.fetchGit {
+    url = "ssh://git@git.narbuto.lt:2203/simas/binfiles.git";
+    ref = "master";
+  };
+  home.file.".xinitrc".text = ''
+  if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+    eval $(dbus-launch --exit-with-session --sh-syntax)
+  fi
+  systemctl --user import-environment DISPLAY XAUTHORITY
+
+  if command -v dbus-update-activation-environment >/dev/null 2>&1; then
+    dbus-update-activation-environment DISPLAY XAUTHORITY
+  fi
+  exec awesome
+  '';
+
 }
