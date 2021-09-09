@@ -1,5 +1,14 @@
 # gnosis host specific configuration
 { config, pkgs, ... }:
+#let
+#  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
+#    export __NV_PRIME_RENDER_OFFLOAD=1
+#    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+#    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+#    export __VK_LAYER_NV_optimus=NVIDIA_only
+#    exec -a "$0" "$@"
+#  '';
+#in
 {
   settings = import ./vars.nix;
 
@@ -53,6 +62,14 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   hardware.video.hidpi.enable = true;
+#  hardware.nvidia.prime = {
+#    offload.enable = true;
+#
+#    # Bus ID of the Intel GPU. You can find it using lspci, either under 3D or VGA
+#    intelBusId = "PCI:0:2:0";
+#    # Bus ID of the NVIDIA GPU. You can find it using lspci, either under 3D or VGA
+#    nvidiaBusId = "PCI:1:0:0";
+#  };
 
   # Kerberos
   krb5 = {
@@ -92,6 +109,7 @@
   environment.systemPackages = with pkgs; [
   #    unstable.pipewire
     linuxPackages.v4l2loopback
+#    nvidia-offload
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -116,6 +134,7 @@
   #networking.firewall.allowedTCPPorts = [ 8033 ];
   services.fwupd.enable = true;
 
+  security.pam.services.swaylock = {};
   security.sudo.enable = true;
   security.sudo.extraRules = [{
     groups = [ "wheel" ];

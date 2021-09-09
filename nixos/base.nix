@@ -46,7 +46,7 @@ in
   services.xserver = {
     enable = true;
     autorun = false;
-    videoDriver = "mesa";
+    videoDriver = "nouveau";
     displayManager.startx.enable = true;
     layout = "us";
     xkbOptions = "altwin:swap_lalt_lwin,terminate:ctrl_alt_bksp,caps:none,eurosign:e";
@@ -76,6 +76,7 @@ in
     noto-fonts
     source-code-pro
     meslo-lg
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
   ];
 
   # Virtualization
@@ -128,9 +129,16 @@ in
 
   # Flatpak
   services.flatpak.enable = true;
-  xdg.portal.enable = true;
-  xdg.portal.gtkUsePortal = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg = {
+    portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+      gtkUsePortal = true;
+    };
+  };
 
   # List services that you want to enable:
   services.udev.extraRules = ''
