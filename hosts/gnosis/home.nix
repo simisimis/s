@@ -31,6 +31,12 @@ in
       exec_always "systemctl --user restart kanshi.service"
     '';
     config = {
+      input = {
+        "type:keyboard" = {
+          xkb_layout = "us,lt";
+          xkb_options = "ctrl:nocaps,grp:win_space_toggl
+        };
+      };
       terminal = "alacritty";
       output = { "*" = { bg = "~/Pictures/owl_1080.jpg fill"; } ; };
       gaps = {
@@ -47,6 +53,8 @@ in
           #"${modifier}+Return" = "exec ${pkgs.termite}/bin/termite";
           "${modifier}+g" = "move workspace to output left";
           "${modifier}+b" = "move workspace to output up";
+          "${modifier}+Shift+t" = "exec trimgrim";
+          "${modifier}+Shift+p" = "exec wofipass";
           "${modifier}+Shift+q" = "kill";
           "${modifier}+Shift+l" = "exec swaylock -f -i ~/Pictures/texture1_1.jpg -t";
           "${modifier}+d" = "exec ${pkgs.wofi}/bin/wofi --show run | ${pkgs.findutils}/bin/xargs swaymsg exec --";

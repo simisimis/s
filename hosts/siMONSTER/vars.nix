@@ -4,5 +4,5 @@
   hw.hostName = "siMONSTER";
   hw.hostId = "f1b2a3d4";
   gitRepos.binfiles.ref = "simonster";
-  gitRepos.binfiles.rev = "bb0cabf056433d25dcf6f8c64cd414e0f04b57e9";
+  gitRepos.binfiles.rev = "3e3a0a224d73faf4c681459d6f43dbff7ee2e2fa";
 }

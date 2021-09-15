@@ -59,7 +59,7 @@ with lib;
             type = with types; uniq str;
           };
           rev = mkOption {
-            default = "d3d845a1c6a5c3edfcaec805a809e5e1187f35dd";
+            default = "6e65c87f701529a68403647f47db937c7477c9f5";
             type = with types; uniq str;
           };
         };
