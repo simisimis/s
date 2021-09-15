@@ -34,7 +34,7 @@ in
       input = {
         "type:keyboard" = {
           xkb_layout = "us,lt";
-          xkb_options = "ctrl:nocaps,grp:win_space_toggl
+          xkb_options = "ctrl:nocaps,grp:win_space_toggle";
         };
       };
       terminal = "alacritty";
