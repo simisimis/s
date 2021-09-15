@@ -9,11 +9,17 @@
     ./hardware-configuration.nix
   ];
 
-  home-manager.users."${config.settings.usr.name}" = import ./home.nix { inherit config; };
-
+  home-manager.users."${config.settings.usr.name}".imports = [
+    ./home.nix
+    ../../hm/base.nix
+    ../../hm/workstation.nix
+  ];
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;
   networking.interfaces.enp5s0.useDHCP = true;
 
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  hardware.video.hidpi.enable = true;
+  security.pam.services.swaylock = {};
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
+  services.openssh.enable = true;
 }

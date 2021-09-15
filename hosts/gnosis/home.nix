@@ -114,7 +114,6 @@ in
     # packages required for my desktop
     wofi
     waybar
-    mako
     slurp
     grim
     brightnessctl

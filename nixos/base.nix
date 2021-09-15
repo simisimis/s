@@ -46,13 +46,13 @@ in
   services.xserver = {
     enable = true;
     autorun = false;
-    videoDriver = "nouveau";
+    videoDriver = config.settings.hw.videoDrv;
     displayManager.startx.enable = true;
     layout = "us";
     xkbOptions = "altwin:swap_lalt_lwin,terminate:ctrl_alt_bksp,caps:none,eurosign:e";
     libinput.enable = true;
     wacom.enable = true;
-    libinput.touchpad.tapping = false;
+    #libinput.touchpad.tapping = false;
     windowManager.awesome.enable = true;
   };
 

@@ -8,4 +8,5 @@
   usr.pwdHash = "$6$a41oybHtnw9ThC$ogkfTouHkmEpSdngeP7aCJyUGq6bqITgTlhBKJHSot1/qeUe687hnO8HNXuI6RF1XsGuYViNX2.vVjFyhl7BE.";
   hw.hostName = "gnosis";
   hw.hostId = "f2e3d4c6";
+  hw.videoDrv = "nouveau";
 }

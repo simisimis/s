@@ -51,6 +51,11 @@ with lib;
           type = with types; uniq str;
           description = "don't be lazy. define it";
         };
+        videoDrv = mkOption {
+          default = "mesa";
+          type = with types; uniq str;
+          description = "video driver";
+        };
       };
       gitRepos = {
         binfiles = {
