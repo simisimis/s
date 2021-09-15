@@ -33,6 +33,14 @@ in
     config = {
       terminal = "alacritty";
       output = { "*" = { bg = "~/Pictures/owl_1080.jpg fill"; } ; };
+      gaps = {
+        inner = 3;
+        outer = 0;
+        smartBorders = "off";
+      };
+      window = {
+        border = 0;
+      };
       keybindings = let
         modifier = config.wayland.windowManager.sway.config.modifier;
         in lib.mkOptionDefault {
@@ -182,6 +190,27 @@ in
       background_opacity = 0.9;
     };
   };
+
+  programs.mako = {
+    enable = true;
+    anchor = "bottom-right";
+    font = "mononoki Nerd Font 10";
+    backgroundColor = "#44485b";
+    textColor = "#c0caf5";
+    width = 350;
+    margin = "0,20,20";
+    padding = "10";
+    borderSize = 2;
+    borderColor="#414868";
+    borderRadius = 5;
+    defaultTimeout = 5000;
+    groupBy = "summary";
+    extraConfig = ''
+    [grouped]
+    format=<b>%s</b>\n%b
+    '';
+  };
+
   programs.ssh = {
     extraOptionOverrides = {
       CanonicalizeHostname = "yes";

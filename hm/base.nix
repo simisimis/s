@@ -206,6 +206,8 @@ in
         colorscheme industry
       endif
       " set nocompatible
+      nnoremap <Tab> :bnext<CR>
+      nnoremap <S-Tab> :bprevious<CR>
       set hidden                        " Allow buffer switching without saving
       set backup                        " Make a backup of the file before saving
       set backupdir=~/.cache/vim/backup " Directory to write backups to (should exist)
@@ -228,6 +230,8 @@ in
 
       set encoding=utf-8                " Set default file encoding to utf-8
       set paste                         " Set paste off
+      let g:airline#extensions#tabline#enabled = 1
+      let g:airline#extensions#tabline#buffer_nr_show = 1
       '';
     plugins = with pkgs.vimPlugins; [
       # Syntax / Language Support ##########################
@@ -235,6 +239,8 @@ in
       vim-go
       vim-toml
       vim-yaml
+      vim-airline
+      nerdtree
 
       # UI #################################################
       gruvbox # colorscheme
