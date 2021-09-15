@@ -279,7 +279,8 @@ in
   };
   home.file.".zsh.d".source = builtins.fetchGit {
     url = "ssh://git@git.narbuto.lt:2203/simas/zshd.git";
-    ref = "master";
+    ref = nixosConfig.settings.gitRepos.zshd.ref;
+    rev = nixosConfig.settings.gitRepos.zshd.rev;
   };
   home.stateVersion = "21.05";
 }

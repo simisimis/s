@@ -147,11 +147,13 @@ in
   };
   home.file.".config/awesome".source = builtins.fetchGit {
     url = "ssh://git@git.narbuto.lt:2203/simas/awesome.git";
-    ref = "master";
+    ref = nixosConfig.settings.gitRepos.awesome.ref;
+    rev = nixosConfig.settings.gitRepos.awesome.rev;
   };
   home.file."bin".source = builtins.fetchGit {
     url = "ssh://git@git.narbuto.lt:2203/simas/binfiles.git";
-    ref = "master";
+    ref = nixosConfig.settings.gitRepos.binfiles.ref;
+    rev = nixosConfig.settings.gitRepos.binfiles.rev;
   };
   home.file.".xinitrc".text = ''
   if test -z "$DBUS_SESSION_BUS_ADDRESS"; then

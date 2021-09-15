@@ -52,6 +52,38 @@ with lib;
           description = "don't be lazy. define it";
         };
       };
+      gitRepos = {
+        binfiles = {
+          ref = mkOption {
+            default = "master";
+            type = with types; uniq str;
+          };
+          rev = mkOption {
+            default = "d3d845a1c6a5c3edfcaec805a809e5e1187f35dd";
+            type = with types; uniq str;
+          };
+        };
+        awesome = {
+          ref = mkOption {
+            default = "master";
+            type = with types; uniq str;
+          };
+          rev = mkOption {
+            default = "4abfaf5740c5ac8b5664f2d678cacd50957ad49f";
+            type = with types; uniq str;
+          };
+        };
+        zshd = {
+          ref = mkOption {
+            default = "master";
+            type = with types; uniq str;
+          };
+          rev = mkOption {
+            default = "3cd0a4e86cc0d4aea9ab13ad5f81ca4bdda90a35";
+            type = with types; uniq str;
+          };
+        };
+      };
       profile = mkOption {
         default = "simi";
         type = with types; uniq str;

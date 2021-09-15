@@ -3,4 +3,6 @@
   usr.ssh.gitea.identityFile = "~/.ssh/id_rsa_siMOHCTP_gitea";
   hw.hostName = "siMONSTER";
   hw.hostId = "f1b2a3d4";
+  gitRepos.binfiles.ref = "simonster";
+  gitRepos.binfiles.rev = "bb0cabf056433d25dcf6f8c64cd414e0f04b57e9";
 }
