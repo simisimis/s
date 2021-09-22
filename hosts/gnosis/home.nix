@@ -38,7 +38,7 @@ in
         };
       };
       terminal = "alacritty";
-      output = { "*" = { bg = "~/Pictures/owl_1080.jpg fill"; } ; };
+      output = { "*" = { bg = "~/Pictures/owl_1080.jpg fit"; } ; };
       gaps = {
         inner = 3;
         outer = 0;
@@ -151,7 +151,6 @@ in
 
     unstable.robo3t
     unstable.mongodb-compass
-
   ];
 
   programs.alacritty = {

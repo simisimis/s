@@ -35,9 +35,10 @@
   #virtualisation.virtualbox.host.enableExtensionPack = true;
   #  boot.kernelPackages = pkgs.linuxPackages_5_11;
   boot.kernel.sysctl."net.ipv6.conf.wlp59s0.disable_ipv6" = true;
-  boot.kernel.sysctl."net.ipv6.conf.enp58s0u1u2u3.disable_ipv6" = true;
-  networking.interfaces.enp58s0u1u2u3.useDHCP = true;
+  networking.dhcpcd.wait = "background";
+
   networking.interfaces.wlp59s0.useDHCP = true;
+
   networking.hosts = { "192.168.56.11" = [ "local-puppet-server-001.localdomain puppet" ]; };
   networking.wireless = {
     enable = true;  # Enables wireless support via wpa_supplicant.

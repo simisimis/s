@@ -32,7 +32,7 @@ in
         };
       };
       terminal = "alacritty";
-      output = { "*" = { bg = "~/Pictures/owl1.jpg fill"; } ; };
+      output = { "*" = { bg = "~/Pictures/owl1.jpg fit"; } ; };
       keybindings = let
         modifier = config.wayland.windowManager.sway.config.modifier;
         in lib.mkOptionDefault {

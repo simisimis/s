@@ -45,7 +45,6 @@ in
 
     unstable.robo3t
     unstable.mongodb-compass
-
   ];
   programs.ssh = {
     extraOptionOverrides = {

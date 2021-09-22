@@ -10,9 +10,7 @@ in
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     #system utils
-    pulseaudio
     pamixer
-
     #dev
     (python38.withPackages(ps: with ps; [ termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
     gitAndTools.gitflow
