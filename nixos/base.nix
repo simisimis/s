@@ -104,6 +104,7 @@ in
     neovim
     git tig
     gnupg
+    inetutils
 
     #utils
     unzip

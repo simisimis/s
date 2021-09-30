@@ -15,6 +15,7 @@ in
     scrot
     flameshot
     xclip
+    xorg.xeyes
     termite
     filezilla
 
@@ -150,18 +151,18 @@ in
     settings = [{
       "height" = 30;
       "modules-left" = ["sway/workspaces"];
-      "modules-right" = [ "network" "network#wl" "backlight" "cpu" "memory" "pulseaudio" "sway/language" "custom/date" "tray" "battery" "custom/power" ];
+      "modules-right" = [ "network" "network#wl" "backlight" "cpu" "memory" "pulseaudio" "sway/language" "custom/vpn" "custom/date" "tray" "battery" "custom/power" ];
       modules = {
         "sway/workspaces" = {
           all-outputs = true;
           format = " {icon} ";
-	       	persistent_workspaces = {
-	       		"1" = [];
-	       		"2" = [];
-	       		"3" = [];
-	       		"4" = [];
-	       		"5" = [];
-	        };
+          persistent_workspaces = {
+            "1" = [];
+            "2" = [];
+            "3" = [];
+            "4" = [];
+            "5" = [];
+          };
           format-icons = {
             "1"= "";
             "2"= "";
@@ -235,17 +236,27 @@ in
           icon-size = 21;
           spacing = 10;
         };
-	      "custom/date" = {
+        "custom/date" = {
           format = "{}";
           return-type = "json";
-	      	interval = 60;
-	      	exec = "~/bin/cal-tooltip";
-	      };
-	      "custom/power" = {
-	      	format = "⏻";
-	      	on-click = "swaynag -t custom -m'Are you sure?' -b 'Suspend' 'systemctl suspend; pkill swaynag'";
+          interval = 60;
+          exec = "~/bin/cal-tooltip";
+        };
+        "custom/power" = {
+          format = "⏻";
+          on-click = "swaynag -t custom -m'Are you sure?' -b 'Suspend' 'systemctl suspend; pkill swaynag'";
           tooltip = false;
-	      };
+        };
+        "custom/vpn" = {
+          interval = 15;
+          return-type = "json";
+          format = "{icon}";
+          format-icons = ["" ""];
+          exec = "exec vpn-handler status json";
+          on-click = "exec vpn-handler start from-other";
+          on-click-middle = "exec vpn-handler stop";
+          on-click-right = "exec vpn-handler start tunnel-all";
+        };
       };
     }];
     style = ''
@@ -278,9 +289,9 @@ in
     }
 
     #workspaces button:hover {
-    	background-color: #7dcfff;
-    	color: #24283b;
-    	border-radius: 5px;
+      background-color: #7dcfff;
+      color: #24283b;
+      border-radius: 5px;
     }
 
     tooltip {
@@ -293,19 +304,6 @@ in
         color: white;
     }
 
-    /*
-    window#waybar.empty {
-        background-color: transparent;
-    }
-    window#waybar.solo {
-        background-color: #FFFFFF;
-    }
-
-
-    window#waybar.termite {
-        background-color: #3F3F3F;
-    }
-    */
     window#waybar.chromium {
         background-color: #000000;
         border: none;
@@ -315,9 +313,9 @@ in
     }
 
     #workspaces {
-    	background-color: #44485b;
+      background-color: #44485b;
       margin: 2px 0px 0px 0px;
-    	border-radius: 5px;
+      border-radius: 5px;
     }
 
     /* If workspaces is the leftmost module, omit left margin */
@@ -330,22 +328,22 @@ in
         margin-right: 0;
     }
 
-    #backlight, #cpu, #memory, #language, #custom-date, #battery, #pulseaudio, #network, #tray {
-    	  background-color: #44485b;
-    	  padding: 5px 10px;
-    	  margin: 2px 0px 0px 0px;
-    	  border-radius: 0px 0px 0px 0px;
+    #backlight, #cpu, #memory, #language, #custom-date, #custom-vpn, #battery, #pulseaudio, #network, #tray {
+      background-color: #44485b;
+      padding: 5px 10px;
+      margin: 2px 0px 0px 0px;
+      border-radius: 0px 0px 0px 0px;
     }
 
     #backlight {
         color: #bd64bd;
     }
     #network {
-        color: #bb79d6;
-    	  border-radius: 5px 0px 0px 5px;
+      color: #bb79d6;
+      border-radius: 5px 0px 0px 5px;
     }
     #network.wl {
-    	  border-radius: 0px 0px 0px 0px;
+      border-radius: 0px 0px 0px 0px;
     }
 
     #network.disconnected {
@@ -353,7 +351,7 @@ in
     }
 
     #cpu {
-    	  color: #f7768e;
+      color: #f7768e;
     }
 
     #memory {
@@ -377,21 +375,29 @@ in
         color: #4ddede;
     }
 
+    #custom-vpn {
+        color: #e75d4a;
+    }
+
+    #custom-vpn.connected {
+        color: #68de4d;
+    }
+
     #custom-power {
       font-size: 12px;
-    	color: #24283b;
-    	background-color: #db4b4b;
-    	border-radius: 5px;
-    	margin-right: 3px;
-    	margin-top: 3px;
-    	margin-bottom: 3px;
-    	margin-left: 3px;
-    	padding: 5px 10px;
+      color: #24283b;
+      background-color: #db4b4b;
+      border-radius: 5px;
+      margin-right: 3px;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      margin-left: 3px;
+      padding: 5px 10px;
     }
 
     #battery {
-        color: #9ece6a;
-    	  border-radius: 0px 5px 5px 0px;
+      color: #9ece6a;
+      border-radius: 0px 5px 5px 0px;
     }
 
     #battery.charging, #battery.plugged {
@@ -457,7 +463,7 @@ in
     font-family: 'Meslo LG S DZ', 'Inter Nerd Font','FuraCode Nerd Font Mono';
     font-size: 15px;
   }
-  
+
   #input {
     border: transparent;
     background-color: rgba(68, 72, 91, 0.85);
@@ -466,40 +472,40 @@ in
     padding: 3px 5px 3px 5px;
     border-radius: 5px;
   }
-  
+
   #entry:selected {
     background-color: #7aa2f7;
-  	border-radius: 5px;
+    border-radius: 5px;
   }
-  
+
   #text:selected {
     color: #24283b;
   }
-  
+
   #inner-box {
     color: #d8dee9;
-  	border-radius: 5px;
+    border-radius: 5px;
     padding: 2px;
     background-color: rgba(68, 72, 91, 0.85);
   }
-  
+
   #outer-box {
     margin: 15px;
     background-color: transparent;
   }
-  
+
   #scroll {
     margin-top: 10px;
     background-color: transparent;
     border: none;
   }
-  
+
   #text {
     padding: 3px;
     color: #c0caf5;
     background-color: transparent;
   }
-  
+
   #img {
     background-color: transparent;
     padding: 5px;

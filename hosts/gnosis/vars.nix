@@ -9,5 +9,6 @@
   hw.hostName = "gnosis";
   hw.hostId = "f2e3d4c6";
   hw.videoDrv = "nouveau";
-  gitRepos.binfiles.rev = "049f79c799764ce7456efb669323540f66811044";
+  #gitRepos.binfiles.rev = "a22c295f53632654e5f82779136291fe112fb9fd";
+  gitRepos.binfiles.rev = "0a621f2dcc5f036f85d4df4dd5fc75954adc70ad";
 }

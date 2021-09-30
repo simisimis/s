@@ -228,6 +228,9 @@ in
 
       set encoding=utf-8                " Set default file encoding to utf-8
       set paste                         " Set paste off
+
+      set wildmode=longest,list         " Set shell like completion. to tab select add 'full'
+
       let g:airline#extensions#tabline#enabled = 1
       let g:airline#extensions#tabline#buffer_nr_show = 1
       '';
