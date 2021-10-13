@@ -17,9 +17,12 @@
     ../../modules/settings.nix
     ./hardware-configuration.nix
   ];
+  nix.package = pkgs.nixFlakes;
+
   nix.extraOptions = ''
     keep-outputs = true
     keep-derivations = true
+    experimental-features = nix-command flakes
   '';
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
