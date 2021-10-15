@@ -2,9 +2,13 @@
 
 ### bootstrap:
 1. nixos:
-sudo nixos-rebuild switch --flake git+ssh://git@github.com/simisimis/s
+```bash
+$ sudo nixos-rebuild switch --flake git+ssh://git@github.com/simisimis/s
+```
 2. home-manager:
-home-manager switch --flake git+ssh://git@github.com/simisimis/s
+```bash
+$ home-manager switch --flake git+ssh://git@github.com/simisimis/s
+```
 
 todo:
 * proper readme
