@@ -1,8 +1,5 @@
 # hm base
-{ nixosConfig, config, pkgs, ... }:
-let
-  unstable = import <nixos-unstable> { config.allowUnfree = true; };
-in
+{ config, pkgs, ... }:
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -52,7 +49,7 @@ in
     matchBlocks = {
       "git.narbuto.lt" = {
         user = "git";
-        identityFile = nixosConfig.settings.usr.ssh.gitea.identityFile;
+        identityFile = config.settings.usr.ssh.gitea.identityFile;
         extraOptions = {
           AddKeysToAgent = "yes";
           PubKeyAuthentication = "yes";
@@ -280,8 +277,7 @@ in
   };
   home.file.".zsh.d".source = builtins.fetchGit {
     url = "ssh://git@git.narbuto.lt:2203/simas/zshd.git";
-    ref = nixosConfig.settings.gitRepos.zshd.ref;
-    rev = nixosConfig.settings.gitRepos.zshd.rev;
+    ref = config.settings.gitRepos.zshd.ref;
+    rev = config.settings.gitRepos.zshd.rev;
   };
-  home.stateVersion = "21.05";
 }

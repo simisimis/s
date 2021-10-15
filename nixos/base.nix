@@ -9,7 +9,7 @@ in
 {
   imports =
     [ # Include the results of the hardware scan.
-      <home-manager/nixos>
+      #<home-manager/nixos>
     ];
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;

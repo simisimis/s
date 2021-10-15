@@ -26,11 +26,11 @@
   '';
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
-  home-manager.users."${config.settings.usr.name}".imports = [ 
-    ./home.nix
-    ../../hm/base.nix
-    ../../hm/workstation.nix
-  ];
+#  home-manager.users."${config.settings.usr.name}".imports = [ 
+#    ./home.nix
+#    ../../hm/base.nix
+#    ../../hm/workstation.nix
+#  ];
 
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;

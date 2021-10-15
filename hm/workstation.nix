@@ -1,7 +1,10 @@
 # hm workstation
-{ nixosConfig, config, pkgs, autoPatchelfHook, ... }:
+{ config, nixpkgs-unstable, pkgs, autoPatchelfHook, ... }:
 let
-  unstable = import <nixos-unstable> { config.allowUnfree = true; };
+  unstable = import nixpkgs-unstable {
+    system = "x86_64-linux";
+    config = { allowUnfree = true; };
+  };
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -134,11 +137,11 @@ in
     matchBlocks = {
       "192.168.178.100" = {
         user = "simas";
-        identityFile = nixosConfig.settings.usr.ssh.backute.identityFile;
+        identityFile = config.settings.usr.ssh.backute.identityFile;
       };
       "github.com" = {
         user = "git";
-        identityFile = nixosConfig.settings.usr.ssh.github.identityFile;
+        identityFile = config.settings.usr.ssh.github.identityFile;
         extraOptions = { 
           AddKeysToAgent = "yes";
           PubKeyAuthentication = "yes";
@@ -432,13 +435,13 @@ in
   };
   home.file.".config/awesome".source = builtins.fetchGit {
     url = "ssh://git@git.narbuto.lt:2203/simas/awesome.git";
-    ref = nixosConfig.settings.gitRepos.awesome.ref;
-    rev = nixosConfig.settings.gitRepos.awesome.rev;
+    ref = config.settings.gitRepos.awesome.ref;
+    rev = config.settings.gitRepos.awesome.rev;
   };
   home.file."bin".source = builtins.fetchGit {
     url = "ssh://git@git.narbuto.lt:2203/simas/binfiles.git";
-    ref = nixosConfig.settings.gitRepos.binfiles.ref;
-    rev = nixosConfig.settings.gitRepos.binfiles.rev;
+    ref = config.settings.gitRepos.binfiles.ref;
+    rev = config.settings.gitRepos.binfiles.rev;
   };
   home.file.".xinitrc".text = ''
   if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
