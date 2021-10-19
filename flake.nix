@@ -7,6 +7,10 @@
     home-manager.url = "github:nix-community/home-manager/release-21.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+    binfiles = {
+      url = "git+ssh://git@git.narbuto.lt:2203/simas/binfiles?ref=master";
+      flake = false;
+    }; #binfiles
   };
 
  outputs = { self, ... }@inputs:
@@ -50,5 +54,5 @@
         ];
       };
     };
-  };
+  }; #outputs
 }

@@ -1,5 +1,5 @@
 # hm workstation
-{ config, nixpkgs-unstable, pkgs, autoPatchelfHook, ... }:
+{ config, nixpkgs-unstable, pkgs, binfiles, autoPatchelfHook, ... }:
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
@@ -438,11 +438,7 @@ in
     ref = config.settings.gitRepos.awesome.ref;
     rev = config.settings.gitRepos.awesome.rev;
   };
-  home.file."bin".source = builtins.fetchGit {
-    url = "ssh://git@git.narbuto.lt:2203/simas/binfiles.git";
-    ref = config.settings.gitRepos.binfiles.ref;
-    rev = config.settings.gitRepos.binfiles.rev;
-  };
+  home.file."bin".source = binfiles.outPath;
   home.file.".xinitrc".text = ''
   if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
     eval $(dbus-launch --exit-with-session --sh-syntax)
