@@ -119,6 +119,7 @@ in
     ethtool
     mako # notification daemon
     dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
+    fantasque-sans-mono
     font-awesome
     roboto-mono
     (nerdfonts.override { fonts = [ "Mononoki" ]; })
@@ -148,6 +149,7 @@ in
     google-cloud-sdk
     kubectx kubectl k9s stern
     vagrant
+    saleae-logic
 
     #web
     teams

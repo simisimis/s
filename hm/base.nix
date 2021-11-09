@@ -7,6 +7,8 @@
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     #system utils
+    usbutils
+    screen
     pamixer
     #dev
     (python38.withPackages(ps: with ps; [ termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
@@ -208,6 +210,7 @@
       set backupdir=~/.cache/vim/backup " Directory to write backups to (should exist)
       set directory=~/.cache/vim/tmp    " No more .sw[a-z] (swap) files all over the place (should exist)
       set history=1000                  " Save a lot of history (default is 20)
+      set clipboard=unnamedplus
       if has('persistent_undo')
         set undofile                    " Use persistent undo file
         set undodir=~/.cache/vim/undo   " Directory to write undo files to (should exist)

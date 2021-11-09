@@ -3,7 +3,10 @@
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
-    config = { allowUnfree = true; };
+    config = {
+      allowUnfree = true;
+      android_sdk.accept_license = true;        
+    };
   };
 in
 {
@@ -45,20 +48,34 @@ in
     binutils
     gnumake
     gcc
+    stdenv.cc.cc.lib
 
     #dev
-    unstable.go unstable.golint dep
+    unstable.go_1_17 unstable.golint dep
     exercism
+    unstable.android-studio
 
     unstable.prusa-slicer
   ];
 
-  programs.vscode = {
+  programs.vscode = with unstable; {
     enable = true;
-    package = unstable.vscode-with-extensions // { pname = "vscode"; };
-    #extensions = [
-    #  vscode-extensions.ms-vscode.Go
-    #];
+    package = vscode-with-extensions // { pname = "vscode"; };
+    extensions = [
+      vscode-extensions.ms-vscode.go
+      vscode-extensions.bbenoist.nix
+    ];
+    userSettings = {
+      "telemetry.enableCrashReporter" = false;
+      "telemetry.enableTelemetry" = false;
+      "go.toolsManagement.autoUpdate" = true;
+      "workbench.colorTheme" = "Solarized Light";
+      "workbench.iconTheme" = null;
+      "explorer.confirmDragAndDrop" = false;
+      "search.useIgnoreFiles" = false;
+      "explorer.confirmDelete" = false;
+      "editor.fontFamily" = "'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
+    };
   };
   programs.zathura.enable = true;
   programs.rofi.enable = true;

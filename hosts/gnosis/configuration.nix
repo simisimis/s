@@ -131,6 +131,8 @@
   };
   services.udev.extraRules = ''
   ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="wheel", MODE="0664"
+  # saleae logic analyser
+  SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
   '';
   services.openssh.enable = false;
   # services.openssh.permitRootLogin = "yes";
