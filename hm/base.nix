@@ -180,7 +180,8 @@
       VISUAL = EDITOR;
       GIT_EDITOR = EDITOR;
       #BAT_THEME="dark_neon";
-
+      # java apps on wayland like android-studio or arduino
+      _JAVA_AWT_WM_NONREPARENTING=1;
       GOPATH = "$HOME/development/go";
       PATH = "$HOME/bin:$GOPATH/bin:$PATH";
     };
