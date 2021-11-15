@@ -123,6 +123,8 @@ in
 
     '';
   };
+
+  programs.gpg.enable = true;
   # services
   services.gpg-agent = {
     enable = true;

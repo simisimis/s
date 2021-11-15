@@ -1,5 +1,5 @@
 # hm base
-{ config, pkgs, ... }:
+{ config, pkgs, zshdfiles, ... }:
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -18,34 +18,6 @@
 
   ];
 
-
-
-  programs.gpg.enable = true;
-  # services
-  services.gpg-agent = {
-    enable = true;
-    enableSshSupport = true;
-    pinentryFlavor = "gtk2";
-  };
-  xdg = {
-    configFile."mimeapps.list".force = true;
-    configFile."obs-studio/plugins/obs-v4l2sink/bin/64bit/obs-v4l2sink.so".source =
-    "${pkgs.obs-v4l2sink}/share/obs/obs-plugins/v4l2sink/bin/64bit/v4l2sink.so";
-    mimeApps = {
-      enable = true;
-      associations.added = {
-        "x-scheme-handler/magnet"="userapp-transmission-gtk-XEE0Y0.desktop";
-      };
-      defaultApplications = {
-        "text/html" = "browser";
-        "x-scheme-handler/http"="browser.desktop";
-        "x-scheme-handler/https"="browser.desktop";
-        "x-scheme-handler/about"="browser.desktop";
-        "x-scheme-handler/unknown"="browser.desktop";
-        "x-scheme-handler/magnet"="userapp-transmission-gtk-XEE0Y0.desktop";
-      };
-    };
-  };
   programs.ssh = {
     enable = true;
     matchBlocks = {
@@ -279,9 +251,5 @@
      rev = "0a6c8b610e799040b612db8888945f502a2ddd9d";
      sha256 = "19x1gf1r6l7r6i7vhhsgzcbdlnr648jx8j84nk2zv1b8igh205hw";
   };
-  home.file.".zsh.d".source = builtins.fetchGit {
-    url = "ssh://git@git.narbuto.lt:2203/simas/zshd.git";
-    ref = config.settings.gitRepos.zshd.ref;
-    rev = config.settings.gitRepos.zshd.rev;
-  };
+  home.file.".zsh.d".source = zshdfiles.outPath;
 }

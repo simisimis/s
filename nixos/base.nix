@@ -15,16 +15,6 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Extra kernel modules
-  # Register a v4l2loopback device at boot
-  boot.kernelModules = [
-    "v4l2loopback"
-  ];
-  # Extra kernel modules
-  boot.extraModulePackages = [
-    config.boot.kernelPackages.v4l2loopback
-  ];
-
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
@@ -54,20 +44,6 @@ in
     #media-session.enable = true;
   };
 
-  # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    autorun = false;
-    videoDriver = config.settings.hw.videoDrv;
-    displayManager.startx.enable = true;
-    layout = "us";
-    xkbOptions = "altwin:swap_lalt_lwin,terminate:ctrl_alt_bksp,caps:none,eurosign:e";
-    libinput.enable = true;
-    wacom.enable = true;
-    #libinput.touchpad.tapping = false;
-    windowManager.awesome.enable = true;
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
     mutableUsers = false;
@@ -91,8 +67,6 @@ in
     (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
   ];
 
-  # Virtualization
-  virtualisation.virtualbox.host.enable = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -139,24 +113,6 @@ in
      };
    })
   ];
-
-  # Flatpak
-  services.flatpak.enable = true;
-  xdg = {
-    portal = {
-      enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
-      ];
-      gtkUsePortal = true;
-    };
-  };
-
-  # List services that you want to enable:
-  services.udev.extraRules = ''
-    SUBSYSTEM=="usb", ATTR{idVendor}=="3297", ATTR{idProduct}=="1969", GROUP="plugdev"
-  '';
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

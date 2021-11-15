@@ -11,6 +11,10 @@
       url = "git+ssh://git@git.narbuto.lt:2203/simas/binfiles?ref=master";
       flake = false;
     }; #binfiles
+    zshdfiles = {
+      url = "git+ssh://git@git.narbuto.lt:2203/simas/zshd?ref=master";
+      flake = false;
+    };
   };
 
  outputs = { self, ... }@inputs:
@@ -44,6 +48,19 @@
           ];
         };
       };
+      backute = inputs.home-manager.lib.homeManagerConfiguration {
+        inherit system pkgs;
+        username = "simas";
+        homeDirectory = "/home/simas";
+        configuration = {
+          _module = { inherit args; };
+          imports = [
+            ./hosts/backute/home.nix
+            ./hm/base.nix
+            ./modules/settings.nix
+          ];
+        };
+      };
     };
     snarbutas = self.homeConfigurations.snarbutas.activationPackage;
     nixosConfigurations = {
@@ -53,6 +70,12 @@
           ./hosts/gnosis/configuration.nix
         ];
       };
-    };
+      backute = lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./hosts/backute/configuration.nix
+        ];
+      };
+    }; #nixosConfigurations
   }; #outputs
 }

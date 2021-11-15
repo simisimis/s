@@ -14,6 +14,7 @@
 
   imports = [
     ../../nixos/base.nix
+    ../../nixos/workstation.nix
     ../../modules/settings.nix
     ./hardware-configuration.nix
   ];
