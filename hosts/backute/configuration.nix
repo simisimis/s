@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
 {
 
   settings = import ./vars.nix;
@@ -11,6 +10,7 @@
   imports = [
     ../../nixos/base.nix
     ../../modules/settings.nix
+    ../../modules/home-assistant
     ./hardware-configuration.nix
     ];
 
@@ -75,7 +75,7 @@
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 2049 32400 3005 8324 32469 ];
+  networking.firewall.allowedTCPPorts = [ 22 2049 32400 3005 8324 32469 8123 1400];
   networking.firewall.allowedUDPPorts = [ 1900 32410 32412 32413 32414 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

@@ -73,6 +73,7 @@
       backute = lib.nixosSystem {
         inherit system;
         modules = [
+          { _module.args = inputs; }
           ./hosts/backute/configuration.nix
         ];
       };
