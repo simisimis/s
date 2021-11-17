@@ -18,6 +18,13 @@
 
   ];
 
+  programs.gpg.enable = true;
+  # services
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
+  };
+
   programs.ssh = {
     enable = true;
     matchBlocks = {

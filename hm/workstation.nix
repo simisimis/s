@@ -58,6 +58,10 @@ in
     unstable.prusa-slicer
   ];
 
+
+  # services
+  services.gpg-agent.pinentryFlavor = "gtk2";
+
   programs.vscode = with unstable; {
     enable = true;
     package = vscode-with-extensions // { pname = "vscode"; };
@@ -124,13 +128,6 @@ in
     '';
   };
 
-  programs.gpg.enable = true;
-  # services
-  services.gpg-agent = {
-    enable = true;
-    enableSshSupport = true;
-    pinentryFlavor = "gtk2";
-  };
   xdg = {
     configFile."obs-studio/plugins/obs-v4l2sink/bin/64bit/obs-v4l2sink.so".source =
     "${pkgs.obs-v4l2sink}/share/obs/obs-plugins/v4l2sink/bin/64bit/v4l2sink.so";

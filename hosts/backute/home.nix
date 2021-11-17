@@ -18,6 +18,7 @@ in
       github.user = config.settings.usr.username;
     };
   };
+
   home.username = config.settings.usr.name;
   home.homeDirectory = "/home/${config.settings.usr.name}";
 
