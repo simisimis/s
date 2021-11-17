@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   # Extra kernel modules
   # Register a v4l2loopback device at boot
