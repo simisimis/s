@@ -148,6 +148,7 @@ in
     ruby bundix puppetgems pdk
     google-cloud-sdk
     kubectx kubectl k9s stern
+    unstable.terraform
     vagrant
     saleae-logic
 

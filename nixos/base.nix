@@ -71,7 +71,7 @@
     xf86_input_wacom
     sshfs
     lsof
-    wget curl
+    wget curl dig
     neovim
     git tig
     gnupg
