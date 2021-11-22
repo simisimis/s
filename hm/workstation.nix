@@ -5,7 +5,7 @@ let
     system = "x86_64-linux";
     config = {
       allowUnfree = true;
-      android_sdk.accept_license = true;        
+      android_sdk.accept_license = true;
     };
   };
 in

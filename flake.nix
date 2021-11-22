@@ -67,6 +67,7 @@
       gnosis = lib.nixosSystem {
         inherit system;
         modules = [
+          { _module.args = inputs; }
           ./hosts/gnosis/configuration.nix
         ];
       };

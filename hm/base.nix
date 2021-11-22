@@ -1,5 +1,13 @@
 # hm base
-{ config, pkgs, zshdfiles, ... }:
+{ config, pkgs, zshdfiles, nixpkgs-unstable, ... }:
+let
+  unstable = import nixpkgs-unstable {
+    system = "x86_64-linux";
+    config = {
+      allowUnfree = true;
+    };
+  };
+in
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -25,6 +33,11 @@
     enableSshSupport = true;
   };
 
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+    defaultOptions = [ "-e" ];
+  };
   programs.ssh = {
     enable = true;
     matchBlocks = {
@@ -111,8 +124,8 @@
         src = pkgs.fetchFromGitHub {
           owner = "zsh-users";
           repo = "zsh-autosuggestions";
-          rev = "v0.6.3";
-          sha256 = "1h8h2mz9wpjpymgl2p7pc146c1jgb3dggpvzwm9ln3in336wl95c";
+          rev = "v0.7.0";
+          sha256 = "sha256-KLUYpUu4DHRumQZ3w59m9aTW6TBKMCXl2UcKi4uMd7w=";
         };
       }
       {
@@ -172,6 +185,7 @@
   };
   programs.neovim = {
     enable = true;
+    package = unstable.neovim-unwrapped;
     vimAlias = true;
     viAlias = true;
     vimdiffAlias = true;
@@ -222,6 +236,8 @@
       vim-yaml
       vim-airline
       nerdtree
+      nvim-lspconfig
+      nvim-compe
 
       # UI #################################################
       gruvbox # colorscheme
@@ -235,7 +251,6 @@
       vim-surround # cs"'
       vim-repeat # cs"'...
       #vim-commentary # gcap
-      # vim-ripgrep
       #vim-indent-object # >aI
       #vim-easy-align # vipga
       #vim-eunuch # :Rename foo.rb
@@ -244,7 +259,7 @@
       #nerdtree
 
       # Buffer / Pane / File Management ####################
-      #fzf-vim # all the things
+      fzf-vim # all the things
 
       # Panes / Larger features ############################
       #tagbar # <leader>5
