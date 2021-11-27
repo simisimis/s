@@ -29,55 +29,39 @@
       inherit system;
       config = { allowUnfree = true; };
     };
-    lib = inputs.nixpkgs.lib;
     args = inputs;
+
+    mkHost = host: inputs.nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = [
+        { _module.args = args; }
+        ./hosts/${host}/configuration.nix
+      ];
+    };
+    mkHome = user: host: type: inputs.home-manager.lib.homeManagerConfiguration {
+      inherit system pkgs;
+      username = user;
+      homeDirectory = "/home/${user}";
+      configuration = {
+        _module = { inherit args; };
+        imports = [
+          ./hosts/${host}/home.nix
+          ./hm/base.nix
+          ./hm/${type}.nix
+          ./modules/settings.nix
+        ];
+      };
+    };
   in {
     homeConfigurations = {
       stateVersion = "21.05";
-      snarbutas = inputs.home-manager.lib.homeManagerConfiguration {
-        inherit system pkgs;
-        username = "snarbutas";
-        homeDirectory = "/home/snarbutas";
-        configuration = {
-          _module = { inherit args; };
-          imports = [
-            ./hosts/gnosis/home.nix
-            ./hm/base.nix
-            ./hm/workstation.nix
-            ./modules/settings.nix
-          ];
-        };
-      };
-      backute = inputs.home-manager.lib.homeManagerConfiguration {
-        inherit system pkgs;
-        username = "simas";
-        homeDirectory = "/home/simas";
-        configuration = {
-          _module = { inherit args; };
-          imports = [
-            ./hosts/backute/home.nix
-            ./hm/base.nix
-            ./modules/settings.nix
-          ];
-        };
-      };
+      gnosis = mkHome "snarbutas" "gnosis" "workstation";
+      backute = mkHome "simas" "backute" "headless";
     };
-    snarbutas = self.homeConfigurations.snarbutas.activationPackage;
+    gnosis = self.homeConfigurations.gnosis.activationPackage;
     nixosConfigurations = {
-      gnosis = lib.nixosSystem {
-        inherit system;
-        modules = [
-          { _module.args = inputs; }
-          ./hosts/gnosis/configuration.nix
-        ];
-      };
-      backute = lib.nixosSystem {
-        inherit system;
-        modules = [
-          { _module.args = inputs; }
-          ./hosts/backute/configuration.nix
-        ];
-      };
+      gnosis = mkHost "gnosis";
+      backute = mkHost "backute";
     }; #nixosConfigurations
   }; #outputs
 }

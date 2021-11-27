@@ -11,5 +11,5 @@
   hw.hostId = "f2e3d4c6";
   hw.videoDrv = "nouveau";
   #gitRepos.binfiles.rev = "a22c295f53632654e5f82779136291fe112fb9fd";
-  gitRepos.binfiles.rev = "0a621f2dcc5f036f85d4df4dd5fc75954adc70ad";
+  gitRepos.binfiles.rev = "97e67161d4df2c0048746f9e16697f3e1cd0a1d7";
 }
