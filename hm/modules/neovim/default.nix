@@ -17,26 +17,11 @@ in
     vimdiffAlias = true;
     #extraConfig = builtins.readFile ./home/extraConfig.vim;
     extraConfig = ''
-      colorscheme gruvbox
-      silent !mkdir -p ~/.cache/vim/{backup,tmp,undo} > /dev/null 2>&1
-      if &diff
-        colorscheme industry
-      endif
-      " set nocompatible
       nnoremap <Tab> :bnext<CR>
       nnoremap <S-Tab> :bprevious<CR>
-      set hidden                        " Allow buffer switching without saving
-      set backup                        " Make a backup of the file before saving
-      set backupdir=~/.cache/vim/backup " Directory to write backups to (should exist)
-      set directory=~/.cache/vim/tmp    " No more .sw[a-z] (swap) files all over the place (should exist)
+
       set history=1000                  " Save a lot of history (default is 20)
       set clipboard=unnamedplus
-      if has('persistent_undo')
-        set undofile                    " Use persistent undo file
-        set undodir=~/.cache/vim/undo   " Directory to write undo files to (should exist)
-        set undolevels=1000             " Maximum number of changes that can be undone
-        set undoreload=10000            " Maximum number of lines to save for undo on buffer reload
-      endif
 
 
       set visualbell                    " Use visual bell instead of a beep
