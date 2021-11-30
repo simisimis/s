@@ -109,16 +109,6 @@
   # Virtualization
   virtualisation.docker.enable = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-  #    unstable.pipewire
-    linuxPackages.v4l2loopback
-#    nvidia-offload
-  ];
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
   # List services that you want to enable:
   services.logind.extraConfig = "HandlePowerKey=suspend";
  

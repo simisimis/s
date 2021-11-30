@@ -9,6 +9,10 @@
   boot.extraModulePackages = [
     config.boot.kernelPackages.v4l2loopback
   ];
+
+  environment.systemPackages = with pkgs; [
+    linuxPackages.v4l2loopback
+  ];
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;

@@ -38,7 +38,7 @@
       home = "/home/${config.settings.usr.name}";
       isNormalUser = true;
       group = "users";
-      extraGroups = [ "wheel" "audio" "plugdev" "docker" "vboxusers" ];
+      extraGroups = [ "wheel" "audio" "plugdev" "docker" "vboxusers" "dialout" ];
       useDefaultShell = true;
       hashedPassword = config.settings.usr.pwdHash;
     };

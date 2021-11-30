@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "awesomewm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1629541313,
+        "narHash": "sha256-m5iy+BR77U3ykFd0ChK2haS3grKvDyuYgVF7/TCgbdo=",
+        "ref": "master",
+        "rev": "4abfaf5740c5ac8b5664f2d678cacd50957ad49f",
+        "revCount": 1,
+        "type": "git",
+        "url": "ssh://git@git.narbuto.lt:2203/simas/awesome"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "ssh://git@git.narbuto.lt:2203/simas/awesome"
+      }
+    },
     "binfiles": {
       "flake": false,
       "locked": {
@@ -70,6 +87,7 @@
     },
     "root": {
       "inputs": {
+        "awesomewm": "awesomewm",
         "binfiles": "binfiles",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",

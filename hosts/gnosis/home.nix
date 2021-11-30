@@ -118,16 +118,6 @@ in
     wl-clipboard
     ethtool
     mako # notification daemon
-    dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
-    fantasque-sans-mono
-    font-awesome
-    roboto-mono
-    (nerdfonts.override { fonts = [ "Mononoki" ]; })
-    material-icons
-    gnome.adwaita-icon-theme
-    libappindicator
-
-    # packages required for my desktop
     wofi
     waybar
     slurp
@@ -135,6 +125,14 @@ in
     brightnessctl
     pamixer
     wdisplays
+
+    fantasque-sans-mono
+    font-awesome
+    roboto-mono
+    (nerdfonts.override { fonts = [ "Mononoki" ]; })
+    material-icons
+    gnome.adwaita-icon-theme
+    libappindicator
     # end wayland
 
     #system

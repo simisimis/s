@@ -15,6 +15,10 @@
       url = "git+ssh://git@git.narbuto.lt:2203/simas/zshd?ref=master";
       flake = false;
     };
+    awesomewm = {
+      url = "git+ssh://git@git.narbuto.lt:2203/simas/awesome?ref=master";
+      flake = false;
+    };
   };
 
  outputs = { self, ... }@inputs:
@@ -56,12 +60,14 @@
     homeConfigurations = {
       stateVersion = "21.05";
       gnosis = mkHome "snarbutas" "gnosis" "workstation";
+      siMONSTER = mkHome "simas" "siMONSTER" "workstation";
       backute = mkHome "simas" "backute" "headless";
     };
     gnosis = self.homeConfigurations.gnosis.activationPackage;
     nixosConfigurations = {
       gnosis = mkHost "gnosis";
       backute = mkHost "backute";
+      siMONSTER = mkHost "siMONSTER";
     }; #nixosConfigurations
   }; #outputs
 }

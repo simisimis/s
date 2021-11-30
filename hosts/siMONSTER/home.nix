@@ -1,22 +1,25 @@
 # siMONSTER specific home manager configuration
-{ nixosConfig, config, pkgs, lib, ... }:
+{ config, pkgs, nixpkgs-unstable, lib, ... }:
 let
-  unstable = import <nixos-unstable> { config.allowUnfree = true; };
+  unstable = import nixpkgs-unstable {
+    system = "x86_64-linux";
+    config = { allowUnfree = true; };
+  };
 in
 {
-  imports = [
-    ../../hm/base.nix
-    ../../hm/workstation.nix
-  ];
+  settings = import ./vars.nix;
+  # import overlays
+  nixpkgs.overlays = [ (import ../../overlays) ];
+  programs.home-manager.enable = true;
   programs.git = {
-    userName = nixosConfig.settings.usr.name;
-    userEmail = nixosConfig.settings.usr.email;
+    userName = config.settings.usr.fullName;
+    userEmail = config.settings.usr.email;
     extraConfig = {
-      github.user = nixosConfig.settings.usr.username;
+      github.user = config.settings.usr.username;
     };
   };
-  home.username = nixosConfig.settings.usr.name;
-  home.homeDirectory = "/home/${nixosConfig.settings.usr.name}";
+  home.username = config.settings.usr.name;
+  home.homeDirectory = "/home/${config.settings.usr.name}";
 
   wayland.windowManager.sway = {
     enable = true;
@@ -83,13 +86,21 @@ in
     pamixer
     wdisplays
 
+    fantasque-sans-mono
     font-awesome
     roboto-mono
     (nerdfonts.override { fonts = [ "Mononoki" ]; })
     material-icons
     gnome.adwaita-icon-theme
+    libappindicator
     # end wayland
+    # system
+    rclone
+    saleae-logic
+
+    minecraft
   ];
+
   programs.alacritty = {
     enable = true;
     settings = {
