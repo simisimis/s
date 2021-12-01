@@ -245,7 +245,7 @@ in
     '';
     matchBlocks = {
       "*.bol.com *.bolcom.net" = {
-        user = config.settings.usr.username;
+        user = config.settings.usr.name;
         extraOptions = {
           ServerAliveInterval = "120";
           SendEnv = "BOL_FANCYPROMPT";

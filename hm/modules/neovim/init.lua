@@ -11,19 +11,28 @@ for _,dir in ipairs(vimdirs) do
 		vim.fn.mkdir(dir, 'p')
 	end
 end
-vim.o.hidden = true -- Allow buffer switching without saving
-vim.o.backup = true -- Make a backup of the file before saving
-vim.o.backupdir = vim.env.HOME .. '/.cache/nvim/backup' -- Directory to write backups to (should exist)
-vim.o.directory = vim.env.HOME .. '/.cache/nvim/tmp' -- No more .sw[a-z] (swap) files all over the place (should exist)
+vim.opt.hidden = true -- Allow buffer switching without saving
+vim.opt.backup = true -- Make a backup of the file before saving
+vim.opt.backupdir = vim.env.HOME .. '/.cache/nvim/backup' -- Directory to write backups to (should exist)
+vim.opt.directory = vim.env.HOME .. '/.cache/nvim/tmp' -- No more .sw[a-z] (swap) files all over the place (should exist)
 if vim.fn.has('persistent_undo') == 1 then
-	vim.o.undofile = true -- Use persistent undo file
-	vim.o.undodir = vim.env.HOME .. '/.cache/nvim/undo' -- Directory to write undo files to (should exist)
-	vim.o.undolevels = 1000 -- Maximum number of changes that can be undone
-	vim.o.undoreload = 10000 -- Maximum number of lines to save for undo on buffer reload
+	vim.opt.undofile = true -- Use persistent undo file
+	vim.opt.undodir = vim.env.HOME .. '/.cache/nvim/undo' -- Directory to write undo files to (should exist)
 end
 
-vim.o.tabstop = 2 -- Number of spaces that equals a tab
-vim.o.shiftwidth = 2 -- Number of spaces to shift (e.g. >> and <<) with
-vim.o.expandtab = true -- Insert spaces instead of tabs
-vim.o.autoindent = true -- Automatically indent to the previous lines' indent level
+vim.opt.clipboard = "unnamedplus" 
+
+vim.opt.visualbell = true -- Use visual bell instead of a beep
+
+vim.opt.tabstop = 2 -- Number of spaces that equals a tab
+vim.opt.shiftwidth = 2 -- Number of spaces to shift (e.g. >> and <<) with
+vim.opt.expandtab = true -- Insert spaces instead of tabs
 vim.opt.listchars = vim.opt.listchars + {eol = '↲', tab = '▸ ', trail = '·'}
+
+vim.opt.wildmode = "longest,list" -- Set shell like completion. to tab select add 'full'
+
+vim.api.nvim_set_keymap('n', '<Tab>', ':bnext<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<S-Tab>', ':bprevious<CR>', {noremap = true})
+
+vim.g["airline#extensions#tabline#enabled"] = 1
+vim.g["airline#extensions#tabline#buffer_nr_show"] = 1

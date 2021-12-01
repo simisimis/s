@@ -1,7 +1,6 @@
 {
   usr.name = "snarbutas";
   usr.fullName = "Simonas Narbutas";
-  usr.username = "snarbutas";
   usr.email = "snarbutas@bol.com";
   usr.ssh.gitea.identityFile = "~/.ssh/id_rsa_backute_gitea";
   usr.ssh.github.identityFile = "~/.ssh/id_rsa_github_simisimis";

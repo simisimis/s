@@ -17,24 +17,6 @@ in
     vimdiffAlias = true;
     #extraConfig = builtins.readFile ./home/extraConfig.vim;
     extraConfig = ''
-      nnoremap <Tab> :bnext<CR>
-      nnoremap <S-Tab> :bprevious<CR>
-
-      set history=1000                  " Save a lot of history (default is 20)
-      set clipboard=unnamedplus
-
-
-      set visualbell                    " Use visual bell instead of a beep
-      set ttyfast                       " Let vim know we have a fast terminal, regardless of $TERM
-
-      set encoding=utf-8                " Set default file encoding to utf-8
-      set paste                         " Set paste off
-
-      set wildmode=longest,list         " Set shell like completion. to tab select add 'full'
-
-      let g:airline#extensions#tabline#enabled = 1
-      let g:airline#extensions#tabline#buffer_nr_show = 1
-
       lua << EOF
       ${initLua}
       EOF
