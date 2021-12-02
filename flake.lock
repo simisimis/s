@@ -20,11 +20,11 @@
     "binfiles": {
       "flake": false,
       "locked": {
-        "lastModified": 1637915746,
-        "narHash": "sha256-feRZZmDzWJjM7pzt50hIJCPXeTRGnDH8iyIaS30B1fQ=",
+        "lastModified": 1638442643,
+        "narHash": "sha256-MvMEm8nqbgln/uIPViX4qfcEx/L9gg9fTer2Wdf9vsQ=",
         "ref": "master",
-        "rev": "97e67161d4df2c0048746f9e16697f3e1cd0a1d7",
-        "revCount": 12,
+        "rev": "c1b37007a2d027d4b19cba088154fb5a13fc07c8",
+        "revCount": 13,
         "type": "git",
         "url": "ssh://git@git.narbuto.lt:2203/simas/binfiles"
       },
@@ -57,11 +57,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1638279546,
-        "narHash": "sha256-1KCwN7twjp1dBdp0jPgVdYFztDkCR8+roo0B34J9oBY=",
+        "lastModified": 1638371214,
+        "narHash": "sha256-0kE6KhgH7n0vyuX4aUoGsGIQOqjIx2fJavpCWtn73rc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "96b4157790fc96e70d6e6c115e3f34bba7be490f",
+        "rev": "a640d8394f34714578f3e6335fc767d0755d78f9",
         "type": "github"
       },
       "original": {
@@ -72,11 +72,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1638198142,
-        "narHash": "sha256-plU9b8r4St6q4U7VHtG9V7oF8k9fIpfXl/KDaZLuY9k=",
+        "lastModified": 1638376152,
+        "narHash": "sha256-ucgLpVqhFnClH7YRUHBHnmiOd82RZdFR3XJt36ks5fE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8a308775674e178495767df90c419425474582a1",
+        "rev": "6daa4a5c045d40e6eae60a3b6e427e8700f1c07f",
         "type": "github"
       },
       "original": {
