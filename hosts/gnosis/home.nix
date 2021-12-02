@@ -261,6 +261,10 @@ in
           PubKeyAuthentication = "yes";
         };
       };
+      "192.168.178.73" = {
+        user = "simas";
+        identityFile = config.settings.usr.ssh.siMONSTER.identityFile;
+      };
     };
   };
   programs.zsh = {

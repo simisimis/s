@@ -36,6 +36,10 @@ with lib;
             default = "~/.ssh/id_rsa_backute_src_host";
             type = with types; uniq str;
           };
+          siMONSTER.identityFile = mkOption {
+            default = "~/.ssh/id_rsa_src_host";
+            type = with types; uniq str;
+          };
           github.identityFile = mkOption {
             default = "~/.ssh/id_rsa_github_src_host";
             type = with types; uniq str;
