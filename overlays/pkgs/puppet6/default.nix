@@ -3,7 +3,7 @@
 bundlerApp {
   pname = "puppet";
   gemdir = ./.;
-  exes = [ "puppet" "puppet-lint"];
+  exes = [ "puppet" "puppet-lint" "hiera" "facter" "rspec" "rake" ];
 
   passthru.updateScript = bundlerUpdateScript "";
 

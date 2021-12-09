@@ -27,6 +27,7 @@ in
       vim-go
       vim-toml
       vim-yaml
+      vim-puppet
       vim-airline
       nerdtree
       nvim-lspconfig

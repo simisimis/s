@@ -70,6 +70,7 @@
     fzf
     jq
     ripgrep
+    fd
     tree
 
     linuxPackages.v4l2loopback

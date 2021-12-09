@@ -51,7 +51,7 @@ in
     stdenv.cc.cc.lib
 
     #dev
-    unstable.go_1_17 unstable.golint dep
+    go_1_17 golint dep delve
     exercism
     unstable.android-studio
 
@@ -62,17 +62,36 @@ in
   # services
   services.gpg-agent.pinentryFlavor = "gtk2";
 
-  programs.vscode = with unstable; {
+  programs.vscode = with pkgs; {
     enable = true;
-    package = vscode-with-extensions // { pname = "vscode"; };
-    extensions = [
-      vscode-extensions.ms-vscode.go
-      vscode-extensions.bbenoist.nix
+    extensions = with vscode-extensions; [
+      golang.go
+      #rust-lang.rust
+      hashicorp.terraform
+      vscodevim.vim
+      redhat.vscode-yaml
+      ms-vscode-remote.remote-ssh
+
+      # third party extensions
+      #arrterian.nix-env-selector
+      brettm12345.nixfmt-vscode     
+      bbenoist.nix
     ];
     userSettings = {
       "telemetry.enableCrashReporter" = false;
       "telemetry.enableTelemetry" = false;
-      "go.toolsManagement.autoUpdate" = true;
+
+      "go.toolsManagement.autoUpdate" = false;
+#      "go.formatTool" = "gofmt";
+#      "go.lintTool" = "golint";
+#      "go.lintOnSave" = "file";
+#      "go.useLanguageServer" = true;
+#      "go.toolsEnvVars" = {
+#        "GOFLAGS" = "-tags=sandbox,integration,e2e";
+#      };
+      "window.zoomLevel" = 0;
+      "editor.formatOnSave" =  true;
+
       "workbench.colorTheme" = "Solarized Light";
       "workbench.iconTheme" = null;
       "explorer.confirmDragAndDrop" = false;

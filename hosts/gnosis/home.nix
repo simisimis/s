@@ -143,7 +143,7 @@ in
 
     #dev
     hiera-eyaml
-    ruby bundix puppetgems pdk
+    ruby bundix puppet pdk
     google-cloud-sdk
     kubectx kubectl k9s stern
     unstable.terraform
