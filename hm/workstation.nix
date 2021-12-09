@@ -95,8 +95,8 @@ in
       "workbench.colorTheme" = "Solarized Light";
       "workbench.iconTheme" = null;
       "workbench.colorCustomizations" = {
-        "editor.selectionBackground" = "#e3b886";
-        "editor.selectionHighlightBackground" = "#e3b886";
+        "editor.selectionBackground" = "#edcda8";
+        "editor.selectionHighlightBackground" = "#edcda8";
       };
       "explorer.confirmDragAndDrop" = false;
       "search.useIgnoreFiles" = false;
