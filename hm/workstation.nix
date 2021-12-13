@@ -80,7 +80,24 @@ in
     userSettings = {
       "telemetry.enableCrashReporter" = false;
       "telemetry.enableTelemetry" = false;
-
+    # ViM settings
+    "vim.normalModeKeyBindingsNonRecursive" = [{
+            "before" = ["u"];
+            "after" = [];
+            "commands"= [{
+                "command"= "undo";
+                "args"= [];
+            }];
+        }
+        {
+            "before" = ["<C-r>"];
+            "after" = [];
+            "commands" = [{
+                "command" = "redo";
+                "args" = [];
+            }];
+        }
+    ];
       "go.toolsManagement.autoUpdate" = false;
 #      "go.formatTool" = "gofmt";
 #      "go.lintTool" = "golint";
