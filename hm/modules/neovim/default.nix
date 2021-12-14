@@ -34,6 +34,7 @@ in
       nvim-compe
 
       # UI #################################################
+      tokyonight-nvim
       gruvbox # colorscheme
       onedark-vim
       #industry
