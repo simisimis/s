@@ -1,9 +1,10 @@
-{ nixpkgs-unstable, ... }:
+{ nixpkgs-unstable, config, ... }:
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
+  dataDir = "/var/lib/zigbee2mqtt";
 in
 {
   services.home-assistant = {
@@ -26,15 +27,43 @@ in
         "::1"
       ];
     };
-
+    history.exclude = {
+      domains = [
+        "automation"
+        "updater"
+      ];
+    };
     recorder.db_url = "postgresql://@/hass";
 
+    homeassistant = {
+      name = "Home";
+      time_zone = config.time.timeZone;
+      latitude = "52.095525";
+      longitude = "5.053437";
+      elevation = "5";
+      unit_system = "metric";
+      temperature_unit = "C";
+    };
+    mqtt = {
+      broker = "localhost";
+      port = 1883;
+      username = "hass";
+      password = "arstarst";
+    };
     tado = { };
     sonos = {
       media_player.hosts = [ "192.168.178.60" ];
     };
 
     roomba = { };
+
+    calendar = { };
+    google = {
+      client_id = "902077847980-5ioe3tre3lafmfn60fgf1tjldsol4ku2.apps.googleusercontent.com";
+      client_secret = "arstarst";
+      calendar_access = "read_write";
+    };
+    shelly = {};
     default_config = { };
 
     sensor = [{
@@ -44,6 +73,7 @@ in
       resource = "https://icanhazdadjoke.com/";
       scan_interval = "3600";
       headers.Accept = "application/json";
+      value_template = "{{ value_json.joke }}";
     }];
 
     intent_script.TellJoke = {
@@ -57,7 +87,7 @@ in
   }; #services.home-assistant.config
 
   services.nginx = {
-    virtualHosts."hass.narbuto.lt" = {
+    virtualHosts."ha.narbuto.lt" = {
       useACMEHost = "narbuto.lt";
       forceSSL = true;
       extraConfig = ''
@@ -84,5 +114,68 @@ in
         "DATABASE hass" = "ALL PRIVILEGES";
       };
     }];
+  };
+  services.zigbee2mqtt = {
+    enable = true;
+    inherit dataDir;
+    package = unstable.zigbee2mqtt;
+    settings = {
+      permit_join = true;
+      serial.port = "/dev/ttyACM0";
+      homeassistant = true;
+      mqtt = {
+        server = "mqtt://localhost:1883";
+        base_topic = "zigbee2mqtt";
+        user = "hass";
+        password = "arstarst";
+#        include_device_information = true;
+        client_id = "zigbee2mqtt";
+      };
+      advanced = {
+        network_key = "GENERATE";
+        log_level = "info";
+      };
+      frontend = {
+        port = 8521;
+      };
+#      experimental = {
+#        new_api = true;
+#      };
+    };
+  };
+
+  #state = [ "${dataDir}/devices.yaml" "${dataDir}/state.json" ];
+
+  systemd.services.zigbee2mqtt = {
+    # override automatic configuration.yaml deployment
+    environment.ZIGBEE2MQTT_DATA = dataDir;
+    after = [
+      "home-assistant.service"
+      "mosquitto.service"
+      "network-online.target"
+    ];
+  };
+
+  services.mosquitto = {
+    enable = true;
+    persistence = false;
+    settings.max_keepalive = 60;
+    listeners = [
+      {
+        port = 1883;
+        omitPasswordAuth = false;
+        users.sensor = {
+          hashedPassword = "$7$101$FtTAxI3zCSJetIhA$of8FT/7VKQ+80dhqEA/nVtdNvNp9S7V7ryYn0WbbyA4zqtpBeEDOGMMkW8vpLYKqZFHoOAUtvwZ98GfbDN2OAA==";
+          acl = [ "readwrite #" ];
+        };
+        users.hass = {
+          hashedPassword = "$7$101$bs680qEFWF7ScglA$ndAJ34vTKJ8dVSH2vhQiSnFlzlM2gUVi1u/6W9YZTtD8jeO+csNFe+N91EZTE/i8vmaVrIVrQYytCeSuGuyY6A==";
+          acl = [ "readwrite #" ];
+        };
+        settings = {
+          allow_anonymous = false;
+        };
+      }
+    ];
   };
 }
