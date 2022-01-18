@@ -48,7 +48,7 @@ in
       broker = "localhost";
       port = 1883;
       username = "hass";
-      password = "arstarst";
+      password = "arst";
     };
     tado = { };
     sonos = {
@@ -83,6 +83,58 @@ in
         entity_id = "sensor.random_joke";
       };
     };
+    automation = [
+      {
+        alias = "living room tree off";
+        trigger = {
+          platform = "time";
+          at = "22:00";
+        };
+        action = {
+          type = "turn_off";
+          device_id = "434ffceaa2edc88692f807839ac1bfe1";
+          entity_id = "switch.living_room_plug";
+          domain = "switch";
+        };
+      } #living room xmas auto off
+      {
+        alias = "living room tree on";
+        trigger = {
+          platform = "time";
+          at = "7:00";
+        };
+        action = {
+          type = "turn_on";
+          device_id = "434ffceaa2edc88692f807839ac1bfe1";
+          entity_id = "switch.living_room_plug";
+          domain = "switch";
+        };
+      } #living room xmas auto on
+      { alias = "attic xmas auto on";
+        trigger = {
+          platform = "time";
+          at = "9:00";
+        };
+        action = {
+          type = "turn_on";
+          device_id = "8f71f657c883dce32f894908401dedba";
+          entity_id = "switch.attic_plug";
+          domain = "switch";
+        };
+      } #attic xmas auto on
+      { alias = "attic xmas auto off";
+        trigger = {
+          platform = "time";
+          at = "17:30";
+        };
+        action = {
+          type = "turn_off";
+          device_id = "8f71f657c883dce32f894908401dedba";
+          entity_id = "switch.attic_plug";
+          domain = "switch";
+        };
+      } #attic xmas auto off
+    ]; # automation
 
   }; #services.home-assistant.config
 
@@ -127,7 +179,7 @@ in
         server = "mqtt://localhost:1883";
         base_topic = "zigbee2mqtt";
         user = "hass";
-        password = "arstarst";
+        password = "arst";
 #        include_device_information = true;
         client_id = "zigbee2mqtt";
       };
