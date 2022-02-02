@@ -27,7 +27,7 @@ in
 
     #web
     firefox
-    chromium
+    (chromium.override { commandLineArgs = [ "--ozone-platform-hint=auto" ]; })
 
     #media
     gthumb

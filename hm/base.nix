@@ -22,7 +22,7 @@ in
     screen
     pamixer
     #dev
-    (python38.withPackages(ps: with ps; [ termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
+    (python38.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
     gitAndTools.gitflow
     jq
     gotop
@@ -118,7 +118,6 @@ in
       feh="feh -Z -.";
       history="history -2000";
       find="noglob find";
-      chromium="chromium --enable-features=UseOzonePlatform --ozone-platform=wayland";
     };
     defaultKeymap = "emacs";
     plugins = [

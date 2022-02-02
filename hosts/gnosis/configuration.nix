@@ -63,6 +63,9 @@
       ctrl_interface_group=wheel
     '';
   };
+  environment.systemPackages = with pkgs; [
+    docker-compose
+  ];
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;

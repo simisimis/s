@@ -63,6 +63,7 @@
     git tig
     gnupg
     inetutils
+    pciutils
 
     #utils
     unzip
