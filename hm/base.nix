@@ -21,6 +21,7 @@ in
     usbutils
     screen
     pamixer
+    gopass
     #dev
     (python38.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
     gitAndTools.gitflow

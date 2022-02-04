@@ -15,7 +15,6 @@ in
     #utils
     arandr
     pavucontrol
-    gopass
     freerdp
     speedcrunch
     scrot
