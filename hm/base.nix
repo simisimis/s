@@ -22,8 +22,9 @@ in
     screen
     pamixer
     gopass
+    udiskie
     #dev
-    (python38.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
+    (python38.withPackages(ps: with ps; [ termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
     gitAndTools.gitflow
     jq
     gotop
@@ -31,7 +32,17 @@ in
   ];
 
   programs.gpg.enable = true;
+  systemd.user.targets.tray = {
+		Unit = {
+			Description = "Home Manager System Tray";
+			Requires = [ "graphical-session-pre.target" ];
+		};
+	};
   # services
+  services.udiskie = {
+    enable = true;
+    tray = "never";
+  };
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
@@ -119,6 +130,7 @@ in
       feh="feh -Z -.";
       history="history -2000";
       find="noglob find";
+      chromium="chromium --enable-features=UseOzonePlatform --ozone-platform=wayland";
     };
     defaultKeymap = "emacs";
     plugins = [
