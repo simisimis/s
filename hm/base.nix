@@ -24,7 +24,7 @@ in
     gopass
     udiskie
     #dev
-    (python38.withPackages(ps: with ps; [ termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
+    (python39.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
     gitAndTools.gitflow
     jq
     gotop

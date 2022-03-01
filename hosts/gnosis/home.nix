@@ -120,6 +120,7 @@ in
   };
   
   home.packages = with pkgs; [
+    musescore
     # start wayland
     swaylock
     swayidle
