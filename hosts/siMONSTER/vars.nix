@@ -4,6 +4,6 @@
   usr.ssh.backute.identityFile = "~/.ssh/id_rsa_siMONSTER_backute";
   hw.hostName = "siMONSTER";
   hw.hostId = "f1b2a3d4";
-  gitRepos.binfiles.ref = "simonster";
+  gitRepos.binfiles.ref = builtins.readFile /run/agenix/secret1;
   gitRepos.binfiles.rev = "a060ba98b9e06c2f28adf8d4d35f04f693188735";
 }

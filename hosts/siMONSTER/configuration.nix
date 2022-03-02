@@ -11,6 +11,7 @@
   ];
   nix.package = pkgs.nixFlakes;
 
+  age.secrets.secret1.file = ./secret1.age;
   nix.extraOptions = ''
     keep-outputs = true
     keep-derivations = true

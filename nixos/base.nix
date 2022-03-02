@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, agenix, ... }:
 {
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -62,6 +62,7 @@
     neovim
     git tig
     gnupg
+    agenix.defaultPackage.x86_64-linux
     inetutils
     pciutils
 

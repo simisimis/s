@@ -7,6 +7,8 @@
     home-manager.url = "github:nix-community/home-manager/release-21.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
     binfiles = {
       url = "git+ssh://git@git.narbuto.lt:2203/simas/binfiles?ref=master";
       flake = false;
@@ -40,6 +42,7 @@
       modules = [
         { _module.args = args; }
         ./hosts/${host}/configuration.nix
+        inputs.agenix.nixosModule
       ];
     };
     mkHome = user: host: type: inputs.home-manager.lib.homeManagerConfiguration {

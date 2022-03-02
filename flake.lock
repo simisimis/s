@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "agenix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1646105662,
+        "narHash": "sha256-jdXCZbGZL0SWWi29GnAOFHUh/QvvP0IyaVLv1ZTDkBI=",
+        "owner": "ryantm",
+        "repo": "agenix",
+        "rev": "297cd58b418249240b9f1f155d52b1b17f292884",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ryantm",
+        "repo": "agenix",
+        "type": "github"
+      }
+    },
     "awesomewm": {
       "flake": false,
       "locked": {
@@ -87,6 +107,7 @@
     },
     "root": {
       "inputs": {
+        "agenix": "agenix",
         "awesomewm": "awesomewm",
         "binfiles": "binfiles",
         "home-manager": "home-manager",
