@@ -23,6 +23,7 @@ in
     pamixer
     gopass
     udiskie
+    pfetch
     #dev
     (python39.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
     gitAndTools.gitflow
