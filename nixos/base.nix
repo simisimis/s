@@ -67,6 +67,7 @@
     pciutils
 
     #utils
+    zip
     unzip
     ranger
     fzf

@@ -148,8 +148,11 @@ in
     cifs-utils
     openconnect
     rclone
+    restic
 
     #dev
+    rustc cargo rustfmt
+    jdk11
     hiera-eyaml
     ruby bundix puppet pdk
     google-cloud-sdk
@@ -281,6 +284,33 @@ in
     ];
     initExtra = ''
     export BOL_FANCYPROMPT="\[\033[38;5;202m\][\[\033[38;5;4m\]\t\[\033[38;5;202m\]] \[\033[38;5;3m\]\h \[\033[38;5;6m\]\W \[\033[38;5;41m\]≫\[\033[0m\] "
+    export JAVA_HOME="${pkgs.jdk11}"
+    export RUST_SRC_PATH="${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}"
     '';
+  };
+  systemd.user.services.notesync = {
+    Unit = {
+      Description = "sync notes to gdrive";
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStartPre = "${pkgs.rclone}/bin/rclone copy gdrive: /home/snarbutas/Documents/papyrus/ -v";
+      ExecStart = "${pkgs.rclone}/bin/rclone sync --exclude '.obsidian/**' /home/snarbutas/Documents/papyrus/  gdrive: -v";
+      SuccessExitStatus = "0 1";
+    };
+  };
+
+  systemd.user.timers.notesync = {
+    Unit = {
+      Description = "sync notes hourly";
+    };
+    Timer = {
+      Unit = "notesync.service";
+      OnCalendar = "*:0,15,30,45";
+      Persistent = "yes";
+    };
+    Install = {
+      WantedBy = [ "timers.target" ];
+    };
   };
 }

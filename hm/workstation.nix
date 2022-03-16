@@ -65,10 +65,10 @@ in
     enable = true;
     extensions = with vscode-extensions; [
       golang.go
-      #rust-lang.rust
       hashicorp.terraform
       vscodevim.vim
       redhat.vscode-yaml
+      redhat.java
       ms-vscode-remote.remote-ssh
 
       # third party extensions
@@ -118,6 +118,16 @@ in
       "search.useIgnoreFiles" = false;
       "explorer.confirmDelete" = false;
       "editor.fontFamily" = "'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
+      "java.jdt.ls.java.home" = "${pkgs.jdk11}/lib/openjdk";
+      "java.configuration.runtimes" = [
+        {
+          "name" = "JavaSE-11";
+          "path" = "${pkgs.jdk11}/lib/openjdk";
+          "default" =  true;
+        }];
+        "java.project.referencedLibraries" = [
+          "/home/snarbutas/development/java/algorithmsp1/lib/algs4.jar"
+        ];
     };
   };
   programs.zathura.enable = true;

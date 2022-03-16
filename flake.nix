@@ -23,7 +23,7 @@
     };
   };
 
- outputs = { self, ... }@inputs:
+  outputs = { self, ... }@inputs:
   let
     system = "x86_64-linux";
 
