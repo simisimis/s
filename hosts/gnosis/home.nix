@@ -306,8 +306,8 @@ in
     };
     Timer = {
       Unit = "notesync.service";
-      OnCalendar = "*:0,15,30,45";
-      Persistent = "yes";
+      OnCalendar = "*:0/15";
+      Persistent = "true";
     };
     Install = {
       WantedBy = [ "timers.target" ];
