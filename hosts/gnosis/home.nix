@@ -294,7 +294,8 @@ in
     };
     Service = {
       Type = "oneshot";
-      ExecStart = "${pkgs.rclone}/bin/rclone sync --exclude '.obsidian/**' /home/snarbutas/Documents/papyrus/  gdrive: -v";
+      ExecStartPre = "${pkgs.rclone}/bin/rclone sync --exclude '${config.settings.hw.hostName}/**' --exclude '.obsidian/**' gdrive: /home/${config.settings.usr.name}/Documents/papyrus/ -v";
+      ExecStart = "${pkgs.rclone}/bin/rclone sync /home/${config.settings.usr.name}/Documents/papyrus/${config.settings.hw.hostName}  gdrive:${config.settings.hw.hostName} -v";
       SuccessExitStatus = "0 1";
     };
   };
