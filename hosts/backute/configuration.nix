@@ -76,9 +76,13 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
+  services.adguardhome = {
+    enable = true;
+    port = 8100;
+  };
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 2049 32400 3005 8324 32469 8123 1400 8521 1883];
-  networking.firewall.allowedUDPPorts = [ 1900 32410 32412 32413 32414 ];
+  networking.firewall.allowedTCPPorts = [ 22 53 2049 32400 3005 8324 32469 8123 1400 8521 1883 8100];
+  networking.firewall.allowedUDPPorts = [ 53 1900 32410 32412 32413 32414 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
