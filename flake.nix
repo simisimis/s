@@ -41,6 +41,7 @@
       inherit system;
       modules = [
         { _module.args = args; }
+        (import ( inputs.nixpkgs-unstable + "/nixos/modules/services/home-automation/home-assistant.nix" ))
         ./hosts/${host}/configuration.nix
         inputs.agenix.nixosModule
       ];
