@@ -1,7 +1,7 @@
 {
-  services.home-assistant.config.scene = [
+  services.home-assistant.config."scene manual" = [
     { id = "1643439197572";
-      name = "living_disco";
+      name = "living_disco_test";
       icon = "mdi:chandelier";
       entities = {
         "light.livingroom_lamp1" = {
@@ -72,4 +72,5 @@
       };
     }
   ];
+  services.home-assistant.config."scene ui" = "!include scenes.yaml";
 }
