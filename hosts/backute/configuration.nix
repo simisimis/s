@@ -2,7 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, nixpkgs-unstable, ... }:
+let
+  unstable = import nixpkgs-unstable {
+    system = "x86_64-linux";
+    config = { allowUnfree = true; };
+  };
+in
 {
 
   settings = import ./vars.nix;
@@ -80,9 +86,14 @@
     enable = true;
     port = 8100;
   };
+  services.unifi = {
+    enable = true;
+    openPorts = true;
+    unifiPackage = unstable.unifi;
+  };
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 53 2049 32400 3005 8324 32469 8123 1400 8521 1883 8100];
-  networking.firewall.allowedUDPPorts = [ 53 1900 32410 32412 32413 32414 ];
+  networking.firewall.allowedTCPPorts = [ 22 53 2049 32400 3005 8324 32469 8123 1400 8521 1883 8100 8443 8081 ];
+  networking.firewall.allowedUDPPorts = [ 53 1900 32410 32412 32413 32414 8443 8081 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 

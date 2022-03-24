@@ -9,6 +9,8 @@
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.firewall.enable = true;
+  #networking.firewall.allowedTCPPorts = [ 8384 22000 ];
+  #networking.firewall.allowedUDPPorts = [ 22000 21027 ];
 
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
@@ -28,6 +30,21 @@
     pulse.enable = true;
   };
 
+  services.syncthing = {
+    enable = true;
+    user = config.settings.usr.name;
+    configDir = config.settings.services.syncthing.configDir; # Folder for Syncthing's settings and keys
+    overrideFolders = true;
+    devices = {
+      "${config.settings.hw.hostName}" = { id = "SQW6JN7-ZEXNTZF-MZNPYDB-UW46K4R-MCVZORG-LFYLFLF-SZW3U3N-OVNTYAH"; };
+    };
+    folders = {
+      "papyrus" = {        # Name of folder in Syncthing, also the folder ID
+        path = config.settings.services.syncthing.dataDir;    # Which folder to add to Syncthing
+        devices = [ config.settings.hw.hostName ];      # Which devices to share the folder with
+      };
+    };
+  };
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
     mutableUsers = false;

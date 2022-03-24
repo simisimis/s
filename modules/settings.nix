@@ -61,6 +61,19 @@ with lib;
           description = "video driver";
         };
       };
+      services = {
+        syncthing = {
+          dataDir = mkOption {
+            type = with types; uniq str;
+            description = "directory to sync";
+          };
+          configDir = mkOption {
+            type = with types; uniq str;
+            description = "config dir ";
+          };
+        };
+      };
+
       gitRepos = {
         binfiles = {
           ref = mkOption {
