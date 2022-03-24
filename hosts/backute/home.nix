@@ -28,8 +28,7 @@ in
     };
     Service = {
       Type = "oneshot";
-      ExecStartPre = "${pkgs.rclone}/bin/rclone sync --exclude '${config.settings.hw.hostName}/**' --exclude '.obsidian/**' gdrive: /srv/docker/raneto/content/ -v";
-      ExecStart = "${pkgs.rclone}/bin/rclone sync /srv/docker/raneto/content/${config.settings.hw.hostName}  gdrive:${config.settings.hw.hostName} -v";
+      ExecStart = "${pkgs.rclone}/bin/rclone sync /srv/docker/raneto/content  gdrive: -v";
       SuccessExitStatus = "0 1";
     };
   };

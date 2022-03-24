@@ -288,29 +288,4 @@ in
     export RUST_SRC_PATH="${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}"
     '';
   };
-  systemd.user.services.notesync = {
-    Unit = {
-      Description = "sync notes to gdrive";
-    };
-    Service = {
-      Type = "oneshot";
-      ExecStartPre = "${pkgs.rclone}/bin/rclone sync --exclude '${config.settings.hw.hostName}/**' --exclude '.obsidian/**' gdrive: /home/${config.settings.usr.name}/Documents/papyrus/ -v";
-      ExecStart = "${pkgs.rclone}/bin/rclone sync /home/${config.settings.usr.name}/Documents/papyrus/${config.settings.hw.hostName}  gdrive:${config.settings.hw.hostName} -v";
-      SuccessExitStatus = "0 1";
-    };
-  };
-
-  systemd.user.timers.notesync = {
-    Unit = {
-      Description = "sync notes hourly";
-    };
-    Timer = {
-      Unit = "notesync.service";
-      OnCalendar = "*:0/15";
-      Persistent = "true";
-    };
-    Install = {
-      WantedBy = [ "timers.target" ];
-    };
-  };
 }
