@@ -33,6 +33,8 @@ in
       nvim-lspconfig
       nvim-compe
 
+      indentLine # show indentlines
+      vim-vinegar
       # UI #################################################
       tokyonight-nvim
       gruvbox # colorscheme
@@ -55,10 +57,12 @@ in
 
       # Buffer / Pane / File Management ####################
       fzf-vim # all the things
+      tmux-complete-vim
 
       # Panes / Larger features ############################
       #tagbar # <leader>5
-      #vim-fugitive # Gblame
+      # Git Integration
+      vim-fugitive # Gblame
     ];
   };
 }

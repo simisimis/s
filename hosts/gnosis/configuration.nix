@@ -25,19 +25,12 @@
     keep-derivations = true
     experimental-features = nix-command flakes
   '';
-  # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
-#  home-manager.users."${config.settings.usr.name}".imports = [ 
-#    ./home.nix
-#    ../../hm/base.nix
-#    ../../hm/workstation.nix
-#  ];
 
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;
 
   #virtualisation.virtualbox.host.enableExtensionPack = true;
-  #  boot.kernelPackages = pkgs.linuxPackages_5_11;
   boot.kernel.sysctl."net.ipv6.conf.wlp59s0.disable_ipv6" = true;
   networking.dhcpcd.wait = "background";
 
@@ -161,6 +154,16 @@
         };
       }
     ];
+  };
+
+  services.syncthing = {
+    # Folder for Syncthing's settings and keys
+    configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
+    folders = {
+      "papyrus" = {
+        path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+      };
+    };
   };
 
   security.pam.services.swaylock = {};

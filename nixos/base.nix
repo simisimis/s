@@ -33,15 +33,14 @@
   services.syncthing = {
     enable = true;
     user = config.settings.usr.name;
-    configDir = config.settings.services.syncthing.configDir; # Folder for Syncthing's settings and keys
     overrideFolders = true;
     devices = {
-      "${config.settings.hw.hostName}" = { id = "SQW6JN7-ZEXNTZF-MZNPYDB-UW46K4R-MCVZORG-LFYLFLF-SZW3U3N-OVNTYAH"; };
+      "gnosis" = { id = "CEF2GB3-OIANJ7X-AGC3CUN-ITGKOXX-TN3N2NI-DOV3ZGP-YLRCUJV-BTMMEAB"; };
+      "backute" = { id = "SQW6JN7-ZEXNTZF-MZNPYDB-UW46K4R-MCVZORG-LFYLFLF-SZW3U3N-OVNTYAH"; };
     };
     folders = {
       "papyrus" = {        # Name of folder in Syncthing, also the folder ID
-        path = config.settings.services.syncthing.dataDir;    # Which folder to add to Syncthing
-        devices = [ config.settings.hw.hostName ];      # Which devices to share the folder with
+        devices = [ "backute" "gnosis" ];      # Which devices to share the folder with
       };
     };
   };

@@ -91,6 +91,15 @@ in
     openPorts = true;
     unifiPackage = unstable.unifi;
   };
+  services.syncthing = {
+    # Folder for Syncthing's settings and keys
+    configDir = config.settings.services.syncthing.configDir;
+    folders = {
+      "papyrus" = {
+        path = config.settings.services.syncthing.dataDir;
+      };
+    };
+  };
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 22 53 2049 32400 3005 8324 32469 8123 1400 8521 1883 8100 8443 8081 ];
   networking.firewall.allowedUDPPorts = [ 53 1900 32410 32412 32413 32414 8443 8081 ];
