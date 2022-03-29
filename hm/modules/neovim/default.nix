@@ -23,6 +23,31 @@ in
       '';
     plugins = with pkgs.vimPlugins; [
       # Syntax / Language Support ##########################
+      # Collection of common configurations for the Nvim LSP client
+      nvim-lspconfig
+
+      # Completion framework
+      nvim-cmp
+
+      # LSP completion source for nvim-cmp
+      cmp-nvim-lsp
+
+      # Snippet completion source for nvim-cmp
+      cmp-vsnip
+
+      # Other usefull completion sources
+      cmp-path
+      cmp-buffer
+
+      # To enable more of the features of rust-analyzer, such as inlay hints and more!
+      rust-tools-nvim
+
+      # Snippet engine
+      vim-vsnip
+
+      # Fuzzy finder
+      telescope-nvim
+
       vim-nix
       vim-go
       vim-toml
@@ -30,11 +55,12 @@ in
       vim-puppet
       vim-airline
       nerdtree
-      nvim-lspconfig
       nvim-compe
+      nvim-treesitter
 
       indentLine # show indentlines
       vim-vinegar
+
       # UI #################################################
       tokyonight-nvim
       gruvbox # colorscheme
@@ -64,5 +90,5 @@ in
       # Git Integration
       vim-fugitive # Gblame
     ];
-  };
+  }; # neovim
 }

@@ -151,7 +151,8 @@ in
     restic
 
     #dev
-    rustc cargo rustfmt
+    #rustc cargo rustfmt
+    rustup
     jdk11
     hiera-eyaml
     ruby bundix puppet pdk

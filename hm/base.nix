@@ -25,6 +25,8 @@ in
     udiskie
     pfetch
     #dev
+    rust-analyzer
+    rnix-lsp
     (python39.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
     gitAndTools.gitflow
     jq

@@ -37,10 +37,11 @@
     devices = {
       "gnosis" = { id = "CEF2GB3-OIANJ7X-AGC3CUN-ITGKOXX-TN3N2NI-DOV3ZGP-YLRCUJV-BTMMEAB"; };
       "backute" = { id = "SQW6JN7-ZEXNTZF-MZNPYDB-UW46K4R-MCVZORG-LFYLFLF-SZW3U3N-OVNTYAH"; };
+      "simsung" = { id = "7L3QGPS-ZTFMSBX-2RJC754-STXLMZ5-ASVZKAR-BLO4FYR-ED3LGEL-CDY3IAJ"; };
     };
     folders = {
       "papyrus" = {        # Name of folder in Syncthing, also the folder ID
-        devices = [ "backute" "gnosis" ];      # Which devices to share the folder with
+        devices = [ "backute" "gnosis" "simsung" ];      # Which devices to share the folder with
       };
     };
   };
