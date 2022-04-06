@@ -133,7 +133,6 @@ in
       feh="feh -Z -.";
       history="history -2000";
       find="noglob find";
-      chromium="chromium --enable-features=UseOzonePlatform --ozone-platform=wayland";
     };
     defaultKeymap = "emacs";
     plugins = [
