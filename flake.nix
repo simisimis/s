@@ -76,5 +76,12 @@
       backute = mkHost "backute";
       siMONSTER = mkHost "siMONSTER";
     }; #nixosConfigurations
+    devShell.x86_64-linux = pkgs.mkShell {
+      buildInputs = with pkgs; [
+        stdenv
+        openssl
+        pkg-config
+      ];
+    }; # devShell
   }; #outputs
 }
