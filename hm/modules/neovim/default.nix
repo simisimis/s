@@ -49,6 +49,7 @@ in
       telescope-nvim
 
       vim-nix
+      vim-markdown
       vim-go
       vim-toml
       vim-yaml

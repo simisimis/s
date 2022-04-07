@@ -81,11 +81,11 @@ in
       hub.protocol = "https";
       color.ui = true;
       pull.rebase = true;
-      url = {
-        "ssh://git@github.com" = {
-          insteadOf = "https://github.com";
-        };
-      };
+#      url = {
+#        "ssh://git@github.com" = {
+#          insteadOf = "https://github.com";
+#        };
+#      };
     };
   };
   programs.tmux = {
