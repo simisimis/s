@@ -26,18 +26,24 @@ in
       # Collection of common configurations for the Nvim LSP client
       nvim-lspconfig
 
-      # Completion framework
+      # A completion engine for neovim written in Lua.
       nvim-cmp
+
+      # nvim-cmp source for buffer words.
+      cmp-buffer
 
       # LSP completion source for nvim-cmp
       cmp-nvim-lsp
 
+      # nvim-cmp source for filesystem paths
+      cmp-path
+
+      # nvim-cmp source for treesitter nodes
+      cmp-treesitter
+
       # Snippet completion source for nvim-cmp
       cmp-vsnip
 
-      # Other usefull completion sources
-      cmp-path
-      cmp-buffer
 
       # To enable more of the features of rust-analyzer, such as inlay hints and more!
       rust-tools-nvim
@@ -45,45 +51,34 @@ in
       # Snippet engine
       vim-vsnip
 
-      # Fuzzy finder
-      telescope-nvim
-
+      # languages
       vim-nix
       vim-markdown
       vim-go
       vim-toml
       vim-yaml
       vim-puppet
-      vim-airline
+
+      # UI #################################################
+      # vim-gitgutter # status in gutter
+      # vim-devicons
+      #vim-airline
+      lualine-nvim
       nerdtree
       nvim-compe
       nvim-treesitter
 
-      indentLine # show indentlines
-      vim-vinegar
-
-      # UI #################################################
-      tokyonight-nvim
-      gruvbox # colorscheme
-      onedark-vim
-      #industry
-      # vim-gitgutter # status in gutter
-      # vim-devicons
-      # vim-airline
-
       # Editor Features ####################################
       vim-surround # cs"'
       vim-repeat # cs"'...
+      hop-nvim
       #vim-commentary # gcap
-      #vim-indent-object # >aI
-      #vim-easy-align # vipga
-      #vim-eunuch # :Rename foo.rb
-      #vim-sneak
-      #supertab
-      #nerdtree
 
       # Buffer / Pane / File Management ####################
-      fzf-vim # all the things
+      #fzf-vim # all the things
+      # Fuzzy finder
+      telescope-nvim
+
       tmux-complete-vim
 
       # Panes / Larger features ############################

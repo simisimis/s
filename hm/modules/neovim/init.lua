@@ -21,6 +21,14 @@ vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR><Esc>", { noremap = true })
 -- Set default split direction.
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+
+-- colors
+vim.opt.background = 'dark'
+vim.g.colors_name = 'slate' -- theme
+if vim.opt.diff:get() then
+  vim.g.colors_name = 'industry'
+end -- end vimdiff theme
+
 -- 
 local cmp = require'cmp'
 cmp.setup({
@@ -86,12 +94,6 @@ local opts = {
 
 require('rust-tools').setup(opts)
 
--- colors
-vim.g.colors_name = 'gruvbox' -- theme
-if vim.opt.diff:get() then
-  vim.g.colors_name = 'industry'
-end -- end vimdiff theme
-
 local vimdirs = {'backup', 'tmp', 'undo'}
 local swap_dir = vim.env.HOME..'/.cache/nvim/swap-files'
 for _,dir in ipairs(vimdirs) do
@@ -124,5 +126,10 @@ vim.opt.wildmode = "longest,list" -- Set shell like completion. to tab select ad
 --vim.api.nvim_set_keymap('n', '<Tab>', ':bnext<CR>', {noremap = true})
 --vim.api.nvim_set_keymap('n', '<S-Tab>', ':bprevious<CR>', {noremap = true})
 
-vim.g["airline#extensions#tabline#enabled"] = 1
-vim.g["airline#extensions#tabline#buffer_nr_show"] = 1
+--vim.g["airline#extensions#tabline#enabled"] = 1
+--vim.g["airline#extensions#tabline#buffer_nr_show"] = 1
+require'hop'.setup()
+vim.api.nvim_set_keymap("n", "<leader>j", '<cmd>lua require("hop").hint_words()<CR>', {})
+vim.api.nvim_set_keymap("n", "<leader>l", '<cmd>lua require("hop").hint_lines()<CR>', {})
+vim.api.nvim_set_keymap("v", "<leader>j", '<cmd>lua require("hop").hint_words()<CR>', {})
+vim.api.nvim_set_keymap("v", "<leader>l", '<cmd>lua require("hop").hint_lines()<CR>', {})
