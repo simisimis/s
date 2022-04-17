@@ -28,9 +28,20 @@ vim.g.colors_name = 'slate' -- theme
 if vim.opt.diff:get() then
   vim.g.colors_name = 'industry'
 end -- end vimdiff theme
-
+vim.cmd [[
+  hi Pmenu ctermfg=187 ctermbg=240 guifg=#d8caac guibg=#505a60
+  hi PmenuSel ctermbg=238 guibg=#444444
+  hi PmenuSel ctermfg=255 guifg=#EEEEEE
+]]
 -- 
-local cmp = require'cmp'
+local nvim_lsp = require('lspconfig')
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+nvim_lsp.rust_analyzer.setup {
+	capabilities = capabilities,
+}
+
+local cmp = require('cmp')
 cmp.setup({
   -- Enable LSP snippets
   snippet = {
@@ -62,37 +73,6 @@ cmp.setup({
     { name = 'buffer' },
   },
 })
-local nvim_lsp = require'lspconfig'
-local opts = {
-  tools = { -- rust-tools options
-    autoSetHints = true,
-    hover_with_actions = true,
-    inlay_hints = {
-      show_parameter_hints = false,
-      parameter_hints_prefix = "",
-      other_hints_prefix = "",
-    },
-  },
-  -- all the opts to send to nvim-lspconfig
-  -- these override the defaults set by rust-tools.nvim
-  -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
-  server = {
-    -- on_attach is a callback called when the language server attachs to the buffer
-    -- on_attach = on_attach,
-    settings = {
-      -- to enable rust-analyzer settings visit:
-      -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-      ["rust-analyzer"] = {
-        -- enable clippy on save
-        checkOnSave = {
-          command = "clippy"
-        },
-      }
-    }
-  },
-}
-
-require('rust-tools').setup(opts)
 
 local vimdirs = {'backup', 'tmp', 'undo'}
 local swap_dir = vim.env.HOME..'/.cache/nvim/swap-files'
@@ -129,6 +109,21 @@ vim.opt.wildmode = "longest,list" -- Set shell like completion. to tab select ad
 --vim.g["airline#extensions#tabline#enabled"] = 1
 --vim.g["airline#extensions#tabline#buffer_nr_show"] = 1
 require'hop'.setup()
+require'lualine'.setup {
+  extensions = {},
+  options = {
+    disabled_filetypes = {},
+    theme = "jellybeans"
+  },
+  sections = {
+    lualine_a = { "hostname", "windows" },
+    lualine_b = { "branch", "diff" },
+    lualine_c = { "filename" },
+    lualine_x = { "mode", "filetype" },
+    lualine_y = { "progress" },
+    lualine_z = { "location" }
+  }
+}
 vim.api.nvim_set_keymap("n", "<leader>j", '<cmd>lua require("hop").hint_words()<CR>', {})
 vim.api.nvim_set_keymap("n", "<leader>l", '<cmd>lua require("hop").hint_lines()<CR>', {})
 vim.api.nvim_set_keymap("v", "<leader>j", '<cmd>lua require("hop").hint_words()<CR>', {})

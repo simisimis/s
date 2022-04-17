@@ -25,6 +25,7 @@ in
       # Syntax / Language Support ##########################
       # Collection of common configurations for the Nvim LSP client
       nvim-lspconfig
+      lsp-status-nvim
 
       # A completion engine for neovim written in Lua.
       nvim-cmp
@@ -46,7 +47,7 @@ in
 
 
       # To enable more of the features of rust-analyzer, such as inlay hints and more!
-      rust-tools-nvim
+      #rust-tools-nvim
 
       # Snippet engine
       vim-vsnip
@@ -60,8 +61,7 @@ in
       vim-puppet
 
       # UI #################################################
-      # vim-gitgutter # status in gutter
-      # vim-devicons
+      nvim-web-devicons
       #vim-airline
       lualine-nvim
       nerdtree
