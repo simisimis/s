@@ -20,7 +20,7 @@ vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR><Esc>", { noremap = true })
 
 -- Set default split direction.
 vim.opt.splitright = true
-vim.opt.splitbelow = true
+-- vim.opt.splitbelow = true
 
 -- colors
 vim.opt.background = 'dark'
@@ -32,6 +32,9 @@ vim.cmd [[
   hi Pmenu ctermfg=187 ctermbg=240 guifg=#d8caac guibg=#505a60
   hi PmenuSel ctermbg=238 guibg=#444444
   hi PmenuSel ctermfg=255 guifg=#EEEEEE
+  hi GitGutterAddLine ctermbg=22
+  hi GitGutterChangeLine ctermbg=58
+  hi GitGutterDeleteLine ctermbg=52
 ]]
 -- 
 local nvim_lsp = require('lspconfig')
@@ -40,6 +43,15 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
 nvim_lsp.rust_analyzer.setup {
 	capabilities = capabilities,
 }
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+	vim.lsp.diagnostic.on_publish_diagnostics, {
+		virtual_text = true,
+		signs = false,
+		update_in_insert = true,
+	}
+)
+-- lsp hover pop up text
+vim.api.nvim_set_keymap("n", "<leader>u", ':lua vim.lsp.buf.hover()<CR>', {})
 
 local cmp = require('cmp')
 cmp.setup({
@@ -73,6 +85,17 @@ cmp.setup({
     { name = 'buffer' },
   },
 })
+require('rust-tools').setup({})
+
+-- plugin settings
+vim.wo.signcolumn = 'yes'
+vim.g.gitgutter_enabled = 1
+vim.g.gitgutter_highlight_lines=1
+vim.g.gitgutter_preview_win_floating = 1
+
+-- mappings
+vim.api.nvim_set_keymap('n', '<leader>gg', ':GitGutterToggle<CR>', {})
+vim.api.nvim_set_keymap('n', '<leader>gh', ':GitGutterLineHighlightsToggle \\| :GitGutterLineNrHighlightsToggle<CR>', {})
 
 local vimdirs = {'backup', 'tmp', 'undo'}
 local swap_dir = vim.env.HOME..'/.cache/nvim/swap-files'

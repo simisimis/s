@@ -47,7 +47,7 @@ in
 
 
       # To enable more of the features of rust-analyzer, such as inlay hints and more!
-      #rust-tools-nvim
+      rust-tools-nvim
 
       # Snippet engine
       vim-vsnip
@@ -68,6 +68,7 @@ in
       nvim-compe
       nvim-treesitter
 
+      vim-gitgutter
       # Editor Features ####################################
       vim-surround # cs"'
       vim-repeat # cs"'...

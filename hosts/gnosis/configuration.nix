@@ -50,6 +50,9 @@
       Interpol = {
         pskRaw = "359f63d7f718954e1e1feb4e850e70c6a04f775a408617445d2c1696742d1b82";
       };
+      StrangerDanger = {
+        psk = "Stuckintheupsidedown?";
+      };
     };
     extraConfig = ''
       ctrl_interface=/run/wpa_supplicant
@@ -58,6 +61,7 @@
   };
   environment.systemPackages = with pkgs; [
     docker-compose
+    clamav
   ];
 
   hardware.bluetooth.enable = true;
@@ -126,6 +130,11 @@
   # Open ports in the firewall.
   #networking.firewall.allowedTCPPorts = [ 8033 ];
   services.fwupd.enable = true;
+
+  services.clamav = {
+    daemon.enable = true;
+    updater.enable = true;
+  };
 
   services.pipewire  = {
     media-session.config.bluez-monitor.rules = [

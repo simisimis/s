@@ -60,6 +60,7 @@ in
           "${modifier}+b" = "move workspace to output up";
           "${modifier}+Shift+t" = "exec trimgrim";
           "${modifier}+Shift+p" = "exec wofipass";
+          "${modifier}+Shift+b" = "exec wofi-emoji";
           "${modifier}+Shift+q" = "kill";
           "${modifier}+Shift+l" = "exec swaylock -f -i ~/Pictures/texture1_1.jpg -t";
           "${modifier}+d" = "exec ${pkgs.wofi}/bin/wofi --show run | ${pkgs.findutils}/bin/xargs swaymsg exec --";
@@ -127,6 +128,7 @@ in
     ethtool
     mako # notification daemon
     wofi
+    wofi-emoji
     waybar
     slurp
     grim
@@ -161,6 +163,7 @@ in
     unstable.terraform
     vagrant
     saleae-logic
+    jetbrains.idea-community
 
     #web
     teams
