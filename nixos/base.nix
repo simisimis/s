@@ -1,4 +1,10 @@
-{ config, pkgs, agenix, ... }:
+{ config, pkgs, nixpkgs-unstable, agenix, ... }:
+let
+  unstable = import nixpkgs-unstable {
+    system = "x86_64-linux";
+    config = { allowUnfree = true; };
+  };
+in
 {
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -78,7 +84,7 @@
     lsof
     wget curl dig
     neovim
-    git tig
+    unstable.git tig
     gnupg
     agenix.defaultPackage.x86_64-linux
     inetutils

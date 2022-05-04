@@ -78,6 +78,7 @@ in
   programs.git = {
     enable = true;
     extraConfig = {
+      safe.directory = "/s";
       hub.protocol = "https";
       color.ui = true;
       pull.rebase = true;

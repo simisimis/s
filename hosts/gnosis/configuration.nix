@@ -51,7 +51,7 @@
         pskRaw = "359f63d7f718954e1e1feb4e850e70c6a04f775a408617445d2c1696742d1b82";
       };
       StrangerDanger = {
-        psk = "Stuckintheupsidedown?";
+        pskRaw = "355a58ca9356e0e688ffd421583aa7c1983aaede33d4a7b41290657ee31cd46e";
       };
     };
     extraConfig = ''
@@ -133,6 +133,9 @@
 
   services.clamav = {
     daemon.enable = true;
+    daemon.settings = {
+      OnAccessIncludePath = "/home/${config.settings.usr.name}";
+    };
     updater.enable = true;
   };
 
