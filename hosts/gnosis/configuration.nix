@@ -62,6 +62,7 @@
   environment.systemPackages = with pkgs; [
     docker-compose
     clamav
+    dmidecode
   ];
 
   hardware.bluetooth.enable = true;
