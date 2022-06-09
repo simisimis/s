@@ -33,4 +33,14 @@
   # saleae logic analyser
   SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
   '';
+
+  services.syncthing = {
+    # Folder for Syncthing's settings and keys
+    configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
+    folders = {
+      "papyrus" = {
+        path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+      };
+    };
+  };
 }

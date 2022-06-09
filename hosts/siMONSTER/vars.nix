@@ -6,4 +6,6 @@
   hw.hostId = "f1b2a3d4";
   gitRepos.binfiles.ref = builtins.readFile /run/agenix/secret1;
   gitRepos.binfiles.rev = "a060ba98b9e06c2f28adf8d4d35f04f693188735";
+  services.syncthing.dataDir = "Documents/papyrus";
+  services.syncthing.configDir = ".config/syncthing";
 }
