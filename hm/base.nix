@@ -26,6 +26,9 @@ in
     pfetch
     #dev
     rust-analyzer
+    rustc cargo rustfmt cargo-edit clippy
+    # rustup
+
     rnix-lsp
     (python39.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
     gitAndTools.gitflow

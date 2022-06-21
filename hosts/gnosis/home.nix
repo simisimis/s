@@ -121,6 +121,10 @@ in
   };
   
   home.packages = with pkgs; [
+    du-dust
+    procs
+    exa
+    tldr
     # start wayland
     swaylock
     swayidle
@@ -153,8 +157,6 @@ in
     restic
 
     #dev
-    #rustc cargo rustfmt
-    rustup
     jdk11
     hiera-eyaml
     ruby bundix puppet pdk
@@ -224,7 +226,7 @@ in
           white = "#eeeeec";
         };
       };
-      background_opacity = 0.9;
+      window.opacity = 0.9;
     };
   };
 

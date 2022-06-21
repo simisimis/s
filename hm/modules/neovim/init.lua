@@ -5,6 +5,9 @@ vim.opt.timeout = false
 vim.opt.timeoutlen = 0
 vim.opt.ttimeout = false
 vim.opt.ttimeoutlen = 0
+-- Manage buffs.
+vim.api.nvim_set_keymap("n", "<leader><S-Tab>", ":bprevious<CR>", {})
+vim.api.nvim_set_keymap("n", "<leader><Tab>", ":bnext<CR>", {})
 -- Manage tabs.
 vim.api.nvim_set_keymap("n", "<S-Tab>", ":tabprevious<CR>", {})
 vim.api.nvim_set_keymap("n", "<Tab>", ":tabnext<CR>", {})
