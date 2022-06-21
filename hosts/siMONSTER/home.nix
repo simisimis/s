@@ -42,8 +42,8 @@ in
           #"${modifier}+Return" = "exec ${pkgs.termite}/bin/termite";
           "${modifier}+g" = "move workspace to output left";
           "${modifier}+b" = "move workspace to output up";
-          "${modifier}+Shift+t" = "exec trimgrim";
-          "${modifier}+Shift+p" = "exec wofipass";
+          "${modifier}+Shift+t" = "exec ~/bin/trimgrim";
+          "${modifier}+Shift+p" = "exec ~/bin/wofipass";
           "${modifier}+Shift+q" = "kill";
           "${modifier}+Shift+l" = "exec swaylock -f -i ~/Pictures/texture1_1.jpg -t";
           "${modifier}+d" = "exec ${pkgs.wofi}/bin/wofi --show run | ${pkgs.findutils}/bin/xargs swaymsg exec --";
@@ -151,7 +151,7 @@ in
           white = "#eeeeec";
         };
       };
-      background_opacity = 0.9;
+      window.opacity = 0.9;
     };
   };
 
