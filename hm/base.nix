@@ -175,6 +175,7 @@ in
         ## This is the way... to traverse through history
         bindkey "^[[A" history-beginning-search-backward
         bindkey "^[[B" history-beginning-search-forward
+        export RUST_SRC_PATH="${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}"
         '';
       initExtraBeforeCompInit = ''
         for f in ~/.zsh.d/*.zsh; do
