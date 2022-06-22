@@ -56,6 +56,9 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 -- lsp hover pop up text
 vim.api.nvim_set_keymap("n", "<leader>u", ':lua vim.lsp.buf.hover()<CR>', {})
 
+-- lsp rename variables
+vim.api.nvim_set_keymap("n", "<leader>n", ':lua vim.lsp.buf.rename()<CR>', {})
+
 local cmp = require('cmp')
 cmp.setup({
   -- Enable LSP snippets
@@ -88,6 +91,7 @@ cmp.setup({
     { name = 'buffer' },
   },
 })
+vim.g.rustfmt_autosave = 1
 require('rust-tools').setup({})
 
 -- plugin settings
