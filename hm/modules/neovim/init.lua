@@ -35,9 +35,9 @@ vim.cmd [[
   hi Pmenu ctermfg=187 ctermbg=240 guifg=#d8caac guibg=#505a60
   hi PmenuSel ctermbg=238 guibg=#444444
   hi PmenuSel ctermfg=255 guifg=#EEEEEE
-  hi GitGutterAddLine ctermbg=22
-  hi GitGutterChangeLine ctermbg=58
-  hi GitGutterDeleteLine ctermbg=52
+  hi DiffAdd ctermbg=22
+  hi DiffChange ctermbg=58
+  hi DiffDelete ctermbg=52
 ]]
 -- 
 local nvim_lsp = require('lspconfig')
@@ -70,9 +70,9 @@ cmp.setup({
   mapping = {
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
-    -- Add tab support
-    --['<S-Tab>'] = cmp.mapping.select_prev_item(),
-    --['<Tab>'] = cmp.mapping.select_next_item(),
+    -- Add arrows
+    ['<Up>'] = cmp.mapping.select_prev_item(),
+    ['<Down>'] = cmp.mapping.select_next_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
@@ -96,13 +96,14 @@ require('rust-tools').setup({})
 
 -- plugin settings
 vim.wo.signcolumn = 'yes'
-vim.g.gitgutter_enabled = 1
-vim.g.gitgutter_highlight_lines=1
-vim.g.gitgutter_preview_win_floating = 1
+--vim.g.gitgutter_enabled = 1
+--vim.g.gitgutter_preview_win_floating = 1
+--vim.g.gitgutter_override_sign_column_highlight=1
+--vim.g.gitgutter_highlight_lines=0
 
 -- mappings
-vim.api.nvim_set_keymap('n', '<leader>gg', ':GitGutterToggle<CR>', {})
-vim.api.nvim_set_keymap('n', '<leader>gh', ':GitGutterLineHighlightsToggle \\| :GitGutterLineNrHighlightsToggle<CR>', {})
+--vim.api.nvim_set_keymap('n', '<leader>gg', ':GitGutterToggle<CR>', {})
+--vim.api.nvim_set_keymap('n', '<leader>gh', ':GitGutterLineHighlightsToggle \\| :GitGutterLineNrHighlightsToggle<CR>', {})
 
 local vimdirs = {'backup', 'tmp', 'undo'}
 local swap_dir = vim.env.HOME..'/.cache/nvim/swap-files'

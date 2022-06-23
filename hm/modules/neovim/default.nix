@@ -69,7 +69,7 @@ in
       nvim-compe
       nvim-treesitter
 
-      vim-gitgutter
+      vim-signify
       # Editor Features ####################################
       vim-surround # cs"'
       vim-repeat # cs"'...
