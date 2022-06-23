@@ -141,7 +141,7 @@ in
     wdisplays
 
     fantasque-sans-mono
-    font-awesome
+    font-awesome_5
     roboto-mono
     (nerdfonts.override { fonts = [ "Mononoki" ]; })
     material-icons
