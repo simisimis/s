@@ -1,20 +1,14 @@
-{ nixpkgs-unstable, config, ... }:
+{ config, ... }:
 let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
   dataDir = "/var/lib/zigbee2mqtt";
 in
 {
-  services.home-assistant = {
-    enable = true;
-    package = (unstable.home-assistant.override {
-      extraPackages = ps: with ps; [ psycopg2 ];
-    }).overrideAttrs (old: {
-      doInstallCheck = false;
-    });
-  };
+  imports = [
+    ./scenes.nix
+  ];
+
+  services.home-assistant.enable = true;
+  services.home-assistant.extraPackages = python3Packages: with python3Packages; [ psycopg2 ];
   services.home-assistant.config =
   {
     frontend = { };
@@ -38,7 +32,7 @@ in
     homeassistant = {
       name = "Home";
       time_zone = config.time.timeZone;
-      latitude = "52.095525";
+      latitude = "22.095525";
       longitude = "5.053437";
       elevation = "5";
       unit_system = "metric";
@@ -51,6 +45,7 @@ in
       password = "arst";
     };
     tado = { };
+    zha = { };
     sonos = {
       media_player.hosts = [ "192.168.178.60" ];
     };
@@ -59,8 +54,8 @@ in
 
     calendar = { };
     google = {
-      client_id = "902077847980-5ioe3tre3lafmfn60fgf1tjldsol4ku2.apps.googleusercontent.com";
-      client_secret = "arstarst";
+      client_id = "902077847980-5ioe3tre3lafmfn60fgf1tjlds.apps.googleusercontent.com";
+      client_secret = "GOCSPX-wFMfa0Vpny6cEW1fUZAU";
       calendar_access = "read_write";
     };
     shelly = {};
@@ -83,58 +78,35 @@ in
         entity_id = "sensor.random_joke";
       };
     };
-    automation = [
-      {
-        alias = "living room tree off";
+    "automation manual" = [
+      { alias = "kitchen lights auto on";
         trigger = {
-          platform = "time";
-          at = "22:00";
-        };
-        action = {
-          type = "turn_off";
-          device_id = "434ffceaa2edc88692f807839ac1bfe1";
-          entity_id = "switch.living_room_plug";
-          domain = "switch";
-        };
-      } #living room xmas auto off
-      {
-        alias = "living room tree on";
-        trigger = {
-          platform = "time";
-          at = "7:00";
-        };
-        action = {
-          type = "turn_on";
-          device_id = "434ffceaa2edc88692f807839ac1bfe1";
-          entity_id = "switch.living_room_plug";
-          domain = "switch";
-        };
-      } #living room xmas auto on
-      { alias = "attic xmas auto on";
-        trigger = {
-          platform = "time";
-          at = "9:00";
+          platform = "sun";
+          event = "sunset";
+          offset = "0";
         };
         action = {
           type = "turn_on";
           device_id = "8f71f657c883dce32f894908401dedba";
-          entity_id = "switch.attic_plug";
+          entity_id = "switch.kitchen_plug";
           domain = "switch";
         };
-      } #attic xmas auto on
-      { alias = "attic xmas auto off";
+      } #kitchen lights auto on
+      { alias = "kitchen lights auto off";
         trigger = {
-          platform = "time";
-          at = "17:30";
+          platform = "sun";
+          event = "sunset";
+          offset = "+02:00:00";
         };
         action = {
           type = "turn_off";
           device_id = "8f71f657c883dce32f894908401dedba";
-          entity_id = "switch.attic_plug";
+          entity_id = "switch.kitchen_plug";
           domain = "switch";
         };
-      } #attic xmas auto off
-    ]; # automation
+      } #kitchen lights auto off
+    ]; # automation manual
+    "automation ui" = "!include automations.yaml";
 
   }; #services.home-assistant.config
 
@@ -158,7 +130,6 @@ in
   };
   services.postgresql = {
     enable = true;
-    package = unstable.postgresql;
     ensureDatabases = [ "hass" ];
     ensureUsers = [{
       name = "hass";
@@ -170,33 +141,27 @@ in
   services.zigbee2mqtt = {
     enable = true;
     inherit dataDir;
-    package = unstable.zigbee2mqtt;
     settings = {
-      permit_join = true;
-      serial.port = "/dev/ttyACM0";
+      permit_join = false;
+      serial.port = "/dev/ttyUSB0";
       homeassistant = true;
       mqtt = {
         server = "mqtt://localhost:1883";
         base_topic = "zigbee2mqtt";
         user = "hass";
-        password = "arst";
-#        include_device_information = true;
+        password = "DCSde40";
         client_id = "zigbee2mqtt";
       };
       advanced = {
-        network_key = "GENERATE";
+        network_key = [ 233 148 21 186 39 17 212 249 129 136 196 193 226 118 228 172 ];
         log_level = "info";
+        channel = 15;
       };
       frontend = {
         port = 8521;
       };
-#      experimental = {
-#        new_api = true;
-#      };
     };
   };
-
-  #state = [ "${dataDir}/devices.yaml" "${dataDir}/state.json" ];
 
   systemd.services.zigbee2mqtt = {
     # override automatic configuration.yaml deployment

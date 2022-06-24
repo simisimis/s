@@ -88,7 +88,7 @@ in
   };
   services.unifi = {
     enable = true;
-    openPorts = true;
+    openFirewall = true;
     unifiPackage = unstable.unifi;
   };
   services.syncthing = {
