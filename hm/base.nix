@@ -107,6 +107,9 @@ in
       # bind broadcast toggle
       bind-key b setw synchronize-panes
 
+      # clear scrollbuffer
+      bind-key C-l send-keys C-l \; clear-history
+
       # format status bar
       set -g status-left "#[fg=colour105,bg=colour241,bold] #S #[fg=colour123,bg=colour241]☵ "
       set -g status-right ""
@@ -176,6 +179,8 @@ in
         bindkey "^[[A" history-beginning-search-backward
         bindkey "^[[B" history-beginning-search-forward
         export RUST_SRC_PATH="${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}"
+        export GOPATH="$HOME/development/go"
+        export PATH="$HOME/bin:$GOPATH/bin:$PATH"
         '';
       initExtraBeforeCompInit = ''
         for f in ~/.zsh.d/*.zsh; do
@@ -195,8 +200,6 @@ in
       #BAT_THEME="dark_neon";
       # java apps on wayland like android-studio or arduino
       _JAVA_AWT_WM_NONREPARENTING=1;
-      GOPATH = "$HOME/development/go";
-      PATH = "$HOME/bin:$GOPATH/bin:$PATH";
     };
     # envExtra
     # profileExtra
