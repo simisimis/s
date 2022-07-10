@@ -53,6 +53,9 @@
       StrangerDanger = {
         pskRaw = "355a58ca9356e0e688ffd421583aa7c1983aaede33d4a7b41290657ee31cd46e";
       };
+      COSMOTE-972578 = {
+        pskRaw = "2526252a2468139734c7dda5d50602e1a5f0bd5dee8c55b9bff5487c4f896bb2";
+      };
     };
     extraConfig = ''
       ctrl_interface=/run/wpa_supplicant

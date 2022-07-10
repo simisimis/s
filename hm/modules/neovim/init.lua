@@ -137,6 +137,9 @@ vim.opt.wildmode = "longest,list" -- Set shell like completion. to tab select ad
 --vim.api.nvim_set_keymap('n', '<Tab>', ':bnext<CR>', {noremap = true})
 --vim.api.nvim_set_keymap('n', '<S-Tab>', ':bprevious<CR>', {noremap = true})
 
+-- Disable folding
+vim.opt.foldenable = false
+
 --vim.g["airline#extensions#tabline#enabled"] = 1
 --vim.g["airline#extensions#tabline#buffer_nr_show"] = 1
 require'hop'.setup()
