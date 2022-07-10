@@ -11,7 +11,7 @@ in
     userEmail = nixosConfig.settings.usr.email;
     extraConfig = {
       github.user = nixosConfig.settings.usr.username;
-      github.email = "simonas@narbuto.lt";
+      #github.email = "simonas@narbuto.lt";
       url = {
         "ssh://git@gitlab.tools.bol.com" = {
           insteadOf = "https://gitlab.tools.bol.com";
