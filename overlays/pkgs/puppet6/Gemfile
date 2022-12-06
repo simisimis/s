@@ -1,0 +1,8 @@
+source 'https://rubygems.org'
+gem "rake"
+gem "puppet", "<7"
+gem "puppet-lint"
+gem "puppet-syntax"
+gem "puppetlabs_spec_helper"
+gem "rspec-puppet"
+gem "rspec-puppet-facts"
