@@ -41,7 +41,7 @@ vim.cmd [[
 ]]
 -- 
 local nvim_lsp = require('lspconfig')
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 nvim_lsp.rust_analyzer.setup {
 	capabilities = capabilities,
@@ -164,12 +164,12 @@ vim.api.nvim_set_keymap("v", "<leader>j", '<cmd>lua require("hop").hint_words()<
 vim.api.nvim_set_keymap("v", "<leader>l", '<cmd>lua require("hop").hint_lines()<CR>', {})
 
 -- Treesitter Plugin Setup
-vim.g.indent_blankline_char = ""
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "lua", "rust", "toml" },
-  highlight = {
-    enable = true,
-  },
-  indent = { enable = true },
-  incremental_selection = { enable = true },
-}
+--vim.g.indent_blankline_char = ""
+--require('nvim-treesitter.configs').setup {
+--  ensure_installed = { "lua", "rust", "toml" },
+--  highlight = {
+--    enable = true,
+--  },
+--  indent = { enable = true },
+--  incremental_selection = { enable = true },
+--}
