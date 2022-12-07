@@ -123,6 +123,34 @@ with lib;
           that should be available on multiple hosts.
         '';
       };
+      hass = {
+        latitude = mkOption {
+          type = with types; uniq str;
+        };
+        longitude = mkOption {
+          type = with types; uniq str;
+        };
+        mqttPass = mkOption {
+          type = with types; uniq str;
+        };
+        gcalId = mkOption {
+          type = with types; uniq str;
+        };
+        gcalSecret = mkOption {
+          type = with types; uniq str;
+        };
+        zigbee2mqttPass = mkOption {
+          type = with types; uniq str;
+        };
+        mosquittoUsers = {
+          sensor = mkOption {
+            type = with types; uniq str;
+          };
+          hass = mkOption {
+            type = with types; uniq str;
+          };
+        };
+      };
     };
   };
 }

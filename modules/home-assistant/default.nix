@@ -32,8 +32,8 @@ in
     homeassistant = {
       name = "Home";
       time_zone = config.time.timeZone;
-      latitude = "22.095525";
-      longitude = "5.053437";
+      latitude = config.settings.hass.latitude;
+      longitude = config.settings.hass.longitude;
       elevation = "5";
       unit_system = "metric";
       temperature_unit = "C";
@@ -42,7 +42,7 @@ in
       broker = "localhost";
       port = 1883;
       username = "hass";
-      password = "arst";
+      password = config.settings.hass.mqttPass;
     };
     tado = { };
     zha = { };
@@ -50,12 +50,10 @@ in
       media_player.hosts = [ "192.168.178.60" ];
     };
 
-    roomba = { };
-
     calendar = { };
     google = {
-      client_id = "902077847980-5ioe3tre3lafmfn60fgf1tjlds.apps.googleusercontent.com";
-      client_secret = "GOCSPX-wFMfa0Vpny6cEW1fUZAU";
+      client_id = config.settings.hass.gcalId;
+      client_secret = config.settings.hass.gcalSecret;
       calendar_access = "read_write";
     };
     shelly = {};
@@ -149,7 +147,7 @@ in
         server = "mqtt://localhost:1883";
         base_topic = "zigbee2mqtt";
         user = "hass";
-        password = "DCSde40";
+        password = config.settings.hass.zigbee2mqttPass;
         client_id = "zigbee2mqtt";
       };
       advanced = {
@@ -182,11 +180,11 @@ in
         port = 1883;
         omitPasswordAuth = false;
         users.sensor = {
-          hashedPassword = "$7$101$FtTAxI3zCSJetIhA$of8FT/7VKQ+80dhqEA/nVtdNvNp9S7V7ryYn0WbbyA4zqtpBeEDOGMMkW8vpLYKqZFHoOAUtvwZ98GfbDN2OAA==";
+          hashedPassword = config.settings.hass.mosquittoUsers.sensor;
           acl = [ "readwrite #" ];
         };
         users.hass = {
-          hashedPassword = "$7$101$bs680qEFWF7ScglA$ndAJ34vTKJ8dVSH2vhQiSnFlzlM2gUVi1u/6W9YZTtD8jeO+csNFe+N91EZTE/i8vmaVrIVrQYytCeSuGuyY6A==";
+          hashedPassword = config.settings.hass.mosquittoUsers.hass;
           acl = [ "readwrite #" ];
         };
         settings = {
