@@ -54,7 +54,7 @@ in
     exercism
     unstable.android-studio
 
-    unstable.prusa-slicer
+    #unstable.prusa-slicer
   ];
 
 

@@ -1,5 +1,6 @@
 # lavirinthos host specific configuration
-{ config, pkgs, nixpkgs-unstable, ipu6-drivers, ... }:
+#{ config, pkgs, nixpkgs-unstable, ipu6-drivers, ... }:
+{ config, pkgs, lib, nixpkgs-unstable, ... }:
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
@@ -17,14 +18,14 @@ in
   ];
   nixpkgs.overlays = [
     (import ../../overlays)
-    ipu6-drivers.overlay."x86_64-linux"
+    #ipu6-drivers.overlay."x86_64-linux"
   ];
 
   hardware.firmware = [
     unstable.linux-firmware
     unstable.sof-firmware
-    pkgs.ipu6-camera-bins
-    pkgs.ivsc-firmware
+    #pkgs.ipu6-camera-bins
+    #pkgs.ivsc-firmware
   ];
   hardware.enableAllFirmware = true;
   hardware.opengl = {
@@ -53,17 +54,10 @@ in
   networking.wireless = {
     enable = true;  # Enables wireless support via wpa_supplicant.
     interfaces = ["wlp0s20f3"];
-    networks = {
-      Arubaruba = {
-        pskRaw = config.settings.hw.wifi.Arubaruba;
-      };
-      Interpol = {
-        pskRaw = config.settings.hw.wifi.Interpol;
-      };
-      COSMOTE-972578 = {
-        pskRaw = config.settings.hw.wifi.COSMOTE-972578;
-      };
-    };
+    networks = lib.mapAttrs
+      ( name: value: {
+        pskRaw = "${value}";
+      }) config.settings.hw.wifi;
     extraConfig = ''
       ctrl_interface=/run/wpa_supplicant
       ctrl_interface_group=wheel
@@ -73,8 +67,8 @@ in
     dmidecode
     libva-utils
     gnome.cheese
-    ipu6-camera-bins
-    ipu6-camera-hal
+    #ipu6-camera-bins
+    #ipu6-camera-hal
     home-manager
     docker-compose
     chrysalis
@@ -85,7 +79,11 @@ in
   #hardware.video.hidpi.enable = true;
 
   # Virtualization
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    extraOptions = "--storage-opt dm.basesize=20G";
+    storageDriver = "zfs";
+  };
 
   # List services that you want to enable:
   services.logind.extraConfig = "HandlePowerKey=suspend";

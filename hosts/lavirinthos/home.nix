@@ -19,6 +19,8 @@ in
       alias = {
         hist = "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
       };
+      fetch.prune = true;
+      fetch.pruneTags = true;
     };
   };
   home.username = config.settings.usr.name;

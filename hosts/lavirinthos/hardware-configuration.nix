@@ -12,7 +12,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "snd_soc_rt715_sdca" "snd_soc_rt1316_sdw" "snd_sof_pci_intel_tgl" "snd_hda_intel" "snd_soc_sof_sdw" "i915" "kvm-intel" ];
   boot.kernelParams = [ "i915.force_probe=46a6" "v4l2loopback.exclusive_caps=1" ];
-  boot.extraModulePackages = [ pkgs.ipu6-drivers ];
+  #boot.extraModulePackages = [ pkgs.ipu6-drivers ];
 
   fileSystems."/" =
     { device = "zpool/LAVIRINTHOS/root";
