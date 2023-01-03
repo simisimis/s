@@ -81,7 +81,6 @@ in
   # Virtualization
   virtualisation.docker = {
     enable = true;
-    extraOptions = "--storage-opt dm.basesize=20G";
     storageDriver = "zfs";
   };
 

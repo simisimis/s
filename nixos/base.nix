@@ -22,7 +22,7 @@
   #networking.firewall.allowedUDPPorts = [ 22000 21027 ];
 
   # Set your time zone.
-  time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "Europe/Athens";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";

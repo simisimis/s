@@ -117,6 +117,7 @@ in
   };
   
   home.packages = with pkgs; [
+    haskellPackages.dhall-yaml
     graphviz
     exiftool
     du-dust
