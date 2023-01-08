@@ -74,11 +74,11 @@ in
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
   services.adguardhome = {
-    enable = true;
+    enable = false;
     port = 8100;
   };
   services.unifi = {
-    enable = true;
+    enable = false;
     openFirewall = true;
     unifiPackage = unstable.unifi;
   };
