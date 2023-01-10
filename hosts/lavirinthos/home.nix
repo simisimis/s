@@ -117,7 +117,8 @@ in
   };
   
   home.packages = with pkgs; [
-    haskellPackages.dhall-yaml
+    dhall-json
+    minikube
     graphviz
     exiftool
     du-dust
@@ -167,6 +168,11 @@ in
     zoom-us
 
   ];
+  home.file.".aws/credentials".text = ''
+  [default]
+  aws_access_key_id = ${config.settings.platform.aws.accessKey}
+  aws_secret_access_key = ${config.settings.platform.aws.accessSecret}
+  '';
 
   programs.alacritty = {
     enable = true;

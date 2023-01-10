@@ -6,6 +6,16 @@ with lib;
 {
   options = {
     settings = {
+      platform = {
+        aws = {
+          accessKey = mkOption {
+            type = with types; uniq str;
+          };
+          accessSecret = mkOption {
+            type = with types; uniq str;
+          };
+        };
+      };
       usr = {
         name = mkOption {
           default = "simas";
