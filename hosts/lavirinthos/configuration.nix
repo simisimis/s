@@ -63,6 +63,9 @@ in
       ctrl_interface_group=wheel
     '';
   };
+  networking.hosts = {
+    "192.168.1.25" = ["traefik.narbuto.lt" "dl.narbuto.lt" "git.narbuto.lt"];
+  };
   environment.systemPackages = with pkgs; [
     dmidecode
     libva-utils

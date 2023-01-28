@@ -117,6 +117,8 @@ in
   };
   
   home.packages = with pkgs; [
+    gh
+    awscli2 eksctl kubernetes-helm
     dhall-json
     minikube
     graphviz

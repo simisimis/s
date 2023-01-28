@@ -60,6 +60,7 @@ in
       vim-toml
       vim-yaml
       vim-puppet
+      vim-terraform
 
       # UI #################################################
       nvim-web-devicons
