@@ -10,11 +10,11 @@
     ipu6-drivers.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     binfiles = {
-      url = "git+ssh://git@git.narbuto.lt:2203/simas/binfiles?ref=master";
+      url = "git+ssh://git@backute:2203/simas/binfiles?ref=master";
       flake = false;
     }; #binfiles
     zshdfiles = {
-      url = "git+ssh://git@git.narbuto.lt:2203/simas/zshd?ref=master";
+      url = "git+ssh://git@backute:2203/simas/zshd?ref=master";
       flake = false;
     };
 

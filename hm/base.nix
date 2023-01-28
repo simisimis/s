@@ -62,7 +62,7 @@ in
   programs.ssh = {
     enable = true;
     matchBlocks = {
-      "git.narbuto.lt" = {
+      "backute" = {
         user = "git";
         identityFile = config.settings.usr.ssh.gitea.identityFile;
         extraOptions = {

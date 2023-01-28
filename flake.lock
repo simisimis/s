@@ -9,12 +9,12 @@
         "rev": "11750aaf209c85bfdcdd8ecc323dfaedd31719ec",
         "revCount": 15,
         "type": "git",
-        "url": "ssh://git@git.narbuto.lt:2203/simas/binfiles"
+        "url": "ssh://git@backute:2203/simas/binfiles"
       },
       "original": {
         "ref": "master",
         "type": "git",
-        "url": "ssh://git@git.narbuto.lt:2203/simas/binfiles"
+        "url": "ssh://git@backute:2203/simas/binfiles"
       }
     },
     "flake-utils": {
@@ -242,12 +242,12 @@
         "rev": "3cd0a4e86cc0d4aea9ab13ad5f81ca4bdda90a35",
         "revCount": 2,
         "type": "git",
-        "url": "ssh://git@git.narbuto.lt:2203/simas/zshd"
+        "url": "ssh://git@backute:2203/simas/zshd"
       },
       "original": {
         "ref": "master",
         "type": "git",
-        "url": "ssh://git@git.narbuto.lt:2203/simas/zshd"
+        "url": "ssh://git@backute:2203/simas/zshd"
       }
     }
   },

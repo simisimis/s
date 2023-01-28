@@ -63,10 +63,8 @@ in
       ctrl_interface_group=wheel
     '';
   };
-  networking.hosts = {
-    "192.168.1.25" = ["traefik.narbuto.lt" "dl.narbuto.lt" "git.narbuto.lt"];
-  };
   environment.systemPackages = with pkgs; [
+    tailscale
     dmidecode
     libva-utils
     gnome.cheese
@@ -104,6 +102,22 @@ in
   # saleae logic analyser
   SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
   '';
+  networking.firewall = {
+    # enable the firewall
+    enable = true;
+
+    # always allow traffic from your Tailscale network
+    trustedInterfaces = [ "tailscale0" ];
+
+    # allow the Tailscale UDP port through the firewall
+    allowedUDPPorts = [ config.services.tailscale.port ];
+
+    # allow you to SSH in over the public internet
+    allowedTCPPorts = [ ];
+    checkReversePath = "loose";
+  };
+
+  services.tailscale.enable = true;
   services.openssh.enable = false;
   services.openssh.openFirewall = false;
   # Open ports in the firewall.
