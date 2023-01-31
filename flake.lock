@@ -3,11 +3,11 @@
     "binfiles": {
       "flake": false,
       "locked": {
-        "lastModified": 1664365687,
-        "narHash": "sha256-ZuPMXzLfL0uBs4ZExrUV5unsMgucXuOgxGNPq4cH/n0=",
+        "lastModified": 1675187079,
+        "narHash": "sha256-57mNzylZwAdJa4mnqkejQDoNLWX5dTbNPI8Wi2pOCzI=",
         "ref": "master",
-        "rev": "11750aaf209c85bfdcdd8ecc323dfaedd31719ec",
-        "revCount": 15,
+        "rev": "eb8da0eb2af5e6077b1ca96c9e253d75bd1b1ba4",
+        "revCount": 17,
         "type": "git",
         "url": "ssh://git@backute:2203/simas/binfiles"
       },
