@@ -271,5 +271,10 @@ in
     initExtra = ''
     export JAVA_HOME="${pkgs.jdk11}"
     '';
+    shellAliases = {
+      kns = "kubens";
+      kctx = "kubectx";
+      k = "kubectl";
+    };
   };
 }
