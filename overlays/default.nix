@@ -37,4 +37,5 @@ final: prev: {
   puppet = prev.callPackage ./pkgs/puppet6 { };
   pdk = prev.callPackage ./pkgs/pdk { };
   wally-cli = prev.callPackage ./pkgs/wally-cli { };
+  ksd = prev.callPackage ./pkgs/ksd { };
 }
