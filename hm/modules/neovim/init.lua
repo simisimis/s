@@ -23,7 +23,7 @@ vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR><Esc>", { noremap = true })
 
 -- Set default split direction.
 vim.opt.splitright = true
--- vim.opt.splitbelow = true
+vim.opt.splitbelow = true
 
 -- colors
 vim.opt.background = 'dark'

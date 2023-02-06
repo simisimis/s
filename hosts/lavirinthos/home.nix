@@ -14,6 +14,7 @@ in
   programs.git = {
     userName = config.settings.usr.fullName;
     userEmail = config.settings.usr.email;
+    signing.key = "55887CDF19112610";
     extraConfig = {
       github.user = config.settings.usr.username;
       alias = {
@@ -119,7 +120,7 @@ in
   home.packages = with pkgs; [
     tmate
     gh
-    awscli2 eksctl kubernetes-helm ksd
+    awscli2 eksctl kubernetes-helm helmfile ksd
     dhall-json
     minikube
     graphviz
