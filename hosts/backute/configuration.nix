@@ -53,6 +53,7 @@ in
   #   wget vim
   # ];
   environment.systemPackages = with pkgs; [
+    tailscale
     pv
     docker-compose
     rclone
@@ -70,6 +71,8 @@ in
   # };
 
   # List services that you want to enable:
+  # Tailscale
+  services.tailscale.enable = true;
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
@@ -92,8 +95,20 @@ in
     };
   };
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 53 2049 32400 3005 8324 32469 8123 1400 8521 1883 8100 8443 8081 ];
-  networking.firewall.allowedUDPPorts = [ 53 1900 32410 32412 32413 32414 8443 8081 ];
+  networking.firewall = {
+    # enable the firewall
+    enable = true;
+
+    # always allow traffic from your Tailscale network
+    trustedInterfaces = [ "tailscale0" ];
+
+    # allow the Tailscale UDP port through the firewall
+    allowedUDPPorts = [ 1900 32410 32412 32413 32414 8443 8081 config.services.tailscale.port];
+
+    # allow you to SSH in over the public internet
+    allowedTCPPorts = [ 22 2049 32400 3005 8324 32469 8123 1400 8521 1883 8100 8443 8081 ];
+    checkReversePath = "loose";
+  };
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
