@@ -44,9 +44,9 @@ in
   };
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = false;
+  boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.efi.canTouchEfiVariables = false;
+  boot.loader.efi.canTouchEfiVariables = true;
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;
 

@@ -112,17 +112,22 @@
         "ipu6-drivers-src": "ipu6-drivers-src",
         "ivsc-driver-src": "ivsc-driver-src",
         "ivsc-firmware-src": "ivsc-firmware-src",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1667720622,
-        "narHash": "sha256-l7AdTYw9bW5TYQwYc6v47Y5twD1KLQa6HRUPDHFnx+0=",
-        "type": "git",
-        "url": "file:///home/simonas/dev/tmp/ipu6-nix"
+        "narHash": "sha256-qs2Z07E3xcJaZuu/agWUK8PYFoj/rezC25I8pGQG7/o=",
+        "owner": "Mitame",
+        "repo": "ipu6-nix",
+        "rev": "8c04fa3c6267e1f8ebad5b270c8968a25f6c2c8e",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/simonas/dev/tmp/ipu6-nix"
+        "owner": "Mitame",
+        "repo": "ipu6-nix",
+        "type": "github"
       }
     },
     "ipu6-drivers-src": {
@@ -203,28 +208,13 @@
         "type": "indirect"
       }
     },
-    "nixpkgs-unstable_2": {
-      "locked": {
-        "lastModified": 1675763311,
-        "narHash": "sha256-bz0Q2H3mxsF1CUfk26Sl9Uzi8/HFjGFD/moZHz1HebU=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "fab09085df1b60d6a0870c8a89ce26d5a4a708c2",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "ref": "nixos-unstable",
-        "type": "indirect"
-      }
-    },
     "root": {
       "inputs": {
         "binfiles": "binfiles",
         "home-manager": "home-manager",
         "ipu6-drivers": "ipu6-drivers",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable_2",
+        "nixpkgs-unstable": "nixpkgs-unstable",
         "zshdfiles": "zshdfiles"
       }
     },

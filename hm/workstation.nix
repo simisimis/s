@@ -50,7 +50,7 @@ in
     stdenv.cc.cc.lib
 
     #dev
-    terraform
+    unstable.terraform
     go_1_18 golint dep delve
     exercism
     unstable.android-studio
