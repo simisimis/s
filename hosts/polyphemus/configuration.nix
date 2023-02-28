@@ -15,7 +15,6 @@ in
   imports = [
     ../../nixos/base.nix
     ../../modules/settings.nix
-    ../../modules/home-assistant
     ./hardware-configuration.nix
     ];
 
@@ -24,7 +23,7 @@ in
 
   boot = {
   # Use the systemd-boot EFI boot loader.
-    initrd.kernelModules = [ "e1000e" ]; 
+    initrd.kernelModules = [ "virtio_pci" ]; 
     initrd.network = {
       enable = true;
       ssh = {
@@ -39,17 +38,17 @@ in
     };
   };
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = false;
-  boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.efi.canTouchEfiVariables = false;
+  # Use grup mbr boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  boot.loader.grub.device = "/dev/sda";
+
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;
-  networking.interfaces.eno1.useDHCP = true;
-  networking.interfaces.wlp1s0.useDHCP = false;
+  networking.interfaces.ens3.useDHCP = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -61,7 +60,6 @@ in
     pv
     docker-compose
     rclone
-    mosquitto
     pciutils
   ];
 
@@ -75,49 +73,33 @@ in
   # };
 
   # List services that you want to enable:
-  # Tailscale
-  services.tailscale.enable = true;
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  services.openssh.passwordAuthentication = false;
-  services.adguardhome = {
-    enable = false;
-    port = 8100;
-  };
-  services.unifi = {
-    enable = false;
-    openFirewall = true;
-    unifiPackage = unstable.unifi;
-  };
-  services.syncthing = {
-    # Folder for Syncthing's settings and keys
-    configDir = config.settings.services.syncthing.configDir;
-    folders = {
-      "papyrus" = {
-        path = config.settings.services.syncthing.dataDir;
-      };
-    };
-  };
-  # Open ports in the firewall.
-  networking.firewall = {
+    networking.firewall = {
     # enable the firewall
     enable = true;
+    allowedTCPPorts = [ 22 ];
 
     # always allow traffic from your Tailscale network
     trustedInterfaces = [ "tailscale0" ];
 
     # allow the Tailscale UDP port through the firewall
-    allowedUDPPorts = [ 1900 32410 32412 32413 32414 8443 8081 config.services.tailscale.port];
+    allowedUDPPorts = [ config.services.tailscale.port ];
 
     # allow you to SSH in over the public internet
-    allowedTCPPorts = [ 22 2049 32400 3005 8324 32469 8123 1400 8521 1883 8100 8443 8081 ];
     checkReversePath = "loose";
   };
+
+  services.syncthing.enable = false;
+
+  services.tailscale.enable = true;
+
+  services.openssh.enable = true;
+  services.openssh.passwordAuthentication = false;
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
   # Enable sound.
-  #sound.enable = true;
+  sound.enable = false;
   # hardware.pulseaudio.enable = true;
 
   # Virtualization

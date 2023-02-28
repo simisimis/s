@@ -64,6 +64,7 @@
       lavirinthos = mkHome "simonas" "lavirinthos" "workstation";
       siMONSTER = mkHome "simas" "siMONSTER" "workstation";
       backute = mkHome "simas" "backute" "headless";
+      polyphemus = mkHome "simas" "polyphemus" "headless";
     };
     gnosis = self.homeConfigurations.gnosis.activationPackage;
     nixosConfigurations = {
@@ -71,6 +72,7 @@
       backute = mkHost "backute";
       siMONSTER = mkHost "siMONSTER";
       lavirinthos = mkHost "lavirinthos";
+      polyphemus = mkHost "polyphemus";
     }; #nixosConfigurations
     devShell.x86_64-linux = pkgs.mkShell {
       buildInputs = with pkgs; [

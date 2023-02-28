@@ -13,6 +13,11 @@
 
   nixpkgs.overlays = [ (import ../../overlays) ];
 
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.systemd-boot.configurationLimit = 5;
+  boot.loader.efi.canTouchEfiVariables = false;
+
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;
   networking.interfaces.enp5s0.useDHCP = true;
