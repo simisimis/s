@@ -36,7 +36,6 @@
   };
 
   services.syncthing = {
-    enable = true;
     user = config.settings.usr.name;
     overrideFolders = true;
     devices = {

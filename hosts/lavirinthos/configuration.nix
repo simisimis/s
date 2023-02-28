@@ -158,6 +158,7 @@ in
   };
 
   services.syncthing = {
+    enable = true;
     # Folder for Syncthing's settings and keys
     configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
     folders = {

@@ -90,6 +90,7 @@ in
     unifiPackage = unstable.unifi;
   };
   services.syncthing = {
+    enable = true;
     # Folder for Syncthing's settings and keys
     configDir = config.settings.services.syncthing.configDir;
     folders = {
