@@ -34,6 +34,7 @@ in
     gitAndTools.gitflow
     jq
     gotop
+    bottom
 
   ];
 

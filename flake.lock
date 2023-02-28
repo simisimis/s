@@ -3,11 +3,11 @@
     "binfiles": {
       "flake": false,
       "locked": {
-        "lastModified": 1675187079,
-        "narHash": "sha256-57mNzylZwAdJa4mnqkejQDoNLWX5dTbNPI8Wi2pOCzI=",
+        "lastModified": 1677255201,
+        "narHash": "sha256-HzilbCTenWyCFREbhmPk6iEJzSmNYjXc2AKOUglGmlQ=",
         "ref": "master",
-        "rev": "eb8da0eb2af5e6077b1ca96c9e253d75bd1b1ba4",
-        "revCount": 17,
+        "rev": "e1c778665cc3eaa13946a2c7cadfa1a9b7612322",
+        "revCount": 18,
         "type": "git",
         "url": "ssh://git@backute:2203/simas/binfiles"
       },
@@ -57,11 +57,11 @@
     "icamerasrc-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1664346769,
-        "narHash": "sha256-6kYU0KqhgJnFGANwlCwUYpk5KWgcXVLFQwp8vZIa0fQ=",
+        "lastModified": 1670571893,
+        "narHash": "sha256-qlV363l4tUjUAa1LiZQq55byKpz1tLESKAXEmgiYHVo=",
         "owner": "intel",
         "repo": "icamerasrc",
-        "rev": "3b7cdb93071360aacebb4e808ee71bb47cf90b30",
+        "rev": "2d36adecf1af9b44df591482aec27a32d8627999",
         "type": "github"
       },
       "original": {
@@ -74,11 +74,11 @@
     "ipu6-camera-bins-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1666343574,
-        "narHash": "sha256-Vl+l43Ed2f7lL/iXG59wdrfyTrTohaYlL79+zDw805E=",
+        "lastModified": 1675854346,
+        "narHash": "sha256-QnedM2UBbGyd2wIF762Mi+VkDZYtC6MifK4XGGxlUzw=",
         "owner": "intel",
         "repo": "ipu6-camera-bins",
-        "rev": "9874603336d97fd4d12a271485645aaabc7c1be3",
+        "rev": "276859fc6de83918a32727d676985ec40f31af2b",
         "type": "github"
       },
       "original": {
@@ -90,11 +90,11 @@
     "ipu6-camera-hal-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1665453886,
-        "narHash": "sha256-o62ce5a1gqVMccOnfw9lto32sXutZtiV2BFUNATyiww=",
+        "lastModified": 1675854593,
+        "narHash": "sha256-AePL7IqoOhlxhfPRLpCman5DNh3wYS4MUcLgmgBUcCM=",
         "owner": "intel",
         "repo": "ipu6-camera-hal",
-        "rev": "8bad42ce759a0bef504f03a7d1dd91510290cfeb",
+        "rev": "884b81aae0ea19a974eb8ccdaeef93038136bdd4",
         "type": "github"
       },
       "original": {
@@ -112,32 +112,27 @@
         "ipu6-drivers-src": "ipu6-drivers-src",
         "ivsc-driver-src": "ivsc-driver-src",
         "ivsc-firmware-src": "ivsc-firmware-src",
-        "nixpkgs": [
-          "nixpkgs-unstable"
-        ]
+        "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
         "lastModified": 1667720622,
-        "narHash": "sha256-qs2Z07E3xcJaZuu/agWUK8PYFoj/rezC25I8pGQG7/o=",
-        "owner": "Mitame",
-        "repo": "ipu6-nix",
-        "rev": "8c04fa3c6267e1f8ebad5b270c8968a25f6c2c8e",
-        "type": "github"
+        "narHash": "sha256-l7AdTYw9bW5TYQwYc6v47Y5twD1KLQa6HRUPDHFnx+0=",
+        "type": "git",
+        "url": "file:///home/simonas/dev/tmp/ipu6-nix"
       },
       "original": {
-        "owner": "Mitame",
-        "repo": "ipu6-nix",
-        "type": "github"
+        "type": "git",
+        "url": "file:///home/simonas/dev/tmp/ipu6-nix"
       }
     },
     "ipu6-drivers-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1666859387,
-        "narHash": "sha256-y3oxKdcAZXSe5tjhTOX018LsDEf5kh3bkClK8TwtdOQ=",
+        "lastModified": 1675851056,
+        "narHash": "sha256-P4pQ3yXTYxZiJPnuDYcv4w/2pyiZn6IVBygWSYNjmkM=",
         "owner": "intel",
         "repo": "ipu6-drivers",
-        "rev": "10e247e046086970a9427988d5a454676515e43b",
+        "rev": "7fdfb5eb220a01ef55aa09f8906613102da12cd0",
         "type": "github"
       },
       "original": {
@@ -149,11 +144,11 @@
     "ivsc-driver-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1663316675,
-        "narHash": "sha256-STg2yLxavS3nb95ioljGFi6I4skSsQ1JQfrmq+d+CKg=",
+        "lastModified": 1672977591,
+        "narHash": "sha256-Q7iyKw4WFSX42E4AtoW/zYRKpknWZSU66V5VPAx6AjA=",
         "owner": "intel",
         "repo": "ivsc-driver",
-        "rev": "99a53bd7160452bbbcc26bcb662cad33c13b36d1",
+        "rev": "94ecb88b3ac238d9145ac16230d6e0779bb4fd32",
         "type": "github"
       },
       "original": {
@@ -180,11 +175,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1675237434,
-        "narHash": "sha256-YoFR0vyEa1HXufLNIFgOGhIFMRnY6aZ0IepZF5cYemo=",
+        "lastModified": 1675757258,
+        "narHash": "sha256-pIRer8vdsoherlRKpzfnHbMZ5TsAcvRlXHCIaHkIUbg=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "285b3ff0660640575186a4086e1f8dc0df2874b5",
+        "rev": "af96094e9b8eb162d70a84fa3b39f4b7a8b264d2",
         "type": "github"
       },
       "original": {
@@ -195,11 +190,26 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1675183161,
-        "narHash": "sha256-Zq8sNgAxDckpn7tJo7V1afRSk2eoVbu3OjI1QklGLNg=",
+        "lastModified": 1675763311,
+        "narHash": "sha256-bz0Q2H3mxsF1CUfk26Sl9Uzi8/HFjGFD/moZHz1HebU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e1e1b192c1a5aab2960bf0a0bd53a2e8124fa18e",
+        "rev": "fab09085df1b60d6a0870c8a89ce26d5a4a708c2",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs-unstable_2": {
+      "locked": {
+        "lastModified": 1675763311,
+        "narHash": "sha256-bz0Q2H3mxsF1CUfk26Sl9Uzi8/HFjGFD/moZHz1HebU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "fab09085df1b60d6a0870c8a89ce26d5a4a708c2",
         "type": "github"
       },
       "original": {
@@ -214,7 +224,7 @@
         "home-manager": "home-manager",
         "ipu6-drivers": "ipu6-drivers",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable",
+        "nixpkgs-unstable": "nixpkgs-unstable_2",
         "zshdfiles": "zshdfiles"
       }
     },

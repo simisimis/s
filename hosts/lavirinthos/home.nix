@@ -121,6 +121,7 @@ in
     tmate
     gh
     awscli2 eksctl kubernetes-helm helmfile ksd
+    postgresql
     dhall-json
     minikube
     graphviz

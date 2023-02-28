@@ -177,6 +177,17 @@ in
     '';
   };
 
+  home.file.".local/share/applications/browser.desktop".text = ''
+    #!/usr/bin/env xdg-open
+    [Desktop Entry]
+    Version=1.0
+    Terminal=false
+    Type=Application
+    Name=Browser select
+    Exec=browser
+    MimeType=x-scheme-handler/unknown;x-scheme-handler/about;x-scheme-handler/https;x-scheme-handler/http;text/html;
+  '';
+
   xdg = {
     configFile."mimeapps.list".force = true;
     mimeApps = {
@@ -188,7 +199,7 @@ in
         "image/jpeg" = "imv-folder.desktop";
         "image/png" = "imv-folder.desktop";
         "image/gif" = "imv-folder.desktop";
-        "text/html" = "browser";
+        "text/html" = "browser.desktop";
         "x-scheme-handler/http"="browser.desktop";
         "x-scheme-handler/https"="browser.desktop";
         "x-scheme-handler/about"="browser.desktop";
@@ -201,7 +212,7 @@ in
       };
     };
   };
-    programs.ssh = {
+  programs.ssh = {
     enable = true;
     matchBlocks = {
       "192.168.178.100" = {

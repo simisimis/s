@@ -61,6 +61,7 @@ in
       vim-yaml
       vim-puppet
       vim-terraform
+      vim-mustache-handlebars
 
       # UI #################################################
       nvim-web-devicons

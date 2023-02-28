@@ -1,6 +1,6 @@
 # lavirinthos host specific configuration
 #{ config, pkgs, nixpkgs-unstable, ipu6-drivers, ... }:
-{ config, pkgs, lib, nixpkgs-unstable, ... }:
+{ config, pkgs, lib, nixpkgs-unstable, ipu6-drivers, ... }:
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
@@ -18,14 +18,15 @@ in
   ];
   nixpkgs.overlays = [
     (import ../../overlays)
-    #ipu6-drivers.overlay."x86_64-linux"
+    ipu6-drivers.overlay."x86_64-linux"
   ];
+  networking.hosts = {};
 
   hardware.firmware = [
     unstable.linux-firmware
     unstable.sof-firmware
-    #pkgs.ipu6-camera-bins
-    #pkgs.ivsc-firmware
+    pkgs.ipu6-camera-bins
+    pkgs.ivsc-firmware
   ];
   hardware.enableAllFirmware = true;
   hardware.opengl = {
@@ -34,8 +35,7 @@ in
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
     ];
   };
-  boot.kernelPackages = unstable.zfsUnstable.latestCompatibleLinuxPackages;
-  boot.zfs.enableUnstable = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   services = {
     zfs = {
       trim.enable = true;
@@ -68,8 +68,8 @@ in
     dmidecode
     libva-utils
     gnome.cheese
-    #ipu6-camera-bins
-    #ipu6-camera-hal
+    ipu6-camera-bins
+    ipu6-camera-hal
     home-manager
     docker-compose
     chrysalis
