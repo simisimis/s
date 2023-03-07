@@ -1,5 +1,5 @@
 # hm base
-{ config, pkgs, zshdfiles, nixpkgs-unstable, ... }:
+{ config, pkgs, nixpkgs-unstable, ... }:
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
@@ -10,7 +10,7 @@ let
 in
 {
   imports = [
-    ./modules/neovim
+    ./modules
   ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -87,6 +87,10 @@ in
       pull.rebase = true;
     };
   };
+  programs.zellij = {
+    enable = true;
+    package = unstable.zellij;
+  };
   programs.tmux = {
     enable = true;
     terminal = "screen-256color";
@@ -116,6 +120,7 @@ in
       bind r source-file ~/.config/tmux/fiddle.conf
       '';
   };
+  programs.starship.enable = true;
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -158,36 +163,12 @@ in
     ];
     ## Set a nice prompt
     initExtra = ''
-        ### =============== Git prompt variables ================ ###
-        ZSH_THEME_GIT_PROMPT_BRANCH="%{\x1b[3m%}%{$fg[cyan]%}"
-        ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[green]%}%{¤%G%}"
-        ZSH_THEME_GIT_PROMPT_CONFLICTS="%{$fg[blue]%}%{x%G%}"
-        ZSH_THEME_GIT_PROMPT_CHANGED="%{$fg[red]%}%{+%G%}"
-        ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[red]%}%{↓%G%}"
-        ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[blue]%}%{↑%G%}"
-        ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[red]%}%{…%G%}"
-        ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}%{✔%G%}"
-        ### =============== Git prompt variables ================ ###
-        ## Set local and ssh prompts
-        PROMPT='%F{red}[%F{blue}%*%F{red}]%f %F{yellow}%m%f '
-        if [ -n "$IN_NIX_SHELL" ]; then
-          PROMPT+='%F{cyan}[%f%B%F{cyan}%1~%f%b%F{cyan}]%f '
-        else
-          PROMPT+='%F{magenta}[%f%B%F{magenta}%1~%f%b%F{magenta}]%f '
-        fi
-        PROMPT+='%(!.%F{red}.%F{green})≫ %f$(git_super_status) '
         ## This is the way... to traverse through history
         bindkey "^[[A" history-beginning-search-backward
         bindkey "^[[B" history-beginning-search-forward
         export RUST_SRC_PATH="${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}"
         export GOPATH="$HOME/development/go"
         export PATH="$HOME/bin:$HOME/.cargo/bin:$GOPATH/bin:$PATH"
-        '';
-      initExtraBeforeCompInit = ''
-        for f in ~/.zsh.d/*.zsh; do
-          source "$f"
-        done
-        source ~/.zsh-git-prompt/zshrc.sh;
         '';
     sessionVariables = rec {
       #NVIM_TUI_ENABLE_TRUE_COLOR = "1";
@@ -208,12 +189,4 @@ in
     # logoutExtra
     # localVariables
   };
-  #repos
-  home.file.".zsh-git-prompt".source = pkgs.fetchFromGitHub {
-     owner = "simisimis";
-     repo = "zsh-git-prompt";
-     rev = "0a6c8b610e799040b612db8888945f502a2ddd9d";
-     sha256 = "19x1gf1r6l7r6i7vhhsgzcbdlnr648jx8j84nk2zv1b8igh205hw";
-  };
-  home.file.".zsh.d".source = zshdfiles.outPath;
 }

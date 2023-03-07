@@ -214,8 +214,7 @@
         "home-manager": "home-manager",
         "ipu6-drivers": "ipu6-drivers",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable",
-        "zshdfiles": "zshdfiles"
+        "nixpkgs-unstable": "nixpkgs-unstable"
       }
     },
     "utils": {
@@ -231,23 +230,6 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "type": "github"
-      }
-    },
-    "zshdfiles": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1623152785,
-        "narHash": "sha256-XFbQzj22VcJCDOUq+unSxF4IlbLo9IAJKZY6xfg1Hhs=",
-        "ref": "master",
-        "rev": "3cd0a4e86cc0d4aea9ab13ad5f81ca4bdda90a35",
-        "revCount": 2,
-        "type": "git",
-        "url": "ssh://git@backute:2203/simas/zshd"
-      },
-      "original": {
-        "ref": "master",
-        "type": "git",
-        "url": "ssh://git@backute:2203/simas/zshd"
       }
     }
   },

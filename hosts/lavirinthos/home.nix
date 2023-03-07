@@ -270,6 +270,9 @@ in
     };
   };
   programs.zsh = {
+    cdpath = [
+      "~/dev/MinaProtocol"
+    ];
     initExtra = ''
     export JAVA_HOME="${pkgs.jdk11}"
     '';

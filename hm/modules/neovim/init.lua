@@ -121,7 +121,7 @@ if vim.fn.has('persistent_undo') == 1 then
 	vim.opt.undodir = vim.env.HOME..'/.cache/nvim/undo' -- Directory to write undo files to (should exist)
 end
 
-vim.opt.clipboard = "unnamedplus" 
+vim.opt.clipboard = "unnamed,unnamedplus"
 
 vim.opt.visualbell = true -- Use visual bell instead of a beep
 

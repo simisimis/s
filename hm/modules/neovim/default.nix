@@ -1,4 +1,4 @@
-{ pkgs, nixpkgs-unstable, ... }@inputs:
+{ pkgs, nixpkgs-unstable, ... }:
 let
   initLua = builtins.readFile ./init.lua;
   unstable = import nixpkgs-unstable {

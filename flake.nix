@@ -13,10 +13,10 @@
       url = "git+ssh://git@backute:2203/simas/binfiles?ref=master";
       flake = false;
     }; #binfiles
-    zshdfiles = {
-      url = "git+ssh://git@backute:2203/simas/zshd?ref=master";
-      flake = false;
-    };
+#    zshdfiles = {
+#      url = "git+ssh://git@backute:2203/simas/zshd?ref=master";
+#      flake = false;
+#    };
 
   };
 
