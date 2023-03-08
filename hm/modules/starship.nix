@@ -20,7 +20,7 @@ in
         disabled = false;
         style = "bold blue";
         format = "[\\[$time\\]]($style)";
-        time_format = "%H:%m";
+        time_format = "%H:%M";
       };
 
       directory = {
