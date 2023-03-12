@@ -6,7 +6,8 @@ in
 {
   config.programs.starship = mkIf starshipEnabled {
     settings = {
-      format = "$hostname$directory$nix_shell(\\($git_branch$git_commit|$git_status\\))$fill$golang$rust$helm$terraform$shlvl$time$line_break$character";
+      add_newline = false;
+      format = "$hostname$directory$nix_shell(\\($git_branch$git_commit|$git_status\\))$fill$golang$rust$helm$terraform$shlvl$kubernetes$time$line_break$character";
 
       character = {
         success_symbol = "[≫](bold green) ";
@@ -28,6 +29,11 @@ in
         repo_root_style = "bold fg:220";
         format = "[\\[$path[$read_only]($read_only_style)\\]]($style) ";
         repo_root_format = "[\\[$before_root_path]($style)[$repo_root]($repo_root_style)[$path[$read_only]($read_only_style)\\]]($style) ";
+      };
+
+      kubernetes = {
+        disabled = false;
+        format = "[$context $namespace]($style)";
       };
 
       nix_shell = {

@@ -76,6 +76,12 @@ with lib;
         };
       };
       services = {
+        bitwarden = {
+          baseUrl = mkOption {
+            type = with types; uniq str;
+            description = "self hosted bitwarden url";
+          };
+        };
         syncthing = {
           dataDir = mkOption {
             type = with types; uniq str;

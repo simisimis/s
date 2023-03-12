@@ -18,6 +18,7 @@ in
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     #system utils
+    bitwarden-cli
     usbutils
     screen
     pamixer
@@ -38,6 +39,14 @@ in
 
   ];
 
+  programs.rbw = {
+    enable = true;
+    settings = {
+      email = config.settings.usr.email;
+      lock_timeout = 86400;
+      base_url = config.settings.services.bitwarden.baseUrl;
+    };
+  };
   programs.gpg.enable = true;
   systemd.user.targets.tray = {
 		Unit = {
@@ -161,7 +170,13 @@ in
         };
       }
     ];
-    ## Set a nice prompt
+    initExtraBeforeCompInit = ''
+      if [[ "$TERM" == "screen-256color|linux" ]] || [[ -n "$ZELLIJ" ]] ; then
+        true
+      else
+        zellij attach -c 'work'
+      fi
+    '';
     initExtra = ''
         ## This is the way... to traverse through history
         bindkey "^[[A" history-beginning-search-backward
