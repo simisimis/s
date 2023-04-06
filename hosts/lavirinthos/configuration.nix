@@ -1,8 +1,8 @@
 # lavirinthos host specific configuration
 #{ config, pkgs, nixpkgs-unstable, ipu6-drivers, ... }:
-{ config, pkgs, lib, nixpkgs-unstable, ... }:
+{ config, lib, nixpkgs-unstable, ... }:
 let
-  unstable = import nixpkgs-unstable {
+  pkgs = import nixpkgs-unstable {
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
@@ -22,11 +22,11 @@ in
   ];
   networking.hosts = {};
 
-  hardware.firmware = [
-    unstable.linux-firmware
-    unstable.sof-firmware
-    #pkgs.ipu6-camera-bins
-    #pkgs.ivsc-firmware
+  hardware.firmware = with pkgs; [
+    linux-firmware
+    sof-firmware
+    ipu6ep-camera-bin
+    ivsc-firmware
   ];
   hardware.enableAllFirmware = true;
   hardware.opengl = {
@@ -35,7 +35,11 @@ in
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
     ];
   };
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    ipu6-drivers
+    #ivsc-driver
+  ];
   services = {
     zfs = {
       trim.enable = true;
@@ -73,6 +77,20 @@ in
     libva-utils
     gnome.cheese
     #ipu6-camera-bins
+    gst_all_1.icamerasrc
+    (ipu6ep-camera-bin.overrideAttrs(_: {installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share/doc
+      cp --no-preserve=mode --recursive \
+        lib \
+        include \
+        $out/
+
+      install -D ../LICENSE $out/share/doc/LICENSE
+
+      runHook postInstall
+    '';}))
     #ipu6-camera-hal
     home-manager
     docker-compose
@@ -128,33 +146,18 @@ in
   #networking.firewall.allowedTCPPorts = [ 8033 ];
   services.fwupd.enable = true;
 
+  environment.etc = {
+    "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
+      bluez_monitor.properties = {
+        ["bluez5.enable-sbc-xq"] = true,
+        ["bluez5.enable-msbc"] = true,
+        ["bluez5.enable-hw-volume"] = true,
+        ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+      }
+    '';
+  };
   services.pipewire  = {
-    media-session.config.bluez-monitor.rules = [
-      {
-        # Matches all cards
-        matches = [ { "device.name" = "~bluez_card.*"; } ];
-        actions = {
-          "update-props" = {
-            "bluez5.reconnect-profiles" = [ "hfp_hf" "hsp_hs" "a2dp_sink" ];
-            # mSBC is not expected to work on all headset + adapter combinations.
-            "bluez5.msbc-support" = true;
-            # SBC-XQ is not expected to work on all headset + adapter combinations.
-            "bluez5.sbc-xq-support" = true;
-          };
-        };
-      }
-      {
-        matches = [
-          # Matches all sources
-          { "node.name" = "~bluez_input.*"; }
-          # Matches all outputs
-          { "node.name" = "~bluez_output.*"; }
-        ];
-        actions = {
-          "node.pause-on-idle" = false;
-        };
-      }
-    ];
+    wireplumber.enable = true;
   };
 
   services.syncthing = {

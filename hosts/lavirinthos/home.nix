@@ -120,7 +120,7 @@ in
   home.packages = with pkgs; [
     tmate
     gh
-    awscli2 eksctl kubernetes-helm helmfile ksd
+    awscli2 eksctl kubernetes-helm helmfile ksd ssm-session-manager-plugin
     postgresql
     dhall-json
     minikube
@@ -130,6 +130,7 @@ in
     procs
     exa
     tldr
+    darktable
     # start wayland
     swaylock
     swayidle
@@ -275,6 +276,7 @@ in
     ];
     initExtra = ''
     export JAVA_HOME="${pkgs.jdk11}"
+    export BW_SESSION="${config.settings.services.bitwarden.sessionId}"
     '';
     shellAliases = {
       kns = "kubens";

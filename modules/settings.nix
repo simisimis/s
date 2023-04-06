@@ -81,6 +81,10 @@ with lib;
             type = with types; uniq str;
             description = "self hosted bitwarden url";
           };
+          sessionId = mkOption {
+            type = with types; uniq str;
+            description = "bitwarden cli session ID";
+          };
         };
         syncthing = {
           dataDir = mkOption {

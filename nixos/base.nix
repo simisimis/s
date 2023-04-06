@@ -1,4 +1,10 @@
-{ config, pkgs, ... }:
+{ config, nixpkgs-unstable, ... }:
+let
+  pkgs = import nixpkgs-unstable {
+    system = "x86_64-linux";
+    config = { allowUnfree = true; };
+  };
+in
 {
 
   nix.package = pkgs.nixFlakes;
@@ -50,6 +56,7 @@
       };
     };
   };
+  programs.zsh.enable = true;
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
     mutableUsers = false;

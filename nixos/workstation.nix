@@ -1,4 +1,10 @@
-{ config, pkgs, ... }:
+{ config, nixpkgs-unstable, ... }:
+let
+  pkgs = import nixpkgs-unstable {
+    system = "x86_64-linux";
+    config = { allowUnfree = true; };
+  };
+in
 {
   # Extra kernel modules
   # Register a v4l2loopback device at boot

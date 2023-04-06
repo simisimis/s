@@ -96,10 +96,8 @@ in
       pull.rebase = true;
     };
   };
-  programs.zellij = {
-    enable = true;
-    package = unstable.zellij;
-  };
+  programs.zellij.enable = true;
+
   programs.tmux = {
     enable = true;
     terminal = "screen-256color";
@@ -170,19 +168,12 @@ in
         };
       }
     ];
-    initExtraBeforeCompInit = ''
-      if [[ "$TERM" == "screen-256color|linux" ]] || [[ -n "$ZELLIJ" ]] ; then
-        true
-      else
-        zellij attach -c 'work'
-      fi
-    '';
     initExtra = ''
         ## This is the way... to traverse through history
-        bindkey "^[[A" history-beginning-search-backward
-        bindkey "^[[B" history-beginning-search-forward
+        bindkey "^[OA" history-beginning-search-backward
+        bindkey "^[OB" history-beginning-search-forward
         export RUST_SRC_PATH="${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}"
-        export GOPATH="$HOME/development/go"
+        export GOPATH="$HOME/dev/go"
         export PATH="$HOME/bin:$HOME/.cargo/bin:$GOPATH/bin:$PATH"
         '';
     sessionVariables = rec {

@@ -34,7 +34,7 @@
     };
     args = inputs;
 
-    mkHost = host: inputs.nixpkgs.lib.nixosSystem {
+    mkHost = host: inputs.nixpkgs-unstable.lib.nixosSystem {
       inherit system;
       modules = [
         { _module.args = args; }
