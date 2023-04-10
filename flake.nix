@@ -6,8 +6,6 @@
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager/release-22.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    #ipu6-drivers.url = "github:Mitame/ipu6-nix";
-    #ipu6-drivers.inputs.nixpkgs.follows = "nixpkgs";
 
     binfiles = {
       url = "git+ssh://git@backute:2203/simas/binfiles?ref=master";

@@ -1,5 +1,4 @@
 # lavirinthos host specific configuration
-#{ config, pkgs, nixpkgs-unstable, ipu6-drivers, ... }:
 { config, lib, nixpkgs-unstable, ... }:
 let
   pkgs = import nixpkgs-unstable {
@@ -18,16 +17,18 @@ in
   ];
   nixpkgs.overlays = [
     (import ../../overlays)
-    #ipu6-drivers.overlay."x86_64-linux"
   ];
   networking.hosts = {};
 
   hardware.firmware = with pkgs; [
+    ipu6ep-camera-bin
     linux-firmware
     sof-firmware
-    ipu6ep-camera-bin
-    ivsc-firmware
   ];
+  systemd.services.v4l2-relayd = {
+    enable = true;
+    wantedBy = [ "multi-user.target" ];
+  };
   hardware.enableAllFirmware = true;
   hardware.opengl = {
     enable = true;
@@ -38,7 +39,7 @@ in
   boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
   boot.extraModulePackages = with config.boot.kernelPackages; [
     ipu6-drivers
-    #ivsc-driver
+    v4l2loopback
   ];
   services = {
     zfs = {
@@ -72,26 +73,11 @@ in
     '';
   };
   environment.systemPackages = with pkgs; [
+    v4l2-relayd-ipu6ep
     tailscale
     dmidecode
     libva-utils
     gnome.cheese
-    #ipu6-camera-bins
-    gst_all_1.icamerasrc
-    (ipu6ep-camera-bin.overrideAttrs(_: {installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share/doc
-      cp --no-preserve=mode --recursive \
-        lib \
-        include \
-        $out/
-
-      install -D ../LICENSE $out/share/doc/LICENSE
-
-      runHook postInstall
-    '';}))
-    #ipu6-camera-hal
     home-manager
     docker-compose
     chrysalis
@@ -120,6 +106,7 @@ in
   };
   services.udev.packages = [pkgs.chrysalis];
   services.udev.extraRules = ''
+  SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"
   ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="wheel", MODE="0664"
   # saleae logic analyser
   SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
