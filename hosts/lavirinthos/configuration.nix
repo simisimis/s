@@ -25,6 +25,10 @@ in
     linux-firmware
     sof-firmware
   ];
+  hardware.ipu6 = {
+    enable = true;
+    platform = "ipu6ep";
+  };
   systemd.services.v4l2-relayd = {
     enable = true;
     wantedBy = [ "multi-user.target" ];
@@ -73,7 +77,6 @@ in
     '';
   };
   environment.systemPackages = with pkgs; [
-    v4l2-relayd-ipu6ep
     tailscale
     dmidecode
     libva-utils

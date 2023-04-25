@@ -79,31 +79,26 @@ in
   };
   services.kanshi.enable = true;
   services.kanshi.profiles = {
-    home = {
+    single = {
       outputs = [
         {
           criteria = "eDP-1";
-          position = "0,620";
-          scale = 2.0;
-        }
-        {
-          criteria = "DP-3";
-          position = "1920,0";
+          position = "0,0";
+          status = "enable";
           scale = 1.0;
         }
       ];
     };
-    work = {
+    dual = {
       outputs = [
         {
           criteria = "eDP-1";
-          position = "0,980";
-          scale = 2.0;
+          status = "disable";
         }
         {
-          criteria = "DP-1";
-          position = "1920,620";
-          scale = 1.0;
+          criteria = "DP-7";
+          position = "0,0";
+          scale = 2.0;
         }
       ];
     };
