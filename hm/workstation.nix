@@ -26,7 +26,7 @@ in
     cinnamon.nemo
 
     #web
-    firefox
+    firefox-bin
     (chromium.override { commandLineArgs = [ "--ozone-platform-hint=auto" ]; })
 
     #media
@@ -327,8 +327,8 @@ in
         exec = "~/bin/cal-tooltip";
       };
       "custom/power" = {
-        format = "⏻";
-        on-click = "swaynag -t custom -m'Are you sure?' -b 'Suspend' 'systemctl suspend; pkill swaynag'";
+        format = "🔌";
+        on-click = "swaynag -m'Are you sure?' -b 'Suspend' 'systemctl suspend; pkill swaynag'";
         tooltip = false;
       };
       "custom/vpn" = {
@@ -347,7 +347,7 @@ in
         border: none;
         border-radius: 0;
         /* `otf-font-awesome` is required to be installed for icons */
-        font-family: "mononoki Nerd Font", "Meslo LG S DZ", "Font Awesome 5 Free", Roboto, Helvetica, Arial;
+        font-family: "JetBrainsMono", "Font Awesome 5 Brands Regular", "Font Awesome 5 Free", "Meslo LG S DZ";
         font-size: 14px;
         min-height: 0;
     }
@@ -382,7 +382,7 @@ in
         background-color: rgba(33, 14, 32, 0.8);
     }
     tooltip label {
-        font-family: "Roboto Mono Thin";
+        font-family: 'JetBrainsMono', 'Roboto Mono Thin';
         font-size: 16px;
         color: white;
     }
@@ -534,7 +534,7 @@ in
     padding: 2px;
     background-color: transparent;
     border-radius: 2px;
-    font-family: 'Meslo LG S DZ', 'Inter Nerd Font','FuraCode Nerd Font Mono';
+    font-family: "Meslo LG S DZ", "JetBrainsMono";
     font-size: 15px;
   }
 

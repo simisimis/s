@@ -1,7 +1,7 @@
 # lavirinthos host specific configuration
-{ config, lib, nixpkgs-unstable, ... }:
+{ config, lib, pkgs, nixpkgs-unstable, ... }:
 let
-  pkgs = import nixpkgs-unstable {
+  unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
@@ -21,7 +21,8 @@ in
   networking.hosts = {};
 
   hardware.firmware = with pkgs; [
-    ipu6ep-camera-bin
+    unstable.ivsc-firmware
+    unstable.ipu6ep-camera-bin
     linux-firmware
     sof-firmware
   ];
@@ -40,9 +41,10 @@ in
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
     ];
   };
-  boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
+  boot.kernelPackages = unstable.zfs.latestCompatibleLinuxPackages;
   boot.extraModulePackages = with config.boot.kernelPackages; [
     ipu6-drivers
+  #  ivsc-driver
     v4l2loopback
   ];
   services = {
@@ -67,10 +69,17 @@ in
   networking.wireless = {
     enable = true;  # Enables wireless support via wpa_supplicant.
     interfaces = ["wlp0s20f3"];
-    networks = lib.mapAttrs
+    networks = (lib.mapAttrs
       ( name: value: {
         pskRaw = "${value}";
-      }) config.settings.hw.wifi;
+      }) config.settings.hw.wifi); #//
+      #{ "ssid" = {
+      #  extraConfig = ''
+      #    key_mgmt=NONE
+      #    '';
+      #  };
+      #};
+
     extraConfig = ''
       ctrl_interface=/run/wpa_supplicant
       ctrl_interface_group=wheel

@@ -2,19 +2,15 @@
   description = "Sims' nix config root flake";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-22.11";
+    nixpkgs.url = "nixpkgs/nixos-23.05";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager/release-22.11";
+    home-manager.url = "github:nix-community/home-manager/release-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     binfiles = {
       url = "git+ssh://git@backute:2203/simas/binfiles?ref=master";
       flake = false;
     }; #binfiles
-#    zshdfiles = {
-#      url = "git+ssh://git@backute:2203/simas/zshd?ref=master";
-#      flake = false;
-#    };
 
   };
 
@@ -32,7 +28,7 @@
     };
     args = inputs;
 
-    mkHost = host: inputs.nixpkgs-unstable.lib.nixosSystem {
+    mkHost = host: inputs.nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
         { _module.args = args; }
@@ -51,7 +47,7 @@
           home = {
             username = user;
             homeDirectory = "/home/${user}";
-            stateVersion = "22.11";
+            stateVersion = "23.05";
           };
         }
       ];
@@ -79,5 +75,13 @@
         pkg-config
       ];
     }; # devShell
+
+    templates = {
+      rust = {
+        path = ./templates/rust;
+        description = "Rust template, using buildRustPackage";
+      };
+    };
+    defaultTemplate = self.templates.rust;
   }; #outputs
 }

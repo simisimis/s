@@ -158,10 +158,22 @@ require'lualine'.setup {
     lualine_z = { "location" }
   }
 }
+
+-- Toggle copilot
+vim.api.nvim_create_user_command("CopilotToggle", function()
+  local status = vim.api.nvim_command_output('Copilot status')
+	if status:find("Enabled") then
+		vim.cmd("Copilot disable")
+	else
+		vim.cmd("Copilot enable")
+	end
+end, { nargs = 0 })
+
 vim.api.nvim_set_keymap("n", "<leader>j", '<cmd>lua require("hop").hint_words()<CR>', {})
 vim.api.nvim_set_keymap("n", "<leader>l", '<cmd>lua require("hop").hint_lines()<CR>', {})
 vim.api.nvim_set_keymap("v", "<leader>j", '<cmd>lua require("hop").hint_words()<CR>', {})
 vim.api.nvim_set_keymap("v", "<leader>l", '<cmd>lua require("hop").hint_lines()<CR>', {})
+vim.api.nvim_set_keymap("n", "<leader> ", ":CopilotToggle<CR>", {})
 
 -- Treesitter Plugin Setup
 --vim.g.indent_blankline_char = ""

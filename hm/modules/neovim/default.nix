@@ -49,6 +49,7 @@ in
       # To enable more of the features of rust-analyzer, such as inlay hints and more!
       rust-tools-nvim
       rust-vim
+      copilot-vim
 
       # Snippet engine
       vim-vsnip

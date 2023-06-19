@@ -27,6 +27,7 @@ in
       directory = {
         style = "bold blue";
         repo_root_style = "bold fg:220";
+        truncate_to_repo = false;
         format = "[\\[$path[$read_only]($read_only_style)\\]]($style) ";
         repo_root_format = "[\\[$before_root_path]($style)[$repo_root]($repo_root_style)[$path[$read_only]($read_only_style)\\]]($style) ";
       };

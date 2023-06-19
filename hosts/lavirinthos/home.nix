@@ -48,7 +48,11 @@ in
         smartBorders = "off";
       };
       window = {
+        titlebar = false;
         border = 0;
+      };
+      floating = {
+        titlebar = false;
       };
       keybindings = let
         modifier = config.wayland.windowManager.sway.config.modifier;
@@ -89,7 +93,7 @@ in
         }
       ];
     };
-    dual = {
+    dual1 = {
       outputs = [
         {
           criteria = "eDP-1";
@@ -97,6 +101,19 @@ in
         }
         {
           criteria = "DP-7";
+          position = "0,0";
+          scale = 2.0;
+        }
+      ];
+    };
+    dual2 = {
+      outputs = [
+        {
+          criteria = "eDP-1";
+          status = "disable";
+        }
+        {
+          criteria = "DP-6";
           position = "0,0";
           scale = 2.0;
         }
@@ -144,7 +161,8 @@ in
     fantasque-sans-mono
     font-awesome_5
     roboto-mono
-    (nerdfonts.override { fonts = [ "Mononoki" ]; })
+    (nerdfonts.override { fonts = [ "Mononoki" "JetBrainsMono" ]; })
+    jetbrains-mono
     material-icons
     gnome.adwaita-icon-theme
     libappindicator
@@ -166,7 +184,7 @@ in
 
     #web
     teams
-    zoom-us
+    unstable.zoom-us
 
   ];
   home.file.".aws/credentials".text = ''
@@ -229,10 +247,10 @@ in
     };
   };
 
-  programs.mako = {
+  services.mako = {
     enable = true;
     anchor = "bottom-right";
-    font = "mononoki Nerd Font 10";
+    font = "JetBrainsMono 10";
     backgroundColor = "#44485b";
     textColor = "#c0caf5";
     width = 350;
