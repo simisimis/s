@@ -75,9 +75,11 @@ in
 
   fonts.fonts = with pkgs; [
     noto-fonts
-    source-code-pro
     meslo-lg
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+    fira-mono
+    fira-code
+    fira-code-symbols
+    (nerdfonts.override { fonts = [ "DroidSansMono" ]; })
   ];
 
   # List packages installed in system profile. To search, run:
@@ -113,7 +115,6 @@ in
     linuxPackages.v4l2loopback
 
     #fonts
-    source-code-pro
     meslo-lg
     noto-fonts
  

@@ -18,6 +18,7 @@ in
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     #system utils
+    nushell
     bitwarden-cli
     usbutils
     screen
@@ -94,6 +95,8 @@ in
       hub.protocol = "https";
       color.ui = true;
       pull.rebase = true;
+      commit.gpgSign = true;
+      init.defaultBranch = "main";
     };
   };
   programs.zellij.enable = true;
@@ -127,6 +130,7 @@ in
       bind r source-file ~/.config/tmux/fiddle.conf
       '';
   };
+  programs.helix.enable = true;
   programs.starship.enable = true;
   programs.zsh = {
     enable = true;

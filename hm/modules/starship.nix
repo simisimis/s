@@ -7,7 +7,7 @@ in
   config.programs.starship = mkIf starshipEnabled {
     settings = {
       add_newline = false;
-      format = "$hostname$directory$nix_shell(\\($git_branch$git_commit|$git_status\\))$fill$golang$rust$helm$terraform$shlvl$kubernetes$time$line_break$character";
+      format = "$hostname$directory$nix_shell(\\($git_branch$git_commit|$git_status\\))$fill$shlvl$kubernetes$line_break$character";
 
       character = {
         success_symbol = "[≫](bold green) ";
@@ -16,13 +16,6 @@ in
 
       fill.symbol = " ";
       shlvl.disabled = false;
-
-      time = {
-        disabled = false;
-        style = "bold blue";
-        format = "[\\[$time\\]]($style)";
-        time_format = "%H:%M";
-      };
 
       directory = {
         style = "bold blue";

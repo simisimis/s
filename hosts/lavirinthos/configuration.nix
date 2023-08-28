@@ -74,6 +74,7 @@ in
         pskRaw = "${value}";
       }) config.settings.hw.wifi); #//
       #{ "ssid" = {
+      # psk = "password";
       #  extraConfig = ''
       #    key_mgmt=NONE
       #    '';

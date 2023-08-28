@@ -29,7 +29,7 @@ in
 
   wayland.windowManager.sway = {
     enable = true;
-    wrapperFeatures.gtk = true ;
+    wrapperFeatures.gtk = true;
     extraConfig = ''
       exec_always "systemctl --user restart kanshi.service"
     '';
@@ -41,7 +41,7 @@ in
         };
       };
       terminal = "alacritty";
-      output = { "*" = { bg = "~/Pictures/owl_1080.jpg fit"; } ; };
+      output = { "*" = { bg = "~/Pictures/owl_1080.jpg fit"; }; };
       gaps = {
         inner = 3;
         outer = 0;
@@ -54,9 +54,11 @@ in
       floating = {
         titlebar = false;
       };
-      keybindings = let
-        modifier = config.wayland.windowManager.sway.config.modifier;
-        in lib.mkOptionDefault {
+      keybindings =
+        let
+          modifier = config.wayland.windowManager.sway.config.modifier;
+        in
+        lib.mkOptionDefault {
           "${modifier}+g" = "move workspace to output left";
           "${modifier}+b" = "move workspace to output up";
           "${modifier}+Shift+t" = "exec trimgrim";
@@ -74,7 +76,7 @@ in
           "XF86AudioPlay" = "exec playerctl play-pause";
           "XF86AudioNext" = "exec playerctl next";
           "XF86AudioPrev" = "exec playerctl previous";
-        }; 
+        };
       bars = [{
         statusCommand = "-";
         command = "waybar";
@@ -83,6 +85,55 @@ in
   };
   services.kanshi.enable = true;
   services.kanshi.profiles = {
+    singleAR = {
+      outputs = [
+        {
+          criteria = "LBT Rokid Max Unknown";
+          position = "0,0";
+          status = "enable";
+          scale = 1.0;
+          mode = "1920x1080@60Hz";
+        }
+        {
+          criteria = "eDP-1";
+          status = "disable";
+        }
+        {
+          criteria = "Dell Inc. DELL U2720Q F7MFTS2";
+          status = "disable";
+        }
+      ];
+    };
+    singleAR2 = {
+      outputs = [
+        {
+          criteria = "LBT Rokid Max Unknown";
+          position = "0,0";
+          status = "enable";
+          scale = 1.0;
+          mode = "1920x1080@60Hz";
+        }
+        {
+          criteria = "eDP-1";
+          status = "disable";
+        }
+      ];
+    };
+    dual = {
+      outputs = [
+        {
+          criteria = "Dell Inc. DELL U2720Q F7MFTS2";
+          position = "0,0";
+          scale = 2.0;
+          mode = "3840x2160@60Hz";
+          status = "enable";
+        }
+        {
+          criteria = "eDP-1";
+          status = "disable";
+        }
+      ];
+    };
     single = {
       outputs = [
         {
@@ -90,32 +141,6 @@ in
           position = "0,0";
           status = "enable";
           scale = 1.0;
-        }
-      ];
-    };
-    dual1 = {
-      outputs = [
-        {
-          criteria = "eDP-1";
-          status = "disable";
-        }
-        {
-          criteria = "DP-7";
-          position = "0,0";
-          scale = 2.0;
-        }
-      ];
-    };
-    dual2 = {
-      outputs = [
-        {
-          criteria = "eDP-1";
-          status = "disable";
-        }
-        {
-          criteria = "DP-6";
-          position = "0,0";
-          scale = 2.0;
         }
       ];
     };
@@ -128,11 +153,17 @@ in
       defaultCacheTtlSsh = 86400;
     };
   };
-  
+  fonts.fontconfig.enable = true;
+
   home.packages = with pkgs; [
     tmate
     gh
-    awscli2 eksctl kubernetes-helm helmfile ksd ssm-session-manager-plugin
+    unstable.awscli2
+    eksctl
+    kubernetes-helm
+    helmfile
+    ksd
+    ssm-session-manager-plugin
     postgresql
     dhall-json
     minikube
@@ -161,8 +192,7 @@ in
     fantasque-sans-mono
     font-awesome_5
     roboto-mono
-    (nerdfonts.override { fonts = [ "Mononoki" "JetBrainsMono" ]; })
-    jetbrains-mono
+    (nerdfonts.override { fonts = [ "Mononoki" "FiraCode" ]; })
     material-icons
     gnome.adwaita-icon-theme
     libappindicator
@@ -176,11 +206,15 @@ in
     #dev
     jdk11
     google-cloud-sdk
-    kubectx kubectl k9s stern
+    kubectx
+    kubectl
+    k9s
+    stern
     unstable.terraform
     saleae-logic
     jetbrains.idea-community
     lens # kubernetes ide
+    dioxus-cli
 
     #web
     teams
@@ -188,9 +222,9 @@ in
 
   ];
   home.file.".aws/credentials".text = ''
-  [default]
-  aws_access_key_id = ${config.settings.platform.aws.accessKey}
-  aws_secret_access_key = ${config.settings.platform.aws.accessSecret}
+    [default]
+    aws_access_key_id = ${config.settings.platform.aws.accessKey}
+    aws_secret_access_key = ${config.settings.platform.aws.accessSecret}
   '';
 
   programs.alacritty = {
@@ -200,19 +234,19 @@ in
         size = 12;
 
         normal = {
-          family = "Meslo LG S DZ";
+          family = "Fira Code";
           style = "Regular";
         };
         bold = {
-          family = "Meslo LG S DZ";
+          family = "Fira Code";
           style = "Bold";
         };
         italic = {
-          family = "Meslo LG S DZ";
+          family = "Fira Code";
           style = "Italic";
         };
         bold_italic = {
-          family = "Meslo LG S DZ";
+          family = "Fira Code";
           style = "Bold Italic";
         };
       };
@@ -243,27 +277,27 @@ in
           white = "#eeeeec";
         };
       };
-      window.opacity = 0.9;
+      window.opacity = 1;
     };
   };
 
   services.mako = {
     enable = true;
     anchor = "bottom-right";
-    font = "JetBrainsMono 10";
+    font = "JetBrainsMono Nerd Font 12";
     backgroundColor = "#44485b";
     textColor = "#c0caf5";
     width = 350;
     margin = "0,20,20";
     padding = "10";
     borderSize = 2;
-    borderColor="#414868";
+    borderColor = "#414868";
     borderRadius = 5;
     defaultTimeout = 5000;
     groupBy = "summary";
     extraConfig = ''
-    [grouped]
-    format=<b>%s</b>\n%b
+      [grouped]
+      format=<b>%s</b>\n%b
     '';
   };
 
@@ -288,8 +322,8 @@ in
       "~/dev/MinaProtocol"
     ];
     initExtra = ''
-    export JAVA_HOME="${pkgs.jdk11}"
-    export BW_SESSION="${config.settings.services.bitwarden.sessionId}"
+      export JAVA_HOME="${pkgs.jdk11}"
+      export BW_SESSION="${config.settings.services.bitwarden.sessionId}"
     '';
     shellAliases = {
       kns = "kubens";

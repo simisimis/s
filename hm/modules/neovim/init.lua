@@ -158,6 +158,22 @@ require'lualine'.setup {
     lualine_z = { "location" }
   }
 }
+-- Telescope
+local telescope = require'telescope'
+local actions = require'telescope.actions'
+
+telescope.setup {
+  defaults = {
+    mappings = {
+      i = {
+        ["<esc>"] = actions.close,
+        ["<CR>"] = actions.select_vertical + actions.center,
+      },
+
+    },
+    pickers = { find_files = { find_command = { "fd", "--type", "f", "--hidden", "--strip-cwd-prefix" } } },
+  },
+}
 
 -- Toggle copilot
 vim.api.nvim_create_user_command("CopilotToggle", function()
@@ -174,14 +190,9 @@ vim.api.nvim_set_keymap("n", "<leader>l", '<cmd>lua require("hop").hint_lines()<
 vim.api.nvim_set_keymap("v", "<leader>j", '<cmd>lua require("hop").hint_words()<CR>', {})
 vim.api.nvim_set_keymap("v", "<leader>l", '<cmd>lua require("hop").hint_lines()<CR>', {})
 vim.api.nvim_set_keymap("n", "<leader> ", ":CopilotToggle<CR>", {})
-
--- Treesitter Plugin Setup
---vim.g.indent_blankline_char = ""
---require('nvim-treesitter.configs').setup {
---  ensure_installed = { "lua", "rust", "toml" },
---  highlight = {
---    enable = true,
---  },
---  indent = { enable = true },
---  incremental_selection = { enable = true },
---}
+vim.api.nvim_set_keymap("n", "<leader><C-f>", ":Telescope live_grep<CR>", {})
+if vim.fn.isdirectory(".git") then
+  vim.api.nvim_set_keymap("n", "<C-f>", '<cmd>Telescope git_files<cr>', {})
+else
+  vim.api.nvim_set_keymap("n", "<C-f>", '<cmd>Telescope find_files<cr>', {})
+end
