@@ -18,7 +18,7 @@ in
   nixpkgs.overlays = [
     (import ../../overlays)
   ];
-  networking.hosts = {};
+  networking.hosts = { };
 
   hardware.firmware = with pkgs; [
     unstable.ivsc-firmware
@@ -44,7 +44,7 @@ in
   boot.kernelPackages = unstable.zfs.latestCompatibleLinuxPackages;
   boot.extraModulePackages = with config.boot.kernelPackages; [
     ipu6-drivers
-  #  ivsc-driver
+    #  ivsc-driver
     v4l2loopback
   ];
   services = {
@@ -67,19 +67,20 @@ in
   # networking.interfaces.eth0.useDHCP = true;
 
   networking.wireless = {
-    enable = true;  # Enables wireless support via wpa_supplicant.
-    interfaces = ["wlp0s20f3"];
+    enable = true; # Enables wireless support via wpa_supplicant.
+    interfaces = [ "wlp0s20f3" ];
     networks = (lib.mapAttrs
-      ( name: value: {
+      (name: value: {
         pskRaw = "${value}";
-      }) config.settings.hw.wifi); #//
-      #{ "ssid" = {
-      # psk = "password";
-      #  extraConfig = ''
-      #    key_mgmt=NONE
-      #    '';
-      #  };
-      #};
+      })
+      config.settings.hw.wifi); #//
+    #{ "ssid" = {
+    # psk = "password";
+    #  extraConfig = ''
+    #    key_mgmt=NONE
+    #    '';
+    #  };
+    #};
 
     extraConfig = ''
       ctrl_interface=/run/wpa_supplicant
@@ -105,10 +106,11 @@ in
     enable = true;
     storageDriver = "zfs";
   };
+  users.users."${config.settings.usr.name}".extraGroups = ["trezord"];
 
   # List services that you want to enable:
   services.logind.extraConfig = "HandlePowerKey=suspend";
- 
+
   services.zfs.autoSnapshot = {
     enable = true;
     hourly = 0;
@@ -117,12 +119,12 @@ in
     monthly = 1;
     frequent = 0;
   };
-  services.udev.packages = [pkgs.chrysalis];
+  services.udev.packages = [ pkgs.chrysalis pkgs.trezor-udev-rules];
   services.udev.extraRules = ''
-  SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"
-  ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="wheel", MODE="0664"
-  # saleae logic analyser
-  SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
+    SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"
+    ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="wheel", MODE="0664"
+    # saleae logic analyser
+    SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
   '';
   networking.firewall = {
     # enable the firewall
@@ -139,6 +141,9 @@ in
     checkReversePath = "loose";
   };
 
+  services = {
+    trezord.enable = true;
+  };
   services.tailscale.enable = true;
   services.openssh.enable = false;
   services.openssh.openFirewall = false;
@@ -156,7 +161,7 @@ in
       }
     '';
   };
-  services.pipewire  = {
+  services.pipewire = {
     wireplumber.enable = true;
   };
 
@@ -171,7 +176,7 @@ in
     };
   };
 
-  security.pam.services.swaylock = {};
+  security.pam.services.swaylock = { };
   security.sudo.enable = true;
   security.sudo.extraRules = [{
     groups = [ "wheel" ];

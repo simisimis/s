@@ -70,6 +70,7 @@ in
         "n" = "jump_view_down";
         "e" = "jump_view_up";
         "i" = "jump_view_right";
+        "C-x" = ":buffer-close";
       };
 
       keys.insert = {
