@@ -48,6 +48,7 @@ in
       ];
     };
   };
+  services.gnome.at-spi2-core.enable = true;
 
   # List services that you want to enable:
   services.udev.packages = [pkgs.chrysalis];

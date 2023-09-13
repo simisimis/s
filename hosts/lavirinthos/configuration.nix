@@ -106,7 +106,7 @@ in
     enable = true;
     storageDriver = "zfs";
   };
-  users.users."${config.settings.usr.name}".extraGroups = ["trezord"];
+  users.users."${config.settings.usr.name}".extraGroups = [ "trezord" ];
 
   # List services that you want to enable:
   services.logind.extraConfig = "HandlePowerKey=suspend";
@@ -119,7 +119,7 @@ in
     monthly = 1;
     frequent = 0;
   };
-  services.udev.packages = [ pkgs.chrysalis pkgs.trezor-udev-rules];
+  services.udev.packages = [ pkgs.chrysalis pkgs.trezor-udev-rules ];
   services.udev.extraRules = ''
     SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"
     ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="wheel", MODE="0664"
@@ -162,6 +162,7 @@ in
     '';
   };
   services.pipewire = {
+    package = unstable.pipewire;
     wireplumber.enable = true;
   };
 
