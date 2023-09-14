@@ -10,12 +10,15 @@ let
   };
 in
 {
+  imports = [
+    ./modules/zellij
+    ./modules/helix
+  ];
+
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     #utils
-    arandr
     pavucontrol
-    freerdp
     speedcrunch
     scrot
     flameshot
@@ -24,6 +27,7 @@ in
     termite
     filezilla
     cinnamon.nemo
+    nushell
 
     #web
     firefox-bin
@@ -54,6 +58,13 @@ in
     go_1_18 golint dep delve
     exercism
     unstable.android-studio
+    rust-analyzer
+    rustc cargo rustfmt cargo-edit clippy cargo-watch bacon
+    trunk wasm-pack wasm-bindgen-cli
+    # rustup
+    rnix-lsp
+    (python39.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
+    gitAndTools.gitflow
 
     #unstable.prusa-slicer
   ];
@@ -131,6 +142,8 @@ in
         ];
     };
   };
+  programs.zellij.enable = true;
+  programs.helix.enable = true;
   programs.zathura.enable = true;
   programs.rofi.enable = true;
   programs.rofi.theme = "Pop-Dark.rasi";

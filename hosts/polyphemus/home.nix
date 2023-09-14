@@ -18,6 +18,8 @@ in
       github.user = config.settings.usr.username;
     };
   };
+  programs.helix.enable = lib.mkForce false;
+  programs.zellij.enable = lib.mkForce false;
 
   home.username = config.settings.usr.name;
   home.homeDirectory = "/home/${config.settings.usr.name}";

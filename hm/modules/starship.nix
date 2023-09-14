@@ -1,10 +1,6 @@
 { lib, pkgs, config, ... }:
-with lib;
-let
-  starshipEnabled = config.programs.starship.enable;
-in
 {
-  config.programs.starship = mkIf starshipEnabled {
+  config.programs.starship = lib.mkIf config.programs.starship.enable {
     settings = {
       add_newline = false;
       format = "$hostname$directory$nix_shell(\\($git_branch$git_commit|$git_status\\))$fill$shlvl$kubernetes$line_break$character";

@@ -15,6 +15,10 @@
     { device = "zroot/POLYPHEMUS/root";
       fsType = "zfs";
     };
+  fileSystems."/data" =
+    { device = "zroot/POLYPHEMUS/data";
+      fsType = "zfs";
+    };
 
   fileSystems."/nix" =
     { device = "zroot/NIX/store";

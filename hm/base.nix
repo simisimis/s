@@ -10,7 +10,8 @@ let
 in
 {
   imports = [
-    ./modules
+    ./modules/starship.nix
+    ./modules/neovim
   ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -18,7 +19,6 @@ in
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     #system utils
-    nushell
     bitwarden-cli
     usbutils
     screen
@@ -26,18 +26,8 @@ in
     gopass
     udiskie
     pfetch
-    #dev
-    rust-analyzer
-    rustc cargo rustfmt cargo-edit clippy cargo-watch bacon
-    trunk wasm-pack wasm-bindgen-cli
-    # rustup
-    rnix-lsp
-    (python39.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
-    gitAndTools.gitflow
     jq
-    gotop
     bottom
-
   ];
 
   programs.rbw = {
@@ -99,7 +89,6 @@ in
       init.defaultBranch = "main";
     };
   };
-  programs.zellij.enable = true;
 
   programs.tmux = {
     enable = true;
@@ -130,7 +119,6 @@ in
       bind r source-file ~/.config/tmux/fiddle.conf
       '';
   };
-  programs.helix.enable = true;
   programs.starship.enable = true;
   programs.zsh = {
     enable = true;

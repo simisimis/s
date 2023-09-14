@@ -1,13 +1,9 @@
-{ lib
-, config
+{ lib, config
 , ...
 }:
-with lib; let
-  helixEnabled = config.programs.helix.enable;
-in
 {
   imports = [ ./languages.nix ];
-  config.programs.helix = mkIf helixEnabled {
+  config.programs.helix = lib.mkIf config.programs.helix.enable {
     settings = {
       theme = "catppuccin_frappe";
       editor = {
