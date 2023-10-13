@@ -164,6 +164,8 @@ in
         ## This is the way... to traverse through history
         bindkey "^[OA" history-beginning-search-backward
         bindkey "^[OB" history-beginning-search-forward
+        bindkey "^[[1;5D" backward-word
+        bindkey "^[[1;5C" forward-word
         export RUST_SRC_PATH="${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}"
         export GOPATH="$HOME/dev/go"
         export PATH="$HOME/bin:$HOME/.cargo/bin:$GOPATH/bin:$PATH"

@@ -156,6 +156,8 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    jira-cli-go
+    grpcurl
     tmate
     gh
     unstable.awscli2
@@ -324,6 +326,7 @@ in
     initExtra = ''
       export JAVA_HOME="${pkgs.jdk11}"
       export BW_SESSION="${config.settings.services.bitwarden.sessionId}"
+      export JIRA_API_TOKEN="${config.settings.services.jira.apiToken}"
     '';
     shellAliases = {
       kns = "kubens";

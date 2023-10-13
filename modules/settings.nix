@@ -76,6 +76,12 @@ with lib;
         };
       };
       services = {
+        jira = {
+          apiToken = mkOption {
+            type = with types; uniq str;
+            description = "API token for Jira";
+          };
+        };
         bitwarden = {
           baseUrl = mkOption {
             type = with types; uniq str;
