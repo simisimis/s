@@ -14,6 +14,7 @@ in
   programs.git = {
     userName = config.settings.usr.fullName;
     userEmail = config.settings.usr.email;
+    signing.key = "9825FCE6155A07FC";
     extraConfig = {
       github.user = config.settings.usr.username;
     };
