@@ -79,7 +79,7 @@ in
   services.tailscale.enable = true;
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.settings.passwordAuthentication = false;
+  services.openssh.settings.PasswordAuthentication = false;
   services.syncthing = {
     enable = true;
     # Folder for Syncthing's settings and keys
