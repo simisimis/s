@@ -15,7 +15,7 @@ in
   imports = [
     ../../nixos/base.nix
     ../../modules/settings.nix
-    ../../modules/home-assistant
+    #../../modules/home-assistant
     ./hardware-configuration.nix
     ];
 
@@ -79,16 +79,7 @@ in
   services.tailscale.enable = true;
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.passwordAuthentication = false;
-  services.adguardhome = {
-    enable = false;
-    port = 8100;
-  };
-  services.unifi = {
-    enable = false;
-    openFirewall = true;
-    unifiPackage = unstable.unifi;
-  };
+  services.openssh.settings.passwordAuthentication = false;
   services.syncthing = {
     enable = true;
     # Folder for Syncthing's settings and keys

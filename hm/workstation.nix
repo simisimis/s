@@ -54,6 +54,7 @@ in
     stdenv.cc.cc.lib
 
     #dev
+    unstable.cargo-espflash
     unstable.terraform
     go_1_18 golint dep delve
     exercism

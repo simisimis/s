@@ -158,6 +158,7 @@ in
   home.packages = with pkgs; [
     jira-cli-go
     grpcurl
+    actionlint
     tmate
     gh
     unstable.awscli2
@@ -321,12 +322,34 @@ in
   };
   programs.zsh = {
     cdpath = [
-      "~/dev/MinaProtocol"
+      "~/dev/MinaFoundation"
     ];
     initExtra = ''
       export JAVA_HOME="${pkgs.jdk11}"
       export BW_SESSION="${config.settings.services.bitwarden.sessionId}"
       export JIRA_API_TOKEN="${config.settings.services.jira.apiToken}"
+      todo () {
+        local description="$*" # get all arguments
+        jira issue create --template ~/.config/.jira/issue-template.yml \
+             -a $(jira me) \
+             -tTask \
+             --custom team=4df12a6f-710c-4bc9-a8e9-a8a77b54567d \
+             --component="DevOps" \
+             --summary "$description"
+      }
+              todo () {
+        local description="$*" # get all arguments
+        jira issue create --template ~/.config/.jira/issue-template.yml \
+          -a $(jira me) \
+          -tTask \
+          --custom team=4df12a6f-710c-4bc9-a8e9-a8a77b54567d \
+          --component="DevOps" \
+          --summary "$description" \
+          --no-input
+          issueID=$(jira issue list -q 'summary ~ "$description"' --plain --no-headers --columns key)
+          sprintID=$(jira sprint list --state=active --plain --table --columns id --no-headers)
+          jira sprint add $sprintID $issueID
+        }
     '';
     shellAliases = {
       kns = "kubens";

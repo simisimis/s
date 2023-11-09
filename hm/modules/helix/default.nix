@@ -41,6 +41,7 @@
         "V" = [ "select_mode" "extend_line_below" ];
         "C-c" = "normal_mode";
         "C-/" = "toggle_comments";
+        "C-x" = ":buffer-close";
         "tab" = ":buffer-next";
         "S-tab" = ":buffer-previous";
 
