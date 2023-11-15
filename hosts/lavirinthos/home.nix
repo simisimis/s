@@ -164,7 +164,7 @@ in
     unstable.awscli2
     eksctl
     kubernetes-helm
-    helmfile
+    unstable.helmfile
     ksd
     ssm-session-manager-plugin
     postgresql
@@ -220,7 +220,6 @@ in
     dioxus-cli
 
     #web
-    teams
     unstable.zoom-us
 
   ];
