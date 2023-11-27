@@ -42,6 +42,7 @@
         "C-c" = "normal_mode";
         "C-/" = "toggle_comments";
         "C-x" = ":buffer-close";
+        "C-y" = ":set-language gotmpl";
         "tab" = ":buffer-next";
         "S-tab" = ":buffer-previous";
 

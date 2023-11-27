@@ -162,7 +162,7 @@ in
     '';
   };
   services.pipewire = {
-    package = unstable.pipewire;
+    #package = unstable.pipewire;
     wireplumber.enable = true;
   };
 
