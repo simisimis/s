@@ -119,7 +119,7 @@ in
     exiftool
     du-dust
     procs
-    exa
+    eza
     tldr
     # start wayland
     swaylock

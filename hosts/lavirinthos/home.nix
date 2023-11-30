@@ -174,7 +174,7 @@ in
     exiftool
     du-dust
     procs
-    exa
+    eza
     tldr
     darktable
     # start wayland
@@ -220,7 +220,7 @@ in
     dioxus-cli
 
     #web
-    unstable.zoom-us
+    unstable.ledger-live-desktop
 
   ];
   home.file.".aws/credentials".text = ''

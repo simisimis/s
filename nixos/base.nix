@@ -44,15 +44,19 @@ in
   services.syncthing = {
     user = config.settings.usr.name;
     overrideFolders = true;
-    devices = {
-      "backute" = { id = config.settings.services.syncthing.ids.backute; };
-      "simsung" = { id = config.settings.services.syncthing.ids.simsung; };
-      "simonster" = { id = config.settings.services.syncthing.ids.simonster; };
-      "lavirinthos" = { id = config.settings.services.syncthing.ids.lavirinthos; };
-    };
-    folders = {
-      "papyrus" = {        # Name of folder in Syncthing, also the folder ID
-        devices = [ "backute" "simsung" "simonster" "lavirinthos"];      # Which devices to share the folder with
+    settings = {
+
+      devices = {
+        "backute" = { id = config.settings.services.syncthing.ids.backute; };
+        "simsung" = { id = config.settings.services.syncthing.ids.simsung; };
+        "simonster" = { id = config.settings.services.syncthing.ids.simonster; };
+        "lavirinthos" = { id = config.settings.services.syncthing.ids.lavirinthos; };
+      };
+      folders = {
+        "papyrus" = {
+          # Name of folder in Syncthing, also the folder ID
+          devices = [ "backute" "simsung" "simonster" "lavirinthos" ]; # Which devices to share the folder with
+        };
       };
     };
   };
@@ -73,7 +77,7 @@ in
     };
   };
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     noto-fonts
     meslo-lg
     fira-mono
@@ -95,9 +99,13 @@ in
     wev
     sshfs
     lsof
-    wget curl dig
+    wget
+    curl
+    dig
     neovim
-    git tig git-crypt
+    git
+    tig
+    git-crypt
     gnupg
     inetutils
     pciutils
@@ -117,12 +125,12 @@ in
     #fonts
     meslo-lg
     noto-fonts
- 
+
   ];
 
-  environment.variables = { 
+  environment.variables = {
     EDITOR = "nvim";
-    VISUAL = "nvim"; 
+    VISUAL = "nvim";
   };
 
   # nix pkgs
@@ -130,11 +138,11 @@ in
 
   nixpkgs.overlays = [
     (self: super: {
-     neovim = super.neovim.override {
-       viAlias = true;
-       vimAlias = true;
-     };
-   })
+      neovim = super.neovim.override {
+        viAlias = true;
+        vimAlias = true;
+      };
+    })
   ];
 
   # This value determines the NixOS release from which the default
@@ -143,6 +151,6 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 
 }

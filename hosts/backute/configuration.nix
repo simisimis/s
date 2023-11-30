@@ -17,14 +17,14 @@ in
     ../../modules/settings.nix
     #../../modules/home-assistant
     ./hardware-configuration.nix
-    ];
+  ];
 
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
 
   boot = {
-  # Use the systemd-boot EFI boot loader.
-    initrd.kernelModules = [ "e1000e" ]; 
+    # Use the systemd-boot EFI boot loader.
+    initrd.kernelModules = [ "e1000e" ];
     initrd.network = {
       enable = true;
       ssh = {
@@ -84,9 +84,11 @@ in
     enable = true;
     # Folder for Syncthing's settings and keys
     configDir = config.settings.services.syncthing.configDir;
-    folders = {
-      "papyrus" = {
-        path = config.settings.services.syncthing.dataDir;
+    settings = {
+      folders = {
+        "papyrus" = {
+          path = config.settings.services.syncthing.dataDir;
+        };
       };
     };
   };
@@ -99,7 +101,7 @@ in
     trustedInterfaces = [ "tailscale0" ];
 
     # allow the Tailscale UDP port through the firewall
-    allowedUDPPorts = [ 1900 32410 32412 32413 32414 8443 8081 config.services.tailscale.port];
+    allowedUDPPorts = [ 1900 32410 32412 32413 32414 8443 8081 config.services.tailscale.port ];
 
     # allow you to SSH in over the public internet
     allowedTCPPorts = [ 22 2049 32400 3005 8324 32469 8123 1400 8521 1883 8100 8443 8081 ];

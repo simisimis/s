@@ -56,15 +56,26 @@ in
     #dev
     unstable.cargo-espflash
     unstable.terraform
-    go_1_18 golint dep delve
+    go_1_19
+    golint
+    dep
+    delve
     exercism
     unstable.android-studio
     rust-analyzer
-    rustc cargo rustfmt cargo-edit clippy cargo-watch bacon
-    trunk wasm-pack wasm-bindgen-cli
+    rustc
+    cargo
+    rustfmt
+    cargo-edit
+    clippy
+    cargo-watch
+    bacon
+    trunk
+    wasm-pack
+    wasm-bindgen-cli
     # rustup
     rnix-lsp
-    (python39.withPackages(ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
+    (python39.withPackages (ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
     gitAndTools.gitflow
 
     #unstable.prusa-slicer
@@ -86,40 +97,39 @@ in
 
       # third party extensions
       #arrterian.nix-env-selector
-      brettm12345.nixfmt-vscode     
+      brettm12345.nixfmt-vscode
       bbenoist.nix
     ];
     userSettings = {
       "telemetry.enableCrashReporter" = false;
       "telemetry.enableTelemetry" = false;
-    # ViM settings
-    "vim.normalModeKeyBindingsNonRecursive" = [{
-            "before" = ["u"];
-            "after" = [];
-            "commands"= [{
-                "command"= "undo";
-                "args"= [];
-            }];
-        }
+      # ViM settings
+      "vim.normalModeKeyBindingsNonRecursive" = [{
+        "before" = [ "u" ];
+        "after" = [ ];
+        "commands" = [{
+          "command" = "undo";
+          "args" = [ ];
+        }];
+      }
         {
-            "before" = ["<C-r>"];
-            "after" = [];
-            "commands" = [{
-                "command" = "redo";
-                "args" = [];
-            }];
-        }
-    ];
+          "before" = [ "<C-r>" ];
+          "after" = [ ];
+          "commands" = [{
+            "command" = "redo";
+            "args" = [ ];
+          }];
+        }];
       "go.toolsManagement.autoUpdate" = false;
-#      "go.formatTool" = "gofmt";
-#      "go.lintTool" = "golint";
-#      "go.lintOnSave" = "file";
-#      "go.useLanguageServer" = true;
-#      "go.toolsEnvVars" = {
-#        "GOFLAGS" = "-tags=sandbox,integration,e2e";
-#      };
+      #      "go.formatTool" = "gofmt";
+      #      "go.lintTool" = "golint";
+      #      "go.lintOnSave" = "file";
+      #      "go.useLanguageServer" = true;
+      #      "go.toolsEnvVars" = {
+      #        "GOFLAGS" = "-tags=sandbox,integration,e2e";
+      #      };
       "window.zoomLevel" = 0;
-      "editor.formatOnSave" =  true;
+      "editor.formatOnSave" = true;
 
       "workbench.colorTheme" = "Solarized Light";
       "workbench.iconTheme" = null;
@@ -136,11 +146,12 @@ in
         {
           "name" = "JavaSE-11";
           "path" = "${pkgs.jdk11}/lib/openjdk";
-          "default" =  true;
-        }];
-        "java.project.referencedLibraries" = [
-          "/home/snarbutas/development/java/algorithmsp1/lib/algs4.jar"
-        ];
+          "default" = true;
+        }
+      ];
+      "java.project.referencedLibraries" = [
+        "/home/snarbutas/development/java/algorithmsp1/lib/algs4.jar"
+      ];
     };
   };
   programs.zellij.enable = true;
@@ -208,19 +219,19 @@ in
     mimeApps = {
       enable = true;
       associations.added = {
-        "x-scheme-handler/magnet"="userapp-transmission-gtk-XEE0Y0.desktop";
+        "x-scheme-handler/magnet" = "userapp-transmission-gtk-XEE0Y0.desktop";
       };
       defaultApplications = {
         "image/jpeg" = "imv-folder.desktop";
         "image/png" = "imv-folder.desktop";
         "image/gif" = "imv-folder.desktop";
         "text/html" = "browser.desktop";
-        "x-scheme-handler/http"="browser.desktop";
-        "x-scheme-handler/https"="browser.desktop";
-        "x-scheme-handler/about"="browser.desktop";
-        "x-scheme-handler/unknown"="browser.desktop";
-        "x-scheme-handler/magnet"="userapp-transmission-gtk-XEE0Y0.desktop";
-        "x-scheme-handler/msteams"="teams.desktop";
+        "x-scheme-handler/http" = "browser.desktop";
+        "x-scheme-handler/https" = "browser.desktop";
+        "x-scheme-handler/about" = "browser.desktop";
+        "x-scheme-handler/unknown" = "browser.desktop";
+        "x-scheme-handler/magnet" = "userapp-transmission-gtk-XEE0Y0.desktop";
+        "x-scheme-handler/msteams" = "teams.desktop";
         "application/pdf" = "zathura.desktop";
         "video/mp4" = "umpv.desktop;mpv.desktop";
         "video/quicktime" = "umpv.desktop;mpv.desktop";
@@ -237,7 +248,7 @@ in
       "github.com" = {
         user = "git";
         identityFile = config.settings.usr.ssh.github.identityFile;
-        extraOptions = { 
+        extraOptions = {
           AddKeysToAgent = "yes";
           PubKeyAuthentication = "yes";
         };
@@ -248,25 +259,25 @@ in
     enable = true;
     settings = [{
       "height" = 30;
-      "modules-left" = ["sway/workspaces"];
+      "modules-left" = [ "sway/workspaces" ];
       "modules-right" = [ "network" "network#wl" "backlight" "cpu" "memory" "pulseaudio" "sway/language" "custom/date" "tray" "battery" "custom/power" ];
       "sway/workspaces" = {
         all-outputs = true;
         format = " {icon} ";
         persistent_workspaces = {
-          "1" = [];
-          "2" = [];
-          "3" = [];
-          "4" = [];
-          "5" = [];
+          "1" = [ ];
+          "2" = [ ];
+          "3" = [ ];
+          "4" = [ ];
+          "5" = [ ];
         };
         format-icons = {
-          "1"= "";
-          "2"= "";
-          "3"= "";
-          "4"= "";
-          "5"= "";
-          "6"= "🖋";
+          "1" = "";
+          "2" = "";
+          "3" = "";
+          "4" = "";
+          "5" = "";
+          "6" = "🖋";
           "urgent" = "";
           "focused" = "";
           "default" = "";
@@ -274,7 +285,7 @@ in
       };
       "backlight" = {
         format = "{percent}% {icon}";
-        format-icons = ["" ""];
+        format-icons = [ "" "" ];
         on-scroll-up = "brightnessctl s +1%";
         on-scroll-down = "brightnessctl s 1%-";
       };
@@ -287,14 +298,14 @@ in
       };
       "battery" = {
         states = {
-            warning = 30;
-            critical = 15;
+          warning = 30;
+          critical = 15;
         };
         format = "{icon} ";
         format-charging = "{capacity}% ";
         format-plugged = "{capacity}% ";
         format-alt = "{capacity}% {icon} ";
-        format-icons = ["" "" "" "" ""];
+        format-icons = [ "" "" "" "" "" ];
       };
       "network" = {
         interface = "enp*";
@@ -326,7 +337,7 @@ in
           phone = "";
           portable = "";
           car = "";
-          default = ["" "" ""];
+          default = [ "" "" "" ];
         };
         on-click = "pavucontrol";
       };
@@ -349,7 +360,7 @@ in
         interval = 15;
         return-type = "json";
         format = "{icon}";
-        format-icons = ["" ""];
+        format-icons = [ "" "" ];
         exec = "exec vpn-handler status json";
         on-click = "exec vpn-handler start from-other";
         on-click-middle = "exec vpn-handler stop";
@@ -357,246 +368,246 @@ in
       };
     }];
     style = ''
-    * {
-        border: none;
-        border-radius: 0;
-        /* `otf-font-awesome` is required to be installed for icons */
-        font-family: "JetBrainsMono", "Font Awesome 5 Brands Regular", "Font Awesome 5 Free", "Meslo LG S DZ";
-        font-size: 14px;
-        min-height: 0;
-    }
+      * {
+          border: none;
+          border-radius: 0;
+          /* `otf-font-awesome` is required to be installed for icons */
+          font-family: "JetBrainsMono", "Font Awesome 5 Brands Regular", "Font Awesome 5 Free", "Meslo LG S DZ";
+          font-size: 14px;
+          min-height: 0;
+      }
 
-    window#waybar {
-        background: transparent;
+      window#waybar {
+          background: transparent;
 
-        /*border-bottom: 3px solid rgba(100, 114, 125, 0.5);*/
-        color: #ffffff;
-        transition-property: background-color;
-        transition-duration: .2s;
-    }
-    #workspaces button {
-        padding: 5px 10px;
-        color: #c0caf5;
-    }
+          /*border-bottom: 3px solid rgba(100, 114, 125, 0.5);*/
+          color: #ffffff;
+          transition-property: background-color;
+          transition-duration: .2s;
+      }
+      #workspaces button {
+          padding: 5px 10px;
+          color: #c0caf5;
+      }
 
-    #workspaces button.focused {
+      #workspaces button.focused {
+          color: #24283b;
+          background-color: #7aa2f7;
+          border-radius: 5px;
+      }
+
+      #workspaces button:hover {
+        background-color: #7dcfff;
         color: #24283b;
-        background-color: #7aa2f7;
         border-radius: 5px;
-    }
+      }
 
-    #workspaces button:hover {
-      background-color: #7dcfff;
-      color: #24283b;
-      border-radius: 5px;
-    }
+      tooltip {
+          border-radius: 4px;
+          background-color: rgba(33, 14, 32, 0.8);
+      }
+      tooltip label {
+          font-family: 'JetBrainsMono', 'Roboto Mono Thin';
+          font-size: 16px;
+          color: white;
+      }
 
-    tooltip {
-        border-radius: 4px;
-        background-color: rgba(33, 14, 32, 0.8);
-    }
-    tooltip label {
-        font-family: 'JetBrainsMono', 'Roboto Mono Thin';
-        font-size: 16px;
-        color: white;
-    }
+      window#waybar.chromium {
+          background-color: #000000;
+          border: none;
+      }
+      #workspaces button.urgent {
+          background-color: #eb4d4b;
+      }
 
-    window#waybar.chromium {
-        background-color: #000000;
-        border: none;
-    }
-    #workspaces button.urgent {
-        background-color: #eb4d4b;
-    }
+      #workspaces {
+        background-color: #44485b;
+        margin: 2px 0px 0px 0px;
+        border-radius: 5px;
+      }
 
-    #workspaces {
-      background-color: #44485b;
-      margin: 2px 0px 0px 0px;
-      border-radius: 5px;
-    }
+      /* If workspaces is the leftmost module, omit left margin */
+      .modules-left > widget:first-child > #workspaces {
+          margin-left: 0;
+      }
 
-    /* If workspaces is the leftmost module, omit left margin */
-    .modules-left > widget:first-child > #workspaces {
-        margin-left: 0;
-    }
+      /* If workspaces is the rightmost module, omit right margin */
+      .modules-right > widget:last-child > #workspaces {
+          margin-right: 0;
+      }
 
-    /* If workspaces is the rightmost module, omit right margin */
-    .modules-right > widget:last-child > #workspaces {
-        margin-right: 0;
-    }
+      #backlight, #cpu, #memory, #language, #custom-date, #custom-vpn, #battery, #pulseaudio, #network, #tray {
+        background-color: #44485b;
+        padding: 5px 10px;
+        margin: 2px 0px 0px 0px;
+        border-radius: 0px 0px 0px 0px;
+      }
 
-    #backlight, #cpu, #memory, #language, #custom-date, #custom-vpn, #battery, #pulseaudio, #network, #tray {
-      background-color: #44485b;
-      padding: 5px 10px;
-      margin: 2px 0px 0px 0px;
-      border-radius: 0px 0px 0px 0px;
-    }
+      #backlight {
+          color: #bd64bd;
+      }
+      #network {
+        color: #bb79d6;
+        border-radius: 5px 0px 0px 5px;
+      }
+      #network.wl {
+        border-radius: 0px 0px 0px 0px;
+      }
 
-    #backlight {
-        color: #bd64bd;
-    }
-    #network {
-      color: #bb79d6;
-      border-radius: 5px 0px 0px 5px;
-    }
-    #network.wl {
-      border-radius: 0px 0px 0px 0px;
-    }
+      #network.disconnected {
+          color: #f53c3c;
+      }
 
-    #network.disconnected {
-        color: #f53c3c;
-    }
-
-    #cpu {
-      color: #f7768e;
-    }
-
-    #memory {
-        color: #ee7575;
-    }
-
-    #pulseaudio {
-        color: #e0af68;
-    }
-
-    #pulseaudio.muted {
-        background-color: #90b1b1;
-        color: #2a5c45;
-    }
-
-    #language {
-        color: #68de4d;
-    }
-
-    #custom-date {
-        color: #4ddede;
-    }
-
-    #custom-vpn {
-        color: #e75d4a;
-    }
-
-    #custom-vpn.connected {
-        color: #68de4d;
-    }
-
-    #custom-power {
-      font-size: 12px;
-      color: #24283b;
-      background-color: #db4b4b;
-      border-radius: 5px;
-      margin-right: 3px;
-      margin-top: 3px;
-      margin-bottom: 3px;
-      margin-left: 3px;
-      padding: 5px 10px;
-    }
-
-    #battery {
-      color: #9ece6a;
-      border-radius: 0px 5px 5px 0px;
-    }
-
-    #battery.charging, #battery.plugged {
-        color: #44485b;
-        animation-name: blink;
-        animation-duration: 1s;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-    }
-
-    @keyframes blink {
-        to {
-            color: #9ece6a;
-        }
-    }
-
-    #battery.critical:not(.charging) {
+      #cpu {
         color: #f7768e;
-        animation-name: blink;
-        animation-duration: 0.5s;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-    }
+      }
 
-    label:focus {
-        background-color: #000000;
-    }
+      #memory {
+          color: #ee7575;
+      }
+
+      #pulseaudio {
+          color: #e0af68;
+      }
+
+      #pulseaudio.muted {
+          background-color: #90b1b1;
+          color: #2a5c45;
+      }
+
+      #language {
+          color: #68de4d;
+      }
+
+      #custom-date {
+          color: #4ddede;
+      }
+
+      #custom-vpn {
+          color: #e75d4a;
+      }
+
+      #custom-vpn.connected {
+          color: #68de4d;
+      }
+
+      #custom-power {
+        font-size: 12px;
+        color: #24283b;
+        background-color: #db4b4b;
+        border-radius: 5px;
+        margin-right: 3px;
+        margin-top: 3px;
+        margin-bottom: 3px;
+        margin-left: 3px;
+        padding: 5px 10px;
+      }
+
+      #battery {
+        color: #9ece6a;
+        border-radius: 0px 5px 5px 0px;
+      }
+
+      #battery.charging, #battery.plugged {
+          color: #44485b;
+          animation-name: blink;
+          animation-duration: 1s;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+          animation-direction: alternate;
+      }
+
+      @keyframes blink {
+          to {
+              color: #9ece6a;
+          }
+      }
+
+      #battery.critical:not(.charging) {
+          color: #f7768e;
+          animation-name: blink;
+          animation-duration: 0.5s;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+          animation-direction: alternate;
+      }
+
+      label:focus {
+          background-color: #000000;
+      }
     '';
     systemd.enable = false;
   };
   home.file."bin".source = binfiles.outPath;
   home.file.".xinitrc".text = ''
-  if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-    eval $(dbus-launch --exit-with-session --sh-syntax)
-  fi
-  systemctl --user import-environment DISPLAY XAUTHORITY
+    if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+      eval $(dbus-launch --exit-with-session --sh-syntax)
+    fi
+    systemctl --user import-environment DISPLAY XAUTHORITY
 
-  if command -v dbus-update-activation-environment >/dev/null 2>&1; then
-    dbus-update-activation-environment DISPLAY XAUTHORITY
-  fi
-  exec awesome
+    if command -v dbus-update-activation-environment >/dev/null 2>&1; then
+      dbus-update-activation-environment DISPLAY XAUTHORITY
+    fi
+    exec awesome
   '';
   home.file.".config/wofi/config".text = ''
-  width=400
-  height=200
+    width=400
+    height=200
   '';
   home.file.".config/wofi/style.css".text = ''
-  #window {
-    padding: 2px;
-    background-color: transparent;
-    border-radius: 2px;
-    font-family: "Meslo LG S DZ", "JetBrainsMono";
-    font-size: 15px;
-  }
+    #window {
+      padding: 2px;
+      background-color: transparent;
+      border-radius: 2px;
+      font-family: "Meslo LG S DZ", "JetBrainsMono";
+      font-size: 15px;
+    }
 
-  #input {
-    border: transparent;
-    background-color: rgba(68, 72, 91, 0.85);
-    caret-color: #c0caf5;
-    color: #c0caf5;
-    padding: 3px 5px 3px 5px;
-    border-radius: 5px;
-  }
+    #input {
+      border: transparent;
+      background-color: rgba(68, 72, 91, 0.85);
+      caret-color: #c0caf5;
+      color: #c0caf5;
+      padding: 3px 5px 3px 5px;
+      border-radius: 5px;
+    }
 
-  #entry:selected {
-    background-color: #7aa2f7;
-    border-radius: 5px;
-  }
+    #entry:selected {
+      background-color: #7aa2f7;
+      border-radius: 5px;
+    }
 
-  #text:selected {
-    color: #24283b;
-  }
+    #text:selected {
+      color: #24283b;
+    }
 
-  #inner-box {
-    color: #d8dee9;
-    border-radius: 5px;
-    padding: 2px;
-    background-color: rgba(68, 72, 91, 0.85);
-  }
+    #inner-box {
+      color: #d8dee9;
+      border-radius: 5px;
+      padding: 2px;
+      background-color: rgba(68, 72, 91, 0.85);
+    }
 
-  #outer-box {
-    margin: 15px;
-    background-color: transparent;
-  }
+    #outer-box {
+      margin: 15px;
+      background-color: transparent;
+    }
 
-  #scroll {
-    margin-top: 10px;
-    background-color: transparent;
-    border: none;
-  }
+    #scroll {
+      margin-top: 10px;
+      background-color: transparent;
+      border: none;
+    }
 
-  #text {
-    padding: 3px;
-    color: #c0caf5;
-    background-color: transparent;
-  }
+    #text {
+      padding: 3px;
+      color: #c0caf5;
+      background-color: transparent;
+    }
 
-  #img {
-    background-color: transparent;
-    padding: 5px;
-  }
+    #img {
+      background-color: transparent;
+      padding: 5px;
+    }
   '';
 }

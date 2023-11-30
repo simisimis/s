@@ -23,22 +23,24 @@
   networking.interfaces.enp5s0.useDHCP = true;
 
   hardware.video.hidpi.enable = true;
-  security.pam.services.swaylock = {};
+  security.pam.services.swaylock = { };
   #virtualisation.virtualbox.host.enableExtensionPack = true;
   services.openssh.enable = true;
 
   services.udev.extraRules = ''
-  # saleae logic analyser
-  SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
+    # saleae logic analyser
+    SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
   '';
 
   services.syncthing = {
     enable = true;
     # Folder for Syncthing's settings and keys
     configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
-    folders = {
-      "papyrus" = {
-        path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+    settings = {
+      folders = {
+        "papyrus" = {
+          path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+        };
       };
     };
   };

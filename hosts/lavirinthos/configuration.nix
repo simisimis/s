@@ -21,15 +21,15 @@ in
   networking.hosts = { };
 
   hardware.firmware = with pkgs; [
-    unstable.ivsc-firmware
-    unstable.ipu6ep-camera-bin
+    #unstable.ivsc-firmware
+    #unstable.ipu6ep-camera-bin
     linux-firmware
     sof-firmware
   ];
-  hardware.ipu6 = {
-    enable = true;
-    platform = "ipu6ep";
-  };
+  #hardware.ipu6 = {
+  #  enable = true;
+  #  platform = "ipu6ep";
+  #};
   systemd.services.v4l2-relayd = {
     enable = true;
     wantedBy = [ "multi-user.target" ];
@@ -43,8 +43,8 @@ in
   };
   boot.kernelPackages = unstable.zfs.latestCompatibleLinuxPackages;
   boot.extraModulePackages = with config.boot.kernelPackages; [
-    ipu6-drivers
-    #  ivsc-driver
+    # ipu6-drivers
+    # ivsc-driver
     v4l2loopback
   ];
   services = {
@@ -100,6 +100,7 @@ in
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   #hardware.video.hidpi.enable = true;
+  hardware.ledger.enable = true;
 
   # Virtualization
   virtualisation.docker = {
@@ -170,9 +171,11 @@ in
     enable = true;
     # Folder for Syncthing's settings and keys
     configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
-    folders = {
-      "papyrus" = {
-        path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+    settings = {
+      folders = {
+        "papyrus" = {
+          path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+        };
       };
     };
   };

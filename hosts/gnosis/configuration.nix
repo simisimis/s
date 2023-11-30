@@ -132,9 +132,11 @@
   services.syncthing = {
     # Folder for Syncthing's settings and keys
     configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
-    folders = {
-      "papyrus" = {
-        path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+    settings = {
+      folders = {
+        "papyrus" = {
+          path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+        };
       };
     };
   };

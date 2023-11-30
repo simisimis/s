@@ -39,10 +39,14 @@ in
 
   # Flatpak
   services.flatpak.enable = true;
-  xdg = {
+  xdg = with pkgs; {
     portal = {
       enable = true;
-      extraPortals = with pkgs; [
+      extraPortals = [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+      configPackages = [
         xdg-desktop-portal-wlr
         xdg-desktop-portal-gtk
       ];

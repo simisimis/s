@@ -2,9 +2,9 @@
   description = "Sims' nix config root flake";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-23.05";
+    nixpkgs.url = "nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager/release-23.05";
+    home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     binfiles = {
@@ -15,73 +15,74 @@
   };
 
   outputs = { self, ... }@inputs:
-  let
-    system = "x86_64-linux";
+    let
+      system = "x86_64-linux";
 
-    pkgs = import inputs.nixpkgs {
-      inherit system;
-      config = { allowUnfree = true; };
-    };
-    unstable = import inputs.nixpkgs-unstable {
-      inherit system;
-      config = { allowUnfree = true; };
-    };
-    args = inputs;
-
-    mkHost = host: inputs.nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        { _module.args = args; }
-        ./hosts/${host}/configuration.nix
-      ];
-    };
-    mkHome = user: host: type: inputs.home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      modules = [
-        { _module.args = args; }
-        ./hosts/${host}/home.nix
-        ./hm/base.nix
-        ./hm/${type}.nix
-        ./modules/settings.nix
-        {
-          home = {
-            username = user;
-            homeDirectory = "/home/${user}";
-            stateVersion = "23.05";
-          };
-        }
-      ];
-    };
-  in {
-    homeConfigurations = {
-      gnosis = mkHome "snarbutas" "gnosis" "workstation";
-      lavirinthos = mkHome "simonas" "lavirinthos" "workstation";
-      siMONSTER = mkHome "simas" "siMONSTER" "workstation";
-      backute = mkHome "simas" "backute" "headless";
-      polyphemus = mkHome "simas" "polyphemus" "headless";
-    };
-    gnosis = self.homeConfigurations.gnosis.activationPackage;
-    nixosConfigurations = {
-      gnosis = mkHost "gnosis";
-      backute = mkHost "backute";
-      siMONSTER = mkHost "siMONSTER";
-      lavirinthos = mkHost "lavirinthos";
-      polyphemus = mkHost "polyphemus";
-    }; #nixosConfigurations
-    devShell.x86_64-linux = pkgs.mkShell {
-      buildInputs = with pkgs; [
-        stdenv
-        openssl
-        pkg-config
-      ];
-    }; # devShell
-
-    templates = {
-      rust = {
-        path = ./templates/rust;
-        description = "Rust template, using buildRustPackage";
+      pkgs = import inputs.nixpkgs {
+        inherit system;
+        config = { allowUnfree = true; };
       };
-    };
-    defaultTemplate = self.templates.rust;
-  }; #outputs
+      unstable = import inputs.nixpkgs-unstable {
+        inherit system;
+        config = { allowUnfree = true; };
+      };
+      args = inputs;
+
+      mkHost = host: inputs.nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          { _module.args = args; }
+          ./hosts/${host}/configuration.nix
+        ];
+      };
+      mkHome = user: host: type: inputs.home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          { _module.args = args; }
+          ./hosts/${host}/home.nix
+          ./hm/base.nix
+          ./hm/${type}.nix
+          ./modules/settings.nix
+          {
+            home = {
+              username = user;
+              homeDirectory = "/home/${user}";
+              stateVersion = "23.11";
+            };
+          }
+        ];
+      };
+    in
+    {
+      homeConfigurations = {
+        gnosis = mkHome "snarbutas" "gnosis" "workstation";
+        lavirinthos = mkHome "simonas" "lavirinthos" "workstation";
+        siMONSTER = mkHome "simas" "siMONSTER" "workstation";
+        backute = mkHome "simas" "backute" "headless";
+        polyphemus = mkHome "simas" "polyphemus" "headless";
+      };
+      gnosis = self.homeConfigurations.gnosis.activationPackage;
+      nixosConfigurations = {
+        gnosis = mkHost "gnosis";
+        backute = mkHost "backute";
+        siMONSTER = mkHost "siMONSTER";
+        lavirinthos = mkHost "lavirinthos";
+        polyphemus = mkHost "polyphemus";
+      }; #nixosConfigurations
+      devShell.x86_64-linux = pkgs.mkShell {
+        buildInputs = with pkgs; [
+          stdenv
+          openssl
+          pkg-config
+        ];
+      }; # devShell
+
+      templates = {
+        rust = {
+          path = ./templates/rust;
+          description = "Rust template, using buildRustPackage";
+        };
+      };
+      defaultTemplate = self.templates.rust;
+    }; #outputs
 }
