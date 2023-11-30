@@ -31,7 +31,7 @@ in
 
     #web
     firefox-bin
-    (chromium.override { commandLineArgs = [ "--ozone-platform-hint=auto" ]; })
+    (brave.override { commandLineArgs = [ "--ozone-platform-hint=auto" ]; })
 
     #media
     gthumb
