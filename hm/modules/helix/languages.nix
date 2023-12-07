@@ -20,24 +20,36 @@
         formatter = {
           command = lib.getExe nixpkgs-fmt;
         };
+        language-servers = [
+          "nil"
+          "buffer-language-server"
+        ];
       }
       {
         name = "hcl";
         auto-format = true;
-        language-server.command = lib.getExe terraform-ls;
-        language-server.args = [ "serve" ];
-        language-server.language-id = "terraform";
+        language-id = "terraform";
+        language-servers = [
+          "terraform"
+          "buffer-language-server"
+        ];
       }
       {
         name = "tfvars";
         auto-format = true;
-        language-server.command = lib.getExe terraform-ls;
-        language-server.args = [ "serve" ];
-        language-server.language-id = "terraform-vars";
+        language-id = "terraform-vars";
+        language-servers = [
+          "terraform"
+          "buffer-language-server"
+        ];
       }
       {
         name = "rust";
         auto-format = true;
+        language-servers = [
+          "rust-analyzer"
+          "buffer-language-server"
+        ];
         formatter = {
           command = lib.getExe rustfmt;
           args = [ "--edition" "2021" ];
@@ -46,12 +58,18 @@
       {
         name = "go";
         auto-format = true;
-        language-server.command = lib.getExe gopls;
+        language-servers = [
+          "gopls"
+          "buffer-language-server"
+        ];
       }
       {
         name = "gotmpl";
         auto-format = true;
-        language-server.command = lib.getExe gopls;
+        language-servers = [
+          "gopls"
+          "buffer-language-server"
+        ];
         file-types = [
           "yaml"
           "tpl"
@@ -70,15 +88,14 @@
           "yaml"
           "yml"
         ];
-        config = {
-          yaml.keyOrdering = false;
-        };
       }
       {
         name = "json";
         auto-format = true;
-        language-server.command = lib.getExe nodePackages.vscode-json-languageserver;
-        language-server.args = [ "--stdio" ];
+        language-servers = [
+          "vscode-json-language-server"
+          "buffer-language-server"
+        ];
         formatter = {
           args = [ "--parser" "json" ];
           command = "prettier";
@@ -86,12 +103,12 @@
       }
       {
         name = "markdown";
-        language-server = {
-          command = "buffer-language-server";
-        };
+        language-servers = [
+          "buffer-language-server"
+        ];
       }
     ];
-    language-servers = {
+    language-server = {
       buffer-language-server = {
         command = "buffer-language-server";
       };
@@ -116,6 +133,9 @@
       yaml-language-server = {
         command = lib.getExe nodePackages.yaml-language-server;
         args = [ "--stdio" ];
+        config = {
+          yaml.keyOrdering = false;
+        };
       };
       terraform = {
         command = lib.getExe terraform-ls;
@@ -129,11 +149,12 @@
       };
       vscode-json-language-server = {
         command = lib.getExe nodePackages.vscode-json-languageserver;
+        args = [ "--stdio" ];
         config = { provideFormatter = true; };
       };
       nil = {
         command = lib.getExe nil;
-        config.nil = {
+        config = {
           formatting.command = [ (lib.getExe nixpkgs-fmt) ];
           nix.flake.autoEvalInputs = true;
         };

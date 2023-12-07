@@ -41,7 +41,7 @@ in
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
     ];
   };
-  boot.kernelPackages = unstable.zfs.latestCompatibleLinuxPackages;
+  boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
   boot.extraModulePackages = with config.boot.kernelPackages; [
     # ipu6-drivers
     # ivsc-driver
