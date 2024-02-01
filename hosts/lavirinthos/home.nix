@@ -156,6 +156,7 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    ec2-api-tools
     prusa-slicer
     jira-cli-go
     grpcurl
@@ -186,6 +187,7 @@ in
     mako # notification daemon
     wofi
     wofi-emoji
+    wtype
     waybar
     slurp
     grim
@@ -310,7 +312,6 @@ in
     };
 
     extraConfig = ''
-      UseRoaming no
       AddKeysToAgent yes
     '';
     matchBlocks = {

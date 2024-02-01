@@ -21,15 +21,9 @@ in
   networking.hosts = { };
 
   hardware.firmware = with pkgs; [
-    #unstable.ivsc-firmware
-    #unstable.ipu6ep-camera-bin
     linux-firmware
     sof-firmware
   ];
-  #hardware.ipu6 = {
-  #  enable = true;
-  #  platform = "ipu6ep";
-  #};
   systemd.services.v4l2-relayd = {
     enable = true;
     wantedBy = [ "multi-user.target" ];
@@ -64,7 +58,7 @@ in
   #virtualisation.virtualbox.host.enableExtensionPack = true;
 
   networking.interfaces.wlp0s20f3.useDHCP = true;
-  # networking.interfaces.eth0.useDHCP = true;
+  networking.interfaces.eth0.useDHCP = true;
 
   networking.wireless = {
     enable = true; # Enables wireless support via wpa_supplicant.
@@ -190,4 +184,3 @@ in
     }];
   }];
 }
-

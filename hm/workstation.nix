@@ -308,7 +308,7 @@ in
         format-icons = [ "" "" "" "" "" ];
       };
       "network" = {
-        interface = "enp*";
+        interface = "eth*";
         format-ethernet = "🖧";
         format-linked = "{ifname} (No IP) 🖧";
         format-disconnected = "Disconnected 🖧";

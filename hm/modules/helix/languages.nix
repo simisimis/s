@@ -84,9 +84,11 @@
       }
       {
         name = "yaml";
+        language-servers = [
+          "yaml-language-server"
+          "buffer-language-server"
+        ];
         file-types = [
-          "yaml"
-          "yml"
         ];
       }
       {
