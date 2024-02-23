@@ -86,7 +86,7 @@ in
   services.gpg-agent.pinentryFlavor = "gtk2";
 
   programs.vscode = with pkgs; {
-    enable = true;
+    enable = false;
     extensions = with vscode-extensions; [
       golang.go
       hashicorp.terraform

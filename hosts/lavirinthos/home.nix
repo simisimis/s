@@ -36,8 +36,8 @@ in
     config = {
       input = {
         "type:keyboard" = {
-          xkb_layout = "us,lt";
-          xkb_options = "ctrl:nocaps,grp:win_space_toggle";
+          xkb_layout = "us,lt,gr";
+          xkb_options = "ctrl:nocaps,grp:ctrl_space_toggle";
         };
       };
       terminal = "alacritty";
@@ -211,7 +211,7 @@ in
 
     #dev
     jdk11
-    google-cloud-sdk
+    (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     kubectx
     kubectl
     k9s
