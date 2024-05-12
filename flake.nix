@@ -11,7 +11,10 @@
       url = "git+ssh://git@backute:2203/simas/binfiles?ref=master";
       flake = false;
     }; #binfiles
-
+    # ipu6-softisp = {
+    #   url = "git+ssh://code.tvl.fyi/depot.git:/users/flokli/ipu6-softisp.git";
+    #   flake = false;
+    # }; #ipu6-softisp
   };
 
   outputs = { self, ... }@inputs:
@@ -74,7 +77,13 @@
           stdenv
           openssl
           pkg-config
+          nodejs_20
         ];
+        shellHook = ''
+          user_shell=$(getent passwd "$(whoami)" |cut -d: -f 7)
+          exec "$user_shell"
+        '';
+
       }; # devShell
 
       templates = {

@@ -25,7 +25,6 @@ in
     xclip
     xorg.xeyes
     termite
-    filezilla
     cinnamon.nemo
     nushell
 
@@ -54,6 +53,7 @@ in
     stdenv.cc.cc.lib
 
     #dev
+    unstable.obsidian
     unstable.cargo-espflash
     unstable.terraform
     go_1_19
@@ -74,8 +74,8 @@ in
     wasm-pack
     wasm-bindgen-cli
     # rustup
-    rnix-lsp
-    (python39.withPackages (ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools ]))
+    #rnix-lsp
+    (python39.withPackages (ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools shapely ]))
     gitAndTools.gitflow
 
     #unstable.prusa-slicer

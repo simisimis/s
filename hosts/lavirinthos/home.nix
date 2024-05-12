@@ -156,6 +156,7 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    pre-commit
     ec2-api-tools
     prusa-slicer
     jira-cli-go
@@ -166,6 +167,7 @@ in
     unstable.awscli2
     eksctl
     kubernetes-helm
+    krew
     unstable.helmfile
     ksd
     ssm-session-manager-plugin
@@ -226,11 +228,6 @@ in
     unstable.ledger-live-desktop
 
   ];
-  home.file.".aws/credentials".text = ''
-    [default]
-    aws_access_key_id = ${config.settings.platform.aws.accessKey}
-    aws_secret_access_key = ${config.settings.platform.aws.accessSecret}
-  '';
 
   programs.alacritty = {
     enable = true;
@@ -329,16 +326,8 @@ in
       export JAVA_HOME="${pkgs.jdk11}"
       export BW_SESSION="${config.settings.services.bitwarden.sessionId}"
       export JIRA_API_TOKEN="${config.settings.services.jira.apiToken}"
+      export AWS_PROFILE="mina"
       todo () {
-        local description="$*" # get all arguments
-        jira issue create --template ~/.config/.jira/issue-template.yml \
-             -a $(jira me) \
-             -tTask \
-             --custom team=4df12a6f-710c-4bc9-a8e9-a8a77b54567d \
-             --component="DevOps" \
-             --summary "$description"
-      }
-              todo () {
         local description="$*" # get all arguments
         jira issue create --template ~/.config/.jira/issue-template.yml \
           -a $(jira me) \
@@ -347,10 +336,10 @@ in
           --component="DevOps" \
           --summary "$description" \
           --no-input
-          issueID=$(jira issue list -q 'summary ~ "$description"' --plain --no-headers --columns key)
-          sprintID=$(jira sprint list --state=active --plain --table --columns id --no-headers)
-          jira sprint add $sprintID $issueID
-        }
+        issueID=$(jira issue list --plain --no-headers --columns key -q "summary ~ '$description'")
+        sprintID=$(jira sprint list --plain --table --columns id,name --state=active --no-headers | grep DevOps |cut -f1)
+        jira sprint add $sprintID $issueID
+      }
     '';
     shellAliases = {
       kns = "kubens";

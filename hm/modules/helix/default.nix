@@ -22,6 +22,7 @@
           select = "underline";
         };
         bufferline = "always";
+        smart-tab.enable = false;
         soft-wrap.enable = true;
         statusline = {
           left = [ "mode" "spacer" "spinner" "spacer" "version-control" "workspace-diagnostics" ];

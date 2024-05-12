@@ -114,7 +114,7 @@ in
     monthly = 1;
     frequent = 0;
   };
-  services.udev.packages = [ pkgs.chrysalis pkgs.trezor-udev-rules ];
+  services.udev.packages = [ pkgs.chrysalis pkgs.trezor-udev-rules pkgs.openocd ];
   services.udev.extraRules = ''
     SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"
     ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="wheel", MODE="0664"
