@@ -1,60 +1,52 @@
 {
-  description = "changeme";
+  description = "CHANGEME";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    rust-overlay.url = "github:oxalica/rust-overlay";
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, rust-overlay, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, fenix }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        overlays = [ (import rust-overlay) ];
+        overlays = [ fenix.overlays.default ];
         pkgs = import nixpkgs {
           inherit system overlays;
         };
 
-        rustPlatform = pkgs.makeRustPlatform {
-          cargo = pkgs.rust-bin.stable.latest.default;
-          rustc = pkgs.rust-bin.stable.latest.default;
-        };
-
-        rustPackage = rustPlatform.buildRustPackage {
-          name = "changeme";
-          src = ./.;
-          cargoLock.lockFile = ./Cargo.lock;
-        };
-
-        dockerImage = pkgs.dockerTools.buildImage {
-          name = "changeme";
-          config = {
-            Cmd = [ "${rustPackage}/bin/changeme" ];
-          };
-        };
       in
       with pkgs;
       {
         devShells.default = mkShell {
           buildInputs = [
-            rust-bin.stable.latest.default
-            rustfmt pre-commit rustPackages.clippy
             just
+            (fenix.packages.${system}.stable.withComponents [
+              "cargo"
+              "clippy"
+              "rust-src"
+              "rustc"
+              "rustfmt"
+              "rust-analyzer"
+              "llvm-tools-preview"
+            ])
+            rust-analyzer
           ];
           shellHook = ''
             cat <<EOF
-            Welcome to whe `changeme` app development shell.
+            Welcome to the 'CHANGEME' development shell.
 
             $(just -l |sed 's/^Available recipes:/The following `just` recipes are available:/')
             EOF
             user_shell=$(getent passwd "$(whoami)" |cut -d: -f 7)
             exec "$user_shell"
           '';
-        };
-
-        packages = {
-          rustPackage = rustPackage;
-          dockerImage = dockerImage;
         };
       }
     );

@@ -158,7 +158,7 @@ in
   home.packages = with pkgs; [
     pre-commit
     ec2-api-tools
-    prusa-slicer
+    unstable.prusa-slicer
     jira-cli-go
     grpcurl
     actionlint
