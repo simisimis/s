@@ -5,6 +5,7 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
+  wallpaper = ./wallpaper.jpg;
 in
 {
   settings = import ./vars.nix;
@@ -41,7 +42,7 @@ in
         };
       };
       terminal = "alacritty";
-      output = { "*" = { bg = "~/Pictures/owl_1080.jpg fit"; }; };
+      output."*".bg = "${wallpaper} fit";
       gaps = {
         inner = 3;
         outer = 0;
@@ -84,9 +85,10 @@ in
     };
   };
   services.kanshi.enable = true;
-  services.kanshi.profiles = {
-    singleAR = {
-      outputs = [
+  services.kanshi.settings = [
+    {
+      profile.name = "singleAR";
+      profile.outputs = [
         {
           criteria = "LBT Rokid Max Unknown";
           position = "0,0";
@@ -103,9 +105,10 @@ in
           status = "disable";
         }
       ];
-    };
-    singleAR2 = {
-      outputs = [
+    }
+    {
+      profile.name = "singleAR2";
+      profile.outputs = [
         {
           criteria = "LBT Rokid Max Unknown";
           position = "0,0";
@@ -118,9 +121,10 @@ in
           status = "disable";
         }
       ];
-    };
-    dual = {
-      outputs = [
+    }
+    {
+      profile.name = "dual";
+      profile.outputs = [
         {
           criteria = "Dell Inc. DELL U2720Q F7MFTS2";
           position = "0,0";
@@ -133,9 +137,10 @@ in
           status = "disable";
         }
       ];
-    };
-    single = {
-      outputs = [
+    }
+    {
+      profile.name = "single";
+      profile.outputs = [
         {
           criteria = "eDP-1";
           position = "0,0";
@@ -143,8 +148,8 @@ in
           scale = 1.0;
         }
       ];
-    };
-  };
+    }
+  ];
   services = {
     gpg-agent = {
       defaultCacheTtl = 86400;
@@ -156,6 +161,7 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    just
     pre-commit
     ec2-api-tools
     unstable.prusa-slicer

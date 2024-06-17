@@ -56,9 +56,8 @@ in
     unstable.obsidian
     unstable.cargo-espflash
     unstable.terraform
-    go_1_19
+    go_1_21
     golint
-    dep
     delve
     exercism
     unstable.android-studio
@@ -83,7 +82,7 @@ in
 
 
   # services
-  services.gpg-agent.pinentryFlavor = "gtk2";
+  services.gpg-agent.pinentryPackage = pkgs.pinentry-gtk2;
 
   programs.vscode = with pkgs; {
     enable = false;

@@ -40,11 +40,11 @@ in
   };
   programs.gpg.enable = true;
   systemd.user.targets.tray = {
-		Unit = {
-			Description = "Home Manager System Tray";
-			Requires = [ "graphical-session-pre.target" ];
-		};
-	};
+    Unit = {
+      Description = "Home Manager System Tray";
+      Requires = [ "graphical-session-pre.target" ];
+    };
+  };
   # services
   services.udiskie = {
     enable = true;
@@ -117,13 +117,13 @@ in
 
       # A temp file to fiddle with tmux conf
       bind r source-file ~/.config/tmux/fiddle.conf
-      '';
+    '';
   };
   programs.starship.enable = true;
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     history = {
       size = 50000;
       save = 50000;
@@ -131,13 +131,13 @@ in
     };
     #shellAliases = import ./home/aliases.nix;
     shellAliases = {
-      ls="ls -F --color=auto";
-      ll="ls -lh";
-      cat="bat -p";
-      grep="grep --color=auto";
-      feh="feh -Z -.";
-      history="history -2000";
-      find="noglob find";
+      ls = "ls -F --color=auto";
+      ll = "ls -lh";
+      cat = "bat -p";
+      grep = "grep --color=auto";
+      feh = "feh -Z -.";
+      history = "history -2000";
+      find = "noglob find";
     };
     defaultKeymap = "emacs";
     plugins = [
@@ -161,15 +161,15 @@ in
       }
     ];
     initExtra = ''
-        ## This is the way... to traverse through history
-        bindkey "^[OA" history-beginning-search-backward
-        bindkey "^[OB" history-beginning-search-forward
-        bindkey "^[[1;5D" backward-word
-        bindkey "^[[1;5C" forward-word
-        export RUST_SRC_PATH="${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}"
-        export GOPATH="$HOME/dev/go"
-        export PATH="$HOME/bin:$HOME/.cargo/bin:$GOPATH/bin:$PATH"
-        '';
+      ## This is the way... to traverse through history
+      bindkey "^[OA" history-beginning-search-backward
+      bindkey "^[OB" history-beginning-search-forward
+      bindkey "^[[1;5D" backward-word
+      bindkey "^[[1;5C" forward-word
+      export RUST_SRC_PATH="${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}"
+      export GOPATH="$HOME/dev/go"
+      export PATH="$HOME/bin:$HOME/.cargo/bin:$GOPATH/bin:$PATH"
+    '';
     sessionVariables = rec {
       #NVIM_TUI_ENABLE_TRUE_COLOR = "1";
       #HOME_MANAGER_CONFIG = /b/etc/nix/home.nix;
@@ -181,7 +181,7 @@ in
       GIT_EDITOR = EDITOR;
       #BAT_THEME="dark_neon";
       # java apps on wayland like android-studio or arduino
-      _JAVA_AWT_WM_NONREPARENTING=1;
+      _JAVA_AWT_WM_NONREPARENTING = 1;
     };
     # envExtra
     # profileExtra
