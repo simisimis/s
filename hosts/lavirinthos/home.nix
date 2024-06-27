@@ -342,9 +342,9 @@ in
           --component="DevOps" \
           --summary "$description" \
           --no-input
-        issueID=$(jira issue list --plain --no-headers --columns key -q "summary ~ '$description'")
-        sprintID=$(jira sprint list --plain --table --columns id,name --state=active --no-headers | grep DevOps |cut -f1)
-        jira sprint add $sprintID $issueID
+        ISSUE_ID=$(jira issue list -a $(jira me) --paginate 1 --no-headers --plain --columns id)
+        jira issue move $ISSUE_ID "Selected for Development"
+        jira open $ISSUE_ID
       }
     '';
     shellAliases = {
