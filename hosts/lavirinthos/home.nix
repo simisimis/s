@@ -346,6 +346,19 @@ in
         jira issue move $ISSUE_ID "Selected for Development"
         jira open $ISSUE_ID
       }
+      aws-portforward () {
+        CLUSTER=$1
+        HOST=$2
+        LOCAL=$3
+        PORT=$4
+
+        NODEGROUP=$(aws eks list-nodegroups --cluster-name $CLUSTER --query 'nodegroups' --output text)
+        SCALINGGROUP=$(aws eks describe-nodegroup --cluster-name $CLUSTER --nodegroup-name $NODEGROUP --query 'nodegroup.resources.autoScalingGroups[*].name' --output text)
+        INSTANCEID=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $SCALINGGROUP --query 'AutoScalingGroups[*].Instances[0].InstanceId' --output text)
+        PARAMETERS=$(jq -n --arg port $PORT --arg host $HOST --arg local $LOCAL '{"portNumber":[$port],"localPortNumber":[$local],"host":[$host]}')
+
+        aws ssm start-session --target $INSTANCEID --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters "$PARAMETERS" 
+      }
     '';
     shellAliases = {
       kns = "kubens";
