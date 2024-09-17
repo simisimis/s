@@ -161,6 +161,11 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    mtr
+    ansible
+    bambu-studio
+    nodejs-slim_20
+    unstable.zed-editor
     just
     pre-commit
     ec2-api-tools
@@ -170,7 +175,8 @@ in
     actionlint
     tmate
     gh
-    unstable.awscli2
+    #unstable.awscli2
+    awscli2
     eksctl
     kubernetes-helm
     krew

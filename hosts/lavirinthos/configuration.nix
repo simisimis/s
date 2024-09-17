@@ -179,7 +179,7 @@ in
   security.sudo.extraRules = [{
     groups = [ "wheel" ];
     commands = [{
-      command = "/run/current-system/sw/bin/openconnect";
+      command = "${pkgs.systemd}/bin/systemctl restart *";
       options = [ "NOPASSWD" ];
     }];
   }];

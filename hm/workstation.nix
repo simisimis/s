@@ -54,7 +54,7 @@ in
 
     #dev
     unstable.obsidian
-    unstable.cargo-espflash
+    #unstable.cargo-espflash
     unstable.terraform
     go_1_21
     golint
