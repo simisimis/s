@@ -23,6 +23,10 @@ in
   nixpkgs.overlays = [ (import ../../overlays) ];
 
   boot = {
+    kernelParams = [
+      "zfs.zil_replay_disable=1"
+      "zfs.zfs_recover=1"
+    ];
     # Use the systemd-boot EFI boot loader.
     initrd.kernelModules = [ "e1000e" ];
     initrd.network = {
