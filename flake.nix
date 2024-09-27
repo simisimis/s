@@ -76,6 +76,7 @@
       }; #nixosConfigurations
       devShell.x86_64-linux = pkgs.mkShell {
         buildInputs = with pkgs; [
+          nmap
           stdenv
           openssl
           pkg-config

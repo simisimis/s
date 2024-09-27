@@ -161,6 +161,7 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    subsurface
     mtr
     ansible
     bambu-studio
@@ -178,6 +179,7 @@ in
     #unstable.awscli2
     awscli2
     eksctl
+    eks-node-viewer
     kubernetes-helm
     krew
     unstable.helmfile
