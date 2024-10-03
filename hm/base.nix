@@ -35,7 +35,7 @@ in
     settings = {
       email = config.settings.usr.email;
       lock_timeout = 86400;
-      base_url = config.settings.services.bitwarden.baseUrl;
+      base_url = config.settings.services.vaultwarden.domain;
     };
   };
   programs.gpg.enable = true;

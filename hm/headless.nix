@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
 {
   # services
-  services.gpg-agent.pinentryFlavor = "curses";
+  services.gpg-agent.pinentryPackage = pkgs.pinentry-curses;
 }

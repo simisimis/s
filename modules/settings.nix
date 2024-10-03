@@ -1,5 +1,5 @@
 # Settings file
-{config, pkgs, lib, ...}:
+{ lib, ... }:
 
 with lib;
 
@@ -71,7 +71,7 @@ with lib;
           description = "video driver";
         };
         wifi = mkOption {
-          default = {};
+          default = { };
           description = "set of ssids/pwds";
         };
       };
@@ -80,16 +80,6 @@ with lib;
           apiToken = mkOption {
             type = with types; uniq str;
             description = "API token for Jira";
-          };
-        };
-        bitwarden = {
-          baseUrl = mkOption {
-            type = with types; uniq str;
-            description = "self hosted bitwarden url";
-          };
-          sessionId = mkOption {
-            type = with types; uniq str;
-            description = "bitwarden cli session ID";
           };
         };
         syncthing = {
@@ -102,8 +92,47 @@ with lib;
             description = "config dir ";
           };
           ids = mkOption {
-            default = {};
+            default = { };
             description = "set of ssids/pwds";
+          };
+        };
+        traefik = {
+          cloudflareKey = mkOption {
+            type = with types; uniq str;
+            description = "API token for cloudflare";
+          };
+        };
+        cloudflared = {
+          tunnelCredentials = mkOption {
+            default = { };
+            description = "Cloudflare tunnel credentials";
+          };
+        };
+        authelia = {
+          jwtSecret = mkOption {
+            type = with types; uniq str;
+          };
+          storageEncryptionKey = mkOption {
+            type = with types; uniq str;
+          };
+          sessionSecret = mkOption {
+            type = with types; uniq str;
+          };
+          userPassword = mkOption {
+            type = with types; uniq str;
+          };
+        };
+        vaultwarden = {
+          adminToken = mkOption {
+            type = with types; uniq str;
+          };
+          domain = mkOption {
+            type = with types; uniq str;
+            description = "Vaultwarden url";
+          };
+          sessionId = mkOption {
+            type = with types; uniq str;
+            description = "bitwarden cli session ID";
           };
         };
       };

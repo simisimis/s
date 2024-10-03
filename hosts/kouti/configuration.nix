@@ -16,7 +16,8 @@ in
     ../../nixos/base.nix
     ../../modules/settings.nix
     ./hardware-configuration.nix
-    ];
+    ./proxy.nix
+  ];
 
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
@@ -79,6 +80,7 @@ in
   #   wget vim
   # ];
   environment.systemPackages = with pkgs; [
+    cloudflared
     home-manager
     tailscale
     pv
@@ -96,7 +98,7 @@ in
   # Enable the OpenSSH daemon.
   networking.firewall = {
     # enable the firewall
-    enable = true; 
+    enable = true;
 
     # always allow traffic from your Tailscale network
     trustedInterfaces = [ "tailscale0" ];
@@ -111,13 +113,12 @@ in
   # List services that you want to enable:
   # Tailscale
   services.tailscale.enable = true;
+  #services.tailscale.permitCertUid = "traefik";
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = true; 
+  services.openssh.settings.PasswordAuthentication = true;
   services.syncthing.enable = false;
-
-  # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
   # Enable sound.
@@ -125,6 +126,36 @@ in
   # hardware.pulseaudio.enable = true;
 
   # Virtualization
-  virtualisation.docker.enable = false;
+  virtualisation.docker.enable = true;
+  # virtualisation.oci-containers = {
+  #   backend = "docker";
+  #   containers = {
+  #     vaultwarden = {
+  #       image = "vaultwarden/server:latest"; # The Docker image you want to deploy
+  #       #container_name = "vaultwarden";
+  #       extraOptions = [
+  #         "--security-opt=no-new-privileges"
+  #       ];
+  #       environment = {
+  #         # Environment variables for the container
+  #         SIGNUPS_ALLOWED = "true";
+  #       };
+  #       volumes = [
+  #         # Volumes to mount in the container
+  #         "/srv/docker/vaultwarden/data:/data"
+  #       ];
+  #       labels = {
+  #         "traefik.enable" = "true";
+  #         "traefik.http.routers.vaultwarden.rule" = "Host(`vault2.narbuto.lt`)";
+  #         "traefik.http.routers.vaultwarden.entryPoints" = "https";
+  #         "traefik.http.routers.vaultwarden.middlewares" = "authelia@file";
+  #         "traefik.http.routers.vaultwarden.tls.certresolver" = "letsEncrypt";
+  #         "traefik.http.routers.vaultwarden.service" = "vaultwarden";
+  #         "traefik.http.services.vaultwarden.loadbalancer.server.port" = "80";
+  #       };
+  #     };
+  #   };
+  # };
 
 }
+

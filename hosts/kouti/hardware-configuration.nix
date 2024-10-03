@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sdhci_pci" ];
@@ -14,17 +15,26 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "zroot/KOUTI/root";
+    {
+      device = "zroot/KOUTI/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/srv/docker" =
+    {
+      device = "zroot/KOUTI/docker";
       fsType = "zfs";
     };
 
   fileSystems."/home" =
-    { device = "zroot/KOUTI/home";
+    {
+      device = "zroot/KOUTI/home";
       fsType = "zfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/359C-BB3B";
+    {
+      device = "/dev/disk/by-uuid/359C-BB3B";
       fsType = "vfat";
     };
 

@@ -338,7 +338,7 @@ in
     ];
     initExtra = ''
       export JAVA_HOME="${pkgs.jdk11}"
-      export BW_SESSION="${config.settings.services.bitwarden.sessionId}"
+      export BW_SESSION="${config.settings.services.vaultwarden.sessionId}"
       export JIRA_API_TOKEN="${config.settings.services.jira.apiToken}"
       export AWS_PROFILE="mina"
       todo () {
