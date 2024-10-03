@@ -235,7 +235,6 @@ in
     unstable.terraform
     saleae-logic
     jetbrains.idea-community
-    lens # kubernetes ide
     dioxus-cli
 
     #web
