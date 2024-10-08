@@ -8,7 +8,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     binfiles = {
-      url = "git+ssh://git@backute:2203/simas/binfiles?ref=master";
+      url = "git+ssh://gitea@kouti:22/simas/binfiles?ref=master";
       flake = false;
     }; #binfiles
     # ipu6-softisp = {

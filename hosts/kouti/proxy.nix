@@ -5,8 +5,12 @@
 ### - Traefik reverse proxy
 ### - Services
 ###########################
-{ config, lib, ... }:
+{ config, lib, nixpkgs-unstable, ... }:
 let
+  unstable = import nixpkgs-unstable {
+    system = "x86_64-linux";
+    config = { allowUnfree = true; };
+  };
   user_database = builtins.toFile "user_database.yml" (
     lib.generators.toYAML { } {
       users = {
@@ -58,6 +62,7 @@ in
     };
     environmentVariables = { };
     settings = {
+      server.port = 9092;
       theme = "dark";
       log.level = "debug";
 
@@ -95,6 +100,18 @@ in
               "^/api$"
               "^/api/"
             ];
+          }
+          {
+            domain = [ "git.narbuto.lt" ];
+            policy = "bypass";
+          }
+          {
+            domain = [ "plex.narbuto.lt" ];
+            policy = "bypass";
+          }
+          {
+            domain = [ "vault.narbuto.lt" ];
+            policy = "bypass";
           }
           {
             domain = [ "*.narbuto.lt" "narbuto.lt" ];
@@ -172,7 +189,7 @@ in
         middlewares = {
           authelia = {
             forwardAuth = {
-              address = "http://localhost:9091/api/verify?rd=https://auth.narbuto.lt/";
+              address = "http://localhost:9092/api/verify?rd=https://auth.narbuto.lt/";
               trustForwardHeader = true;
               authResponseHeaders = [
                 "Remote-User"
@@ -197,17 +214,39 @@ in
             entryPoints = "https";
             tls.certResolver = "letsEncrypt";
           };
-          vaultwarden = {
-            service = "vaultwarden";
-            rule = "Host(`vault2.narbuto.lt`)";
+          gitea = {
+            service = "gitea";
+            rule = "Host(`git.narbuto.lt`)";
+            entryPoints = "https";
+            tls.certResolver = "letsEncrypt";
+          };
+          plex = {
+            service = "plex";
+            rule = "Host(`plex.narbuto.lt`)";
             entryPoints = "https";
             middlewares = "authelia@file";
             tls.certResolver = "letsEncrypt";
           };
+          transmission = {
+            service = "transmission";
+            rule = "Host(`dl.narbuto.lt`)";
+            entryPoints = "https";
+            middlewares = "authelia@file";
+            tls.certResolver = "letsEncrypt";
+          };
+          vaultwarden = {
+            service = "vaultwarden";
+            rule = "Host(`vault.narbuto.lt`)";
+            entryPoints = "https";
+            tls.certResolver = "letsEncrypt";
+          };
         };
         services = {
-          authelia.loadBalancer.servers = [{ url = "http://localhost:9091/"; }];
+          authelia.loadBalancer.servers = [{ url = "http://localhost:9092/"; }];
           vaultwarden.loadBalancer.servers = [{ url = "http://localhost:8000/"; }];
+          plex.loadBalancer.servers = [{ url = "http://localhost:32400/"; }];
+          transmission.loadBalancer.servers = [{ url = "http://localhost:9091/"; }];
+          gitea.loadBalancer.servers = [{ url = "http://localhost:3000/"; }];
         };
       };
     };
@@ -235,5 +274,38 @@ in
       DOMAIN = config.settings.services.vaultwarden.domain;
       SIGNUPS_ALLOWED = true;
     };
+  };
+  ####################
+  ### --- Plex --- ###
+  ####################
+  services.plex = {
+    enable = true;
+    user = config.settings.usr.name;
+    group = "users";
+    openFirewall = true;
+  };
+  ############################
+  ### --- Transmission --- ###
+  ############################
+  services.transmission = {
+    enable = true;
+    user = config.settings.usr.name;
+    group = "users";
+    settings.rpc-bind-address = "0.0.0.0";
+    #settings.rpc-authentication-required = false;
+    settings.rpc-host-whitelist-enabled = false;
+    settings.download-dir = "/srv/media/movies";
+  };
+  #####################
+  ### --- Gitea --- ###
+  #####################
+  services.gitea = {
+    enable = true;
+    package = unstable.gitea;
+    settings.server = {
+      SSH_DOMAIN = "kouti";
+    };
+    #user = "git";
+    #group = "users";
   };
 }

@@ -63,8 +63,8 @@ in
   programs.ssh = {
     enable = true;
     matchBlocks = {
-      "backute" = {
-        user = "git";
+      "kouti" = {
+        user = "gitea";
         identityFile = config.settings.usr.ssh.gitea.identityFile;
         extraOptions = {
           AddKeysToAgent = "yes";

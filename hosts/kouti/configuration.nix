@@ -103,9 +103,9 @@ in
     # always allow traffic from your Tailscale network
     trustedInterfaces = [ "tailscale0" ];
 
-    allowedUDPPorts = [ 1900 32410 32412 32413 32414 8443 8081 config.services.tailscale.port ];
+    allowedUDPPorts = [ config.services.tailscale.port ];
 
-    allowedTCPPorts = [ 22 2049 32400 3005 8324 32469 8123 1400 8521 1883 8100 8443 8081 ];
+    allowedTCPPorts = [ ];
 
     checkReversePath = "loose";
   };
@@ -117,7 +117,7 @@ in
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = true;
+  services.openssh.settings.PasswordAuthentication = false;
   services.syncthing.enable = false;
   # networking.firewall.enable = false;
 
@@ -127,35 +127,27 @@ in
 
   # Virtualization
   virtualisation.docker.enable = true;
-  # virtualisation.oci-containers = {
-  #   backend = "docker";
-  #   containers = {
-  #     vaultwarden = {
-  #       image = "vaultwarden/server:latest"; # The Docker image you want to deploy
-  #       #container_name = "vaultwarden";
-  #       extraOptions = [
-  #         "--security-opt=no-new-privileges"
-  #       ];
-  #       environment = {
-  #         # Environment variables for the container
-  #         SIGNUPS_ALLOWED = "true";
-  #       };
-  #       volumes = [
-  #         # Volumes to mount in the container
-  #         "/srv/docker/vaultwarden/data:/data"
-  #       ];
-  #       labels = {
-  #         "traefik.enable" = "true";
-  #         "traefik.http.routers.vaultwarden.rule" = "Host(`vault2.narbuto.lt`)";
-  #         "traefik.http.routers.vaultwarden.entryPoints" = "https";
-  #         "traefik.http.routers.vaultwarden.middlewares" = "authelia@file";
-  #         "traefik.http.routers.vaultwarden.tls.certresolver" = "letsEncrypt";
-  #         "traefik.http.routers.vaultwarden.service" = "vaultwarden";
-  #         "traefik.http.services.vaultwarden.loadbalancer.server.port" = "80";
-  #       };
-  #     };
-  #   };
-  # };
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      gitwitt = {
+        image = "simisimis/gitwitt:0.1.0";
+        extraOptions = [
+          "--security-opt=no-new-privileges"
+        ];
+        environment = { };
+        volumes = [ ];
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.gitwitt.rule" = "Host(`gitwitt.narbuto.lt`)";
+          "traefik.http.routers.gitwitt.entryPoints" = "https";
+          "traefik.http.routers.gitwitt.tls.certresolver" = "letsEncrypt";
+          "traefik.http.routers.gitwitt.service" = "gitwitt";
+          "traefik.http.services.gitwitt.loadbalancer.server.port" = "8080";
+        };
+      };
+    };
+  };
 
 }
 
