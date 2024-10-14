@@ -308,4 +308,25 @@ in
     #user = "git";
     #group = "users";
   };
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      gitwitt = {
+        image = "simisimis/gitwitt:0.2.0";
+        extraOptions = [
+          "--security-opt=no-new-privileges"
+        ];
+        environment = { };
+        volumes = [ ];
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.gitwitt.rule" = "Host(`gitwitt.narbuto.lt`)";
+          "traefik.http.routers.gitwitt.entryPoints" = "https";
+          "traefik.http.routers.gitwitt.tls.certresolver" = "letsEncrypt";
+          "traefik.http.routers.gitwitt.service" = "gitwitt";
+          "traefik.http.services.gitwitt.loadbalancer.server.port" = "8080";
+        };
+      };
+    };
+  };
 }
