@@ -15,6 +15,7 @@ in
   programs.git = {
     userName = config.settings.usr.fullName;
     userEmail = config.settings.usr.email;
+    diff-so-fancy.enable = true;
     signing.key = "55887CDF19112610";
     extraConfig = {
       github.user = config.settings.usr.username;
@@ -161,6 +162,7 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    unstable.logseq
     subsurface
     mtr
     ansible
@@ -181,6 +183,7 @@ in
     eksctl
     eks-node-viewer
     kubernetes-helm
+    kubecolor
     krew
     unstable.helmfile
     ksd
@@ -336,6 +339,7 @@ in
       "~/dev/MinaFoundation"
     ];
     initExtra = ''
+      source <(kubectl completion zsh)
       export JAVA_HOME="${pkgs.jdk11}"
       export BW_SESSION="${config.settings.services.vaultwarden.sessionId}"
       export JIRA_API_TOKEN="${config.settings.services.jira.apiToken}"
@@ -370,7 +374,7 @@ in
     shellAliases = {
       kns = "kubens";
       kctx = "kubectx";
-      k = "kubectl";
+      k = "kubecolor";
     };
   };
 }
