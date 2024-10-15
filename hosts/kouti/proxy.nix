@@ -39,6 +39,7 @@ in
       credentialsFile =
         builtins.toFile "credentialsFile.json" (builtins.toJSON config.settings.services.cloudflared.tunnelCredentials);
       ingress = {
+        "narbuto.lt" = { service = "https://localhost:443"; };
         "*.narbuto.lt" = { service = "https://localhost:443"; };
       };
       originRequest.noTLSVerify = true;
@@ -325,6 +326,22 @@ in
           "traefik.http.routers.gitwitt.tls.certresolver" = "letsEncrypt";
           "traefik.http.routers.gitwitt.service" = "gitwitt";
           "traefik.http.services.gitwitt.loadbalancer.server.port" = "8080";
+        };
+      };
+      narbuto = {
+        image = "narbuto:0.1.3";
+        extraOptions = [
+          "--security-opt=no-new-privileges"
+        ];
+        environment = { };
+        volumes = [ ];
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.narbuto.rule" = "Host(`narbuto.lt`)";
+          "traefik.http.routers.narbuto.entryPoints" = "https";
+          "traefik.http.routers.narbuto.tls.certresolver" = "letsEncrypt";
+          "traefik.http.routers.narbuto.service" = "narbuto";
+          "traefik.http.services.narbuto.loadbalancer.server.port" = "8080";
         };
       };
     };
