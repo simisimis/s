@@ -176,7 +176,7 @@ in
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=3";
       #DEV_ALLOW_ITERM2_INTEGRATION = "1";
 
-      EDITOR = "nvim";
+      EDITOR = "hx";
       VISUAL = EDITOR;
       GIT_EDITOR = EDITOR;
       #BAT_THEME="dark_neon";

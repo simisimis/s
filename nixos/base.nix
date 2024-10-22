@@ -113,12 +113,12 @@ in
     #utils
     zip
     unzip
-    ranger
     fzf
     jq
     ripgrep
     fd
     tree
+    unstable.procs
 
     linuxPackages.v4l2loopback
 
@@ -129,8 +129,8 @@ in
   ];
 
   environment.variables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
+    EDITOR = "hx";
+    VISUAL = "hx";
   };
 
   # nix pkgs

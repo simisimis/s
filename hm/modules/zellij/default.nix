@@ -29,7 +29,7 @@ in
         themes = {
           gruvbox-dark = {
             fg = "#D5C4A1";
-            bg = "#282828";
+            bg = "#737994";
             black = "#3C3836";
             red = "#CC241D";
             green = "#98971A";

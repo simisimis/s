@@ -15,7 +15,7 @@ in
   programs.git = {
     userName = config.settings.usr.fullName;
     userEmail = config.settings.usr.email;
-    diff-so-fancy.enable = true;
+    difftastic.enable = true;
     signing.key = "55887CDF19112610";
     extraConfig = {
       github.user = config.settings.usr.username;
@@ -42,7 +42,7 @@ in
           xkb_options = "ctrl:nocaps,grp:ctrl_space_toggle";
         };
       };
-      terminal = "alacritty";
+      terminal = "wezterm";
       output."*".bg = "${wallpaper} fit";
       gaps = {
         inner = 3;
@@ -245,6 +245,61 @@ in
 
   ];
 
+
+  programs.wezterm = {
+    enable = true;
+    colorSchemes = {
+      simColors = {
+        ansi = [
+          "#2e3436"
+          "#fc3e3e"
+          "#66b31e"
+          "#f6d922"
+          "#5183c4"
+          "#c36ccf"
+          "#19a5a7"
+          "#d3d7cf"
+        ];
+        brights = [
+          "#555753"
+          "#f06464"
+          "#8ae234"
+          "#fce94f"
+          "#729fcf"
+          "#c164b6"
+          "#429bf1"
+          "#eeeeec"
+        ];
+        background = "#3f3f3f";
+        foreground = "#dedede";
+        cursor_bg = "#949cbb";
+        cursor_border = "#949cbb";
+        cursor_fg = "#303446";
+        selection_bg = "#737994";
+        selection_fg = "#303446";
+      };
+    };
+    extraConfig =
+      ''
+        return {
+          enable_tab_bar = false,
+          harfbuzz_features = {"calt=0", "cv01", "cv02", "cv04", "ss01", "ss03", "ss04", "cv31", "cv08", "cv30", "cv27"},
+          font = wezterm.font('Fira Code', { weight = 'Light'}),
+          font_size = 12,
+          color_scheme = "simColors",
+          -- #Scrollback
+          -- #scrollback_lines = 10000,
+
+          -- Window
+          window_padding = {
+            left = 10,
+            right = 10,
+            top = 10,
+            bottom = 10,
+          },
+        }
+      '';
+  };
   programs.alacritty = {
     enable = true;
     settings = {
@@ -377,4 +432,63 @@ in
       k = "kubecolor";
     };
   };
+  programs.zoxide.enable = true;
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+    package = unstable.yazi;
+    settings = {
+      open.rules = [
+        {
+          mime = "text/*";
+          use = [ "edit" "reveal" ];
+        }
+        {
+          mime = "image/*";
+          use = [ "image" "reveal" ];
+        }
+        {
+          mime = "video/*";
+          use = [ "play" "reveal" ];
+        }
+        {
+          mime = "application/json";
+          use = [ "edit" "reveal" ];
+        }
+        {
+          mime = "*";
+          use = [ "edit" "open" "reveal" ];
+        }
+      ];
+      opener = {
+        text = [
+          {
+            run = ''hx "$@" '';
+            for = "linux";
+          }
+        ];
+        image = [
+          {
+            run = ''imv "$@" '';
+            block = true;
+            for = "linux";
+          }
+        ];
+        video = [
+          {
+            run = ''mpv "$@" '';
+            block = true;
+            for = "linux";
+          }
+        ];
+        reveal = [
+          {
+            run = ''${pkgs.exiftool}/bin/exiftool "$1";'';
+            block = true;
+          }
+        ];
+      };
+    };
+  };
+  programs.yt-dlp.enable = true;
 }
