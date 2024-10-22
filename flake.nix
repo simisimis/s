@@ -64,6 +64,7 @@
         backute = mkHome "simas" "backute" "headless";
         polyphemus = mkHome "simas" "polyphemus" "headless";
         kouti = mkHome "simas" "kouti" "headless";
+        devops = mkHome "simonas" "devops" "headless";
       };
       gnosis = self.homeConfigurations.gnosis.activationPackage;
       nixosConfigurations = {
