@@ -15,7 +15,7 @@ in
   programs.git = {
     userName = config.settings.usr.fullName;
     userEmail = config.settings.usr.email;
-    difftastic.enable = true;
+    diff-so-fancy.enable = true;
     signing.key = "55887CDF19112610";
     extraConfig = {
       github.user = config.settings.usr.username;
@@ -387,6 +387,19 @@ in
         user = "simas";
         identityFile = config.settings.usr.ssh.siMONSTER.identityFile;
       };
+      "*.hz.minaprotocol.network" = {
+        user = "root";
+        identityFile = config.settings.usr.ssh.hz.identityFile;
+        extraOptions = {
+          AddKeysToAgent = "yes";
+          PubKeyAuthentication = "yes";
+          ControlMaster = "auto";
+          ControlPath = "~/.ssh/master-%r@%h:%p";
+          ControlPersist = "600";
+          StrictHostKeyChecking = "no";
+          UserKnownHostsFile = "/dev/null";
+        };
+      };
     };
   };
   programs.zsh = {
@@ -399,6 +412,10 @@ in
       export BW_SESSION="${config.settings.services.vaultwarden.sessionId}"
       export JIRA_API_TOKEN="${config.settings.services.jira.apiToken}"
       export AWS_PROFILE="mina"
+
+      # make completion work with kubecolor
+      compdef kubecolor=kubectl
+
       todo () {
         local description="$*" # get all arguments
         jira issue create --template ~/.config/.jira/issue-template.yml \
@@ -429,8 +446,20 @@ in
     shellAliases = {
       kns = "kubens";
       kctx = "kubectx";
+      kubectl = "kubecolor";
       k = "kubecolor";
     };
+    plugins = [
+      {
+        name = "fzf-tab";
+        src = pkgs.fetchFromGitHub {
+          owner = "Aloxaf";
+          repo = "fzf-tab";
+          rev = "v1.1.1";
+          sha256 = "sha256-0/YOL1/G2SWncbLNaclSYUz7VyfWu+OB8TYJYm4NYkM=";
+        };
+      }
+    ];
   };
   programs.zoxide.enable = true;
   programs.yazi = {
