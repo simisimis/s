@@ -26,6 +26,12 @@
       fsType = "zfs";
     };
 
+  fileSystems."/srv/media" =
+    {
+      device = "zroot/KOUTI/media";
+      fsType = "zfs";
+    };
+
   fileSystems."/home" =
     {
       device = "zroot/KOUTI/home";
