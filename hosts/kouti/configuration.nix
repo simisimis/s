@@ -15,6 +15,7 @@ in
   imports = [
     ../../nixos/base.nix
     ../../modules/settings.nix
+    ./hass.nix
     ./hardware-configuration.nix
     ./proxy.nix
   ];
@@ -38,7 +39,7 @@ in
     };
   };
 
-  boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
+  #boot.kernelPackages = pkgs.linuxPackages_6_6;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -105,7 +106,7 @@ in
 
     allowedUDPPorts = [ config.services.tailscale.port ];
 
-    allowedTCPPorts = [ ];
+    allowedTCPPorts = [ 1400 ];
 
     checkReversePath = "loose";
   };
@@ -120,10 +121,6 @@ in
   services.openssh.settings.PasswordAuthentication = false;
   services.syncthing.enable = false;
   # networking.firewall.enable = false;
-
-  # Enable sound.
-  sound.enable = false;
-  # hardware.pulseaudio.enable = true;
 
   # Virtualization
   virtualisation.docker.enable = true;

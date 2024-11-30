@@ -138,6 +138,11 @@ let
   '';
 in
 {
+  # #settings = import ../../hosts/kouti/vars.nix;
+
+  # imports = [
+  #   ../settings.nix
+  # ];
 
   services.zigbee2mqtt = {
     enable = true;

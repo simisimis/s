@@ -63,18 +63,21 @@ in
     };
     environmentVariables = { };
     settings = {
-      server.port = 9092;
+      server.address = "tcp://:9092";
       theme = "dark";
       log.level = "debug";
 
-      default_redirection_url = "https://auth.narbuto.lt";
       authentication_backend = {
         file.path = user_database;
       };
       session = {
-        domain = "narbuto.lt";
         expiration = 3600;
         inactivity = 3600;
+        cookies = [{
+          domain = "narbuto.lt";
+          authelia_url = "https://auth.narbuto.lt";
+          default_redirection_url = "https://narbuto.lt";
+        }];
       };
       totp = {
         disable = false;
@@ -103,20 +106,11 @@ in
             ];
           }
           {
-            domain = [ "git.narbuto.lt" ];
-            policy = "bypass";
-          }
-          {
-            domain = [ "plex.narbuto.lt" ];
-            policy = "bypass";
-          }
-          {
-            domain = [ "vault.narbuto.lt" ];
-            policy = "bypass";
-          }
-          {
             domain = [ "*.narbuto.lt" "narbuto.lt" ];
             policy = "one_factor";
+            resources = [
+              "^/.*"
+            ];
           }
         ];
       };
@@ -218,14 +212,13 @@ in
           gitea = {
             service = "gitea";
             rule = "Host(`git.narbuto.lt`)";
-            entryPoints = "https";
+            entryPoints = [ "http" "https" ];
             tls.certResolver = "letsEncrypt";
           };
           plex = {
             service = "plex";
             rule = "Host(`plex.narbuto.lt`)";
-            entryPoints = "https";
-            middlewares = "authelia@file";
+            entryPoints = [ "http" "https" ];
             tls.certResolver = "letsEncrypt";
           };
           transmission = {
@@ -241,6 +234,20 @@ in
             entryPoints = "https";
             tls.certResolver = "letsEncrypt";
           };
+          hass = {
+            service = "hass";
+            rule = "Host(`ha.narbuto.lt`)";
+            entryPoints = "https";
+            #middlewares = "authelia@file";
+            tls.certResolver = "letsEncrypt";
+          };
+          z2m = {
+            service = "z2m";
+            rule = "Host(`z2m.narbuto.lt`)";
+            entryPoints = "https";
+            middlewares = "authelia@file";
+            tls.certResolver = "letsEncrypt";
+          };
         };
         services = {
           authelia.loadBalancer.servers = [{ url = "http://localhost:9092/"; }];
@@ -248,6 +255,8 @@ in
           plex.loadBalancer.servers = [{ url = "http://localhost:32400/"; }];
           transmission.loadBalancer.servers = [{ url = "http://localhost:9091/"; }];
           gitea.loadBalancer.servers = [{ url = "http://localhost:3000/"; }];
+          hass.loadBalancer.servers = [{ url = "http://localhost:8123/"; }];
+          z2m.loadBalancer.servers = [{ url = "http://localhost:8521/"; }];
         };
       };
     };
