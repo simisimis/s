@@ -162,6 +162,8 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    gping
+    unstable.plasticity
     unstable.logseq
     subsurface
     mtr
