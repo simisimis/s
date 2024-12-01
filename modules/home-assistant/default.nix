@@ -139,6 +139,10 @@ let
 in
 {
 
+  imports = [
+    ../settings.nix
+  ];
+
   services.zigbee2mqtt = {
     enable = true;
     inherit dataDir;
