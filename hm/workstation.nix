@@ -25,7 +25,7 @@ in
     xclip
     xorg.xeyes
     termite
-    cinnamon.nemo
+    nemo
     nushell
 
     #web
@@ -56,7 +56,7 @@ in
     unstable.obsidian
     #unstable.cargo-espflash
     unstable.terraform
-    go_1_21
+    go
     golint
     delve
     exercism
@@ -74,7 +74,7 @@ in
     wasm-bindgen-cli
     # rustup
     #rnix-lsp
-    (python39.withPackages (ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools shapely ]))
+    (python312.withPackages (ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools shapely ]))
     gitAndTools.gitflow
 
     #unstable.prusa-slicer
@@ -258,8 +258,45 @@ in
     enable = true;
     settings = [{
       "height" = 30;
-      "modules-left" = [ "sway/workspaces" ];
-      "modules-right" = [ "network" "network#wl" "backlight" "cpu" "memory" "pulseaudio" "sway/language" "custom/date" "tray" "battery" "custom/power" ];
+      "modules-left" = [
+        "sway/workspaces"
+        "hyprland/workspaces"
+      ];
+      "modules-right" = [
+        "network"
+        "network#wl"
+        "backlight"
+        "cpu"
+        "memory"
+        "pulseaudio"
+        "sway/language"
+        "hyprland/language"
+        "custom/date"
+        "tray"
+        "battery"
+        "custom/power"
+      ];
+      "hyprland/workspaces" = {
+        format = " {icon} ";
+        format-icons = {
+          "1" = "🖋";
+          "2" = "";
+          "3" = "";
+          "4" = "";
+          "5" = "";
+          "6" = "";
+          "active" = "";
+          "default" = "";
+        };
+        persistent-workspaces = {
+          "1" = [ ];
+          "2" = [ ];
+          "3" = [ ];
+          "4" = [ ];
+          "5" = [ ];
+          "6" = [ ];
+        };
+      };
       "sway/workspaces" = {
         all-outputs = true;
         format = " {icon} ";

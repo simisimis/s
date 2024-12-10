@@ -29,13 +29,13 @@ in
     wantedBy = [ "multi-user.target" ];
   };
   hardware.enableAllFirmware = true;
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
     ];
   };
-  boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
+  #boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
   boot.extraModulePackages = with config.boot.kernelPackages; [
     # ipu6-drivers
     # ivsc-driver
@@ -85,7 +85,7 @@ in
     tailscale
     dmidecode
     libva-utils
-    gnome.cheese
+    cheese
     home-manager
     docker-compose
     chrysalis

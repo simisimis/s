@@ -5,7 +5,15 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
+  version = "24.2.6";
   wallpaper = ./wallpaper.jpg;
+  plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
+    version = "${version}";
+    src = pkgs.fetchurl {
+      url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
+      hash = "sha256-MEw7pmaDPOxhjeIHWumCxwESZri3gdXULIc7kRh9/BM=";
+    };
+  });
 in
 {
   settings = import ./vars.nix;
@@ -85,6 +93,97 @@ in
       }];
     };
   };
+  wayland.windowManager.hyprland = {
+    enable = true;
+
+    settings = {
+      exec-once = [ "waybar" "systemctl --user restart kanshi" ];
+
+
+      general = {
+        gaps_in = 1;
+        gaps_out = 2;
+      };
+      # ********** Key Bindings **********
+      # See https://wiki.hyprland.org/Configuring/Binds/ for more.
+
+      "$launcher" = "wofi --show run";
+      "$browser" = "firefox";
+      "$terminal" = "alacritty";
+
+      # https://wiki.hyprland.org/Configuring/Variables/#input
+      input = {
+        kb_layout = "us,lt,gr";
+        kb_options = "ctrl:nocaps,grp:ctrl_space_toggle";
+      };
+
+      bind = [
+        # Launch programs.
+        "ALT, D, exec, $launcher"
+
+        "ALT, Return, exec, $terminal"
+        # Quit current program.
+        "ALT SHIFT, Q, killactive"
+        # Toggle fullscreen.
+        "ALT, F, fullscreen"
+        # Focus windows.
+        "ALT, up, movefocus, u"
+        "ALT, down, movefocus, d"
+        "ALT, left, movefocus, l"
+        "ALT, right, movefocus, r"
+        # Focus workspace by number.
+        "ALT, 1, workspace, 1"
+        "ALT, 2, workspace, 2"
+        "ALT, 3, workspace, 3"
+        "ALT, 4, workspace, 4"
+        "ALT, 5, workspace, 5"
+        "ALT, 6, workspace, 6"
+        "ALT, 7, workspace, 7"
+        "ALT, 8, workspace, 8"
+        # Focus prev/next workspace.
+        "CTRL SHIFT, left, workspace, r-1"
+        "CTRL SHIFT, right, workspace, r+1"
+        # Send window to the given desktop.
+        "ALT SHIFT, 1, movetoworkspace, 1"
+        "ALT SHIFT, 2, movetoworkspace, 2"
+        "ALT SHIFT, 3, movetoworkspace, 3"
+        "ALT SHIFT, 4, movetoworkspace, 4"
+        "ALT SHIFT, 5, movetoworkspace, 5"
+        "ALT SHIFT, 6, movetoworkspace, 6"
+        "ALT SHIFT, 7, movetoworkspace, 7"
+        "ALT SHIFT, 8, movetoworkspace, 8"
+
+        # Print screen
+        "ALT SHIFT, T, exec, trimgrim"
+        # Insert emoji
+        "ALT SHIFT, B, exec, wofi-emoji"
+        # Quit Hyprland.
+        "ALT SHIFT, C, exit"
+      ];
+      # Move/resize windows with alt + drag
+      bindm = [
+        "ALT, mouse:272, movewindow"
+        "ALT, mouse:273, resizewindow"
+      ];
+
+
+      # https://wiki.hyprland.org/Configuring/Variables/#misc
+      misc = {
+        force_default_wallpaper = 2;
+      };
+      # https://easings.net/#easeOutQuint
+      bezier = "ease_out_quint, 0.22, 1, 0.36, 1";
+      # Disable all animations, except for workspace switching.
+      animation = [
+        "workspaces, 1, 5, ease_out_quint, slide"
+        "windows, 0"
+        "layers, 0"
+        "fade, 0"
+        "border, 0"
+        "borderangle, 0"
+      ];
+    };
+  };
   services.kanshi.enable = true;
   services.kanshi.settings = [
     {
@@ -140,6 +239,22 @@ in
       ];
     }
     {
+      profile.name = "dualwide";
+      profile.outputs = [
+        {
+          criteria = "Dell Inc. DELL U4025QW FNHNF34";
+          position = "0,0";
+          scale = 2.0;
+          mode = "5120x2160@120.000Hz";
+          status = "enable";
+        }
+        {
+          criteria = "eDP-1";
+          status = "disable";
+        }
+      ];
+    }
+    {
       profile.name = "single";
       profile.outputs = [
         {
@@ -162,9 +277,11 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    libGL
     gping
-    unstable.plasticity
-    unstable.logseq
+    plasticityNew
+    chromium
+    #logseq
     subsurface
     mtr
     ansible
@@ -221,7 +338,7 @@ in
     roboto-mono
     (nerdfonts.override { fonts = [ "Mononoki" "FiraCode" ]; })
     material-icons
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libappindicator
     # end wayland
 
@@ -410,10 +527,11 @@ in
     ];
     initExtra = ''
       source <(kubectl completion zsh)
-      export JAVA_HOME="${pkgs.jdk11}"
+      export JAVA_HOME="${pkgs.jdk23}"
       export BW_SESSION="${config.settings.services.vaultwarden.sessionId}"
       export JIRA_API_TOKEN="${config.settings.services.jira.apiToken}"
       export AWS_PROFILE="mina"
+      export LD_LIBRARY_PATH="${pkgs.libGL}/lib:/run/opengl-driver/lib"
 
       # make completion work with kubecolor
       compdef kubecolor=kubectl

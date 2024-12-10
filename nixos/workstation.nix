@@ -45,10 +45,12 @@ in
       extraPortals = [
         xdg-desktop-portal-wlr
         xdg-desktop-portal-gtk
+        xdg-desktop-portal-hyprland
       ];
       configPackages = [
         xdg-desktop-portal-wlr
         xdg-desktop-portal-gtk
+        xdg-desktop-portal-hyprland
       ];
     };
   };
