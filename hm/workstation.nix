@@ -29,7 +29,7 @@ in
     nushell
 
     #web
-    firefox-bin
+    (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
     (brave.override { commandLineArgs = [ "--ozone-platform-hint=auto" ]; })
 
     #media
@@ -74,7 +74,7 @@ in
     wasm-bindgen-cli
     # rustup
     #rnix-lsp
-    (python312.withPackages (ps: with ps; [ pyserial intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools shapely ]))
+    (python312.withPackages (ps: with ps; [ pyserial west intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools shapely ]))
     gitAndTools.gitflow
 
     #unstable.prusa-slicer

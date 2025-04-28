@@ -1,17 +1,28 @@
-# solo repo for nix and home-manager specific configuration. WIP
+# My nix Repository
 
-### bootstrap:
-1. nixos:
+A nix flake for:
+- NixOS configurations
+- Home Manager configurations
+- dev shell
+- Templates
+
+## Examples
+### NixOS
 ```bash
-$ sudo nixos-rebuild switch --flake git+ssh://git@github.com/simisimis/s
-```
-2. home-manager:
-```bash
-$ home-manager switch --flake git+ssh://git@github.com/simisimis/s
+$ sudo nixos-rebuild switch --flake git+ssh://git@github.com/simisimis/s#lavirinthos
 ```
 
-todo:
-* proper readme
-* add two more hosts
-* come up with more refined structure
-* finish this se...
+### Home Manager
+```bash
+$ home-manager switch --flake git+ssh://git@github.com/simisimis/s#lavirinthos
+```
+
+### Dev shell
+```bash
+$ nix develop git+ssh://git@github.com/simisimis/s
+```
+
+### Language templates
+```bash
+$ nix flake init -t git+ssh://git@github.com/simisimis/s#rust
+```

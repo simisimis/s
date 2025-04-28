@@ -182,6 +182,7 @@ in
       #BAT_THEME="dark_neon";
       # java apps on wayland like android-studio or arduino
       _JAVA_AWT_WM_NONREPARENTING = 1;
+      LIBVA_DRIVER_NAME = "iHD";
     };
     # envExtra
     # profileExtra

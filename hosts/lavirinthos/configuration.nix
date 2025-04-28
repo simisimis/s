@@ -1,11 +1,5 @@
 # lavirinthos host specific configuration
-{ config, lib, pkgs, nixpkgs-unstable, ... }:
-let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
-in
+{ config, lib, pkgs, ... }:
 {
   settings = import ./vars.nix;
 
@@ -33,6 +27,7 @@ in
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
+      vpl-gpu-rt
     ];
   };
   #boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
@@ -82,6 +77,7 @@ in
     '';
   };
   environment.systemPackages = with pkgs; [
+    zoom-us
     tailscale
     dmidecode
     libva-utils

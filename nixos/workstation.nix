@@ -24,7 +24,7 @@ in
   services.xserver = {
     enable = true;
     autorun = false;
-    videoDriver = config.settings.hw.videoDrv;
+    videoDrivers = [ config.settings.hw.videoDrv ];
     displayManager.startx.enable = true;
     xkb.layout = "us";
     xkb.options = "altwin:swap_lalt_lwin,terminate:ctrl_alt_bksp,caps:none,eurosign:e";

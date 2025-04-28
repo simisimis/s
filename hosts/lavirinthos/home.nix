@@ -5,13 +5,13 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
-  version = "24.2.6";
+  version = "25.1.9";
   wallpaper = ./wallpaper.jpg;
   plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
     version = "${version}";
     src = pkgs.fetchurl {
       url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-      hash = "sha256-MEw7pmaDPOxhjeIHWumCxwESZri3gdXULIc7kRh9/BM=";
+      hash = "sha256-iNgMsQ6JDPRNKssvgVyZ9z8aUFzemboYgm1wIjuERog=";
     };
   });
 in
@@ -44,6 +44,7 @@ in
       exec_always "systemctl --user restart kanshi.service"
     '';
     config = {
+      modifier = "Mod4";
       input = {
         "type:keyboard" = {
           xkb_layout = "us,lt,gr";
@@ -119,51 +120,51 @@ in
 
       bind = [
         # Launch programs.
-        "ALT, D, exec, $launcher"
+        "SUPER, D, exec, $launcher"
 
-        "ALT, Return, exec, $terminal"
+        "SUPER, Return, exec, $terminal"
         # Quit current program.
-        "ALT SHIFT, Q, killactive"
+        "SUPER SHIFT, Q, killactive"
         # Toggle fullscreen.
-        "ALT, F, fullscreen"
+        "SUPER, F, fullscreen"
         # Focus windows.
-        "ALT, up, movefocus, u"
-        "ALT, down, movefocus, d"
-        "ALT, left, movefocus, l"
-        "ALT, right, movefocus, r"
+        "SUPER, up, movefocus, u"
+        "SUPER, down, movefocus, d"
+        "SUPER, left, movefocus, l"
+        "SUPER, right, movefocus, r"
         # Focus workspace by number.
-        "ALT, 1, workspace, 1"
-        "ALT, 2, workspace, 2"
-        "ALT, 3, workspace, 3"
-        "ALT, 4, workspace, 4"
-        "ALT, 5, workspace, 5"
-        "ALT, 6, workspace, 6"
-        "ALT, 7, workspace, 7"
-        "ALT, 8, workspace, 8"
+        "SUPER, 1, workspace, 1"
+        "SUPER, 2, workspace, 2"
+        "SUPER, 3, workspace, 3"
+        "SUPER, 4, workspace, 4"
+        "SUPER, 5, workspace, 5"
+        "SUPER, 6, workspace, 6"
+        "SUPER, 7, workspace, 7"
+        "SUPER, 8, workspace, 8"
         # Focus prev/next workspace.
-        "CTRL SHIFT, left, workspace, r-1"
-        "CTRL SHIFT, right, workspace, r+1"
+        "CTRL SUPER, left, workspace, r-1"
+        "CTRL SUPER, right, workspace, r+1"
         # Send window to the given desktop.
-        "ALT SHIFT, 1, movetoworkspace, 1"
-        "ALT SHIFT, 2, movetoworkspace, 2"
-        "ALT SHIFT, 3, movetoworkspace, 3"
-        "ALT SHIFT, 4, movetoworkspace, 4"
-        "ALT SHIFT, 5, movetoworkspace, 5"
-        "ALT SHIFT, 6, movetoworkspace, 6"
-        "ALT SHIFT, 7, movetoworkspace, 7"
-        "ALT SHIFT, 8, movetoworkspace, 8"
+        "SUPER SHIFT, 1, movetoworkspace, 1"
+        "SUPER SHIFT, 2, movetoworkspace, 2"
+        "SUPER SHIFT, 3, movetoworkspace, 3"
+        "SUPER SHIFT, 4, movetoworkspace, 4"
+        "SUPER SHIFT, 5, movetoworkspace, 5"
+        "SUPER SHIFT, 6, movetoworkspace, 6"
+        "SUPER SHIFT, 7, movetoworkspace, 7"
+        "SUPER SHIFT, 8, movetoworkspace, 8"
 
         # Print screen
-        "ALT SHIFT, T, exec, trimgrim"
+        "SUPER SHIFT, T, exec, trimgrim"
         # Insert emoji
-        "ALT SHIFT, B, exec, wofi-emoji"
+        "SUPER SHIFT, B, exec, wofi-emoji"
         # Quit Hyprland.
-        "ALT SHIFT, C, exit"
+        "SUPER SHIFT, C, exit"
       ];
-      # Move/resize windows with alt + drag
+      # Move/resize windows with super + drag
       bindm = [
-        "ALT, mouse:272, movewindow"
-        "ALT, mouse:273, resizewindow"
+        "SUPER, mouse:272, movewindow"
+        "SUPER, mouse:273, resizewindow"
       ];
 
 
@@ -245,7 +246,7 @@ in
           criteria = "Dell Inc. DELL U4025QW FNHNF34";
           position = "0,0";
           scale = 2.0;
-          mode = "5120x2160@120.000Hz";
+          mode = "5120x2160@60.000Hz";
           status = "enable";
         }
         {
@@ -277,6 +278,8 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    arduino-ide
+    kustomize
     libGL
     gping
     plasticityNew
@@ -598,11 +601,15 @@ in
         }
         {
           mime = "video/*";
-          use = [ "play" "reveal" ];
+          use = [ "video" "reveal" ];
         }
         {
           mime = "application/json";
           use = [ "edit" "reveal" ];
+        }
+        {
+          mime = "application/pdf";
+          use = "zathura";
         }
         {
           mime = "*";
@@ -614,6 +621,12 @@ in
           {
             run = ''hx "$@" '';
             for = "linux";
+          }
+        ];
+        zathura = [
+          {
+            run = ''zathura "$@"'';
+            block = true;
           }
         ];
         image = [

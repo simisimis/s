@@ -82,6 +82,9 @@
           openssl
           pkg-config
           nodejs_20
+          #cmake
+          #ninja
+          #(python312.withPackages (ps: with ps; [ pyserial west pyelftools intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools shapely ]))
         ];
         shellHook = ''
           user_shell=$(getent passwd "$(whoami)" |cut -d: -f 7)
