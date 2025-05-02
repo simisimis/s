@@ -121,7 +121,17 @@ in
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;
-  services.syncthing.enable = false;
+  services.syncthing = {
+    enable = true;
+    settings = {
+      folders = {
+        "papyrus" = {
+          path = config.services.syncthing.dataDir + "/papyrus";
+        };
+      };
+    };
+  };
+
   # networking.firewall.enable = false;
 
   # Virtualization

@@ -1,4 +1,4 @@
-{ config, pkgs, nixpkgs-unstable, ... }:
+{ config, lib, pkgs, nixpkgs-unstable, ... }:
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
@@ -38,20 +38,18 @@ in
   };
 
   services.syncthing = {
-    user = config.settings.usr.name;
     overrideFolders = true;
     settings = {
 
-      devices = {
-        "backute" = { id = config.settings.services.syncthing.ids.backute; };
-        "simsung" = { id = config.settings.services.syncthing.ids.simsung; };
-        "simonster" = { id = config.settings.services.syncthing.ids.simonster; };
-        "lavirinthos" = { id = config.settings.services.syncthing.ids.lavirinthos; };
-      };
+      devices = (lib.mapAttrs
+        (name: value: {
+          id = "${value}";
+        })
+        config.settings.services.syncthing.ids);
       folders = {
         "papyrus" = {
           # Name of folder in Syncthing, also the folder ID
-          devices = [ "backute" "simsung" "simonster" "lavirinthos" ]; # Which devices to share the folder with
+          devices = lib.attrNames config.settings.services.syncthing.ids;
         };
       };
     };
