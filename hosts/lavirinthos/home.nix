@@ -110,7 +110,8 @@ in
 
       "$launcher" = "wofi --show run";
       "$browser" = "firefox";
-      "$terminal" = "alacritty";
+      #"$terminal" = "alacritty";
+      "$terminal" = "wezterm";
 
       # https://wiki.hyprland.org/Configuring/Variables/#input
       input = {
@@ -526,45 +527,45 @@ in
   };
   programs.zsh = {
     cdpath = [
-      "~/dev/MinaFoundation"
+      "~/dev"
     ];
     initExtra = ''
       source <(kubectl completion zsh)
       export JAVA_HOME="${pkgs.jdk23}"
       export BW_SESSION="${config.settings.services.vaultwarden.sessionId}"
-      export JIRA_API_TOKEN="${config.settings.services.jira.apiToken}"
-      export AWS_PROFILE="mina"
+      #export JIRA_API_TOKEN=""
+      #export AWS_PROFILE=""
       export LD_LIBRARY_PATH="${pkgs.libGL}/lib:/run/opengl-driver/lib"
 
       # make completion work with kubecolor
       compdef kubecolor=kubectl
 
-      todo () {
-        local description="$*" # get all arguments
-        jira issue create --template ~/.config/.jira/issue-template.yml \
-          -a $(jira me) \
-          -tTask \
-          --custom team=4df12a6f-710c-4bc9-a8e9-a8a77b54567d \
-          --component="DevOps" \
-          --summary "$description" \
-          --no-input
-        ISSUE_ID=$(jira issue list -a $(jira me) --paginate 1 --no-headers --plain --columns id)
-        jira issue move $ISSUE_ID "Selected for Development"
-        jira open $ISSUE_ID
-      }
-      aws-portforward () {
-        CLUSTER=$1
-        HOST=$2
-        LOCAL=$3
-        PORT=$4
+      # todo () {
+      #   local description="$*" # get all arguments
+      #   jira issue create --template ~/.config/.jira/issue-template.yml \
+      #     -a $(jira me) \
+      #     -tTask \
+      #     --custom team=4df12a6f-710c-4bc9-a8e9-a8a77b54567d \
+      #     --component="DevOps" \
+      #     --summary "$description" \
+      #     --no-input
+      #   ISSUE_ID=$(jira issue list -a $(jira me) --paginate 1 --no-headers --plain --columns id)
+      #   jira issue move $ISSUE_ID "Selected for Development"
+      #   jira open $ISSUE_ID
+      # }
+      # aws-portforward () {
+      #   CLUSTER=$1
+      #   HOST=$2
+      #   LOCAL=$3
+      #   PORT=$4
 
-        NODEGROUP=$(aws eks list-nodegroups --cluster-name $CLUSTER --query 'nodegroups' --output text)
-        SCALINGGROUP=$(aws eks describe-nodegroup --cluster-name $CLUSTER --nodegroup-name $NODEGROUP --query 'nodegroup.resources.autoScalingGroups[*].name' --output text)
-        INSTANCEID=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $SCALINGGROUP --query 'AutoScalingGroups[*].Instances[0].InstanceId' --output text)
-        PARAMETERS=$(jq -n --arg port $PORT --arg host $HOST --arg local $LOCAL '{"portNumber":[$port],"localPortNumber":[$local],"host":[$host]}')
+      #   NODEGROUP=$(aws eks list-nodegroups --cluster-name $CLUSTER --query 'nodegroups' --output text)
+      #   SCALINGGROUP=$(aws eks describe-nodegroup --cluster-name $CLUSTER --nodegroup-name $NODEGROUP --query 'nodegroup.resources.autoScalingGroups[*].name' --output text)
+      #   INSTANCEID=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $SCALINGGROUP --query 'AutoScalingGroups[*].Instances[0].InstanceId' --output text)
+      #   PARAMETERS=$(jq -n --arg port $PORT --arg host $HOST --arg local $LOCAL '{"portNumber":[$port],"localPortNumber":[$local],"host":[$host]}')
 
-        aws ssm start-session --target $INSTANCEID --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters "$PARAMETERS" 
-      }
+      #   aws ssm start-session --target $INSTANCEID --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters "$PARAMETERS" 
+      # }
     '';
     shellAliases = {
       kns = "kubens";
