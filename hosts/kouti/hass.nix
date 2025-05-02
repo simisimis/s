@@ -4,51 +4,47 @@ let
   zigbeeStick = "/dev/serial/by-id/usb-Silicon_Labs_slae.sh_cc2652rb_stick_-_slaesh_s_iot_stuff_00_12_4B_00_23_93_3E_19-if00-port0";
 
   format = pkgs.formats.yaml { };
-  scripts = format.generate "scripts_manual.yaml" [
-    {
-      open_shutters = {
-        alias = "Open all Shutters";
-        sequence = [
-          {
-            type = "turn_on";
-            device_id = "27d5caa44415945ead5325db090dab15";
-            entity_id = "switch.office_roller_main_l2";
-            domain = "switch";
-          }
-          {
-            delay = 20;
-          }
-          {
-            type = "turn_off";
-            device_id = "27d5caa44415945ead5325db090dab15";
-            entity_id = "switch.office_roller_main_l2";
-            domain = "switch";
-          }
-        ];
-      };
-      close_shutters = {
-        alias = "Bring down all Shutters";
-        sequence = [
-          {
-            type = "turn_on";
-            device_id = "27d5caa44415945ead5325db090dab15";
-            entity_id = "switch.office_roller_main_l1";
-            domain = "switch";
-          }
-          {
-            delay = 20;
-          }
-          {
-            type = "turn_off";
-            device_id = "27d5caa44415945ead5325db090dab15";
-            entity_id = "switch.office_roller_main_l1";
-            domain = "switch";
-          }
-        ];
-      };
-    }
-
-  ];
+  scripts = format.generate "scripts_manual.yaml" [{
+    # close_shutters = {
+    #   alias = "Bring down all Shutters";
+    #   sequence = [
+    #     {
+    #       type = "close";
+    #       device_id = "a0b97b59fef36eb323951194c5393f3d";
+    #       entity_id = "7b445699cbabb24f62746d8dc62ff617";
+    #       domain = "cover";
+    #     }
+    #     {
+    #       type = "close";
+    #       device_id = "ced64379cedb0489c4a893324634ff01";
+    #       entity_id = "cd3054b952c75cb6aaf836088d6346aa";
+    #       domain = "cover";
+    #     }
+    #   ];
+    # };
+    open_all_rollers = {
+      alias = "Open all rollers";
+      sequence = [{
+        action = "cover.open_cover";
+        data = { };
+        target = {
+          entity_id = "cover.all_rollers";
+        };
+      }];
+      description = "Open all rollers";
+    };
+    close_all_rollers = {
+      alias = "Close all rollers";
+      sequence = [{
+        action = "cover.close_cover";
+        data = { };
+        target = {
+          entity_id = "cover.all_rollers";
+        };
+      }];
+      description = "Close all rollers";
+    };
+  }];
   scenes = format.generate "scenes_manual.yaml" [ ];
   automations = format.generate "automations_manual.yaml" [
     {
@@ -95,10 +91,10 @@ let
       conditions = [ ];
       actions = [
         {
-          type = "turn_on";
-          device_id = "27d5caa44415945ead5325db090dab15";
-          entity_id = "ec64fec62f6a3a9a492408d44ce38c6f";
-          domain = "switch";
+          type = "open";
+          device_id = "a0b97b59fef36eb323951194c5393f3d";
+          entity_id = "7b445699cbabb24f62746d8dc62ff617";
+          domain = "cover";
         }
       ];
       mode = "single";
@@ -106,25 +102,144 @@ let
     {
       id = "1731010905880";
       alias = "rollerstop";
-      description = "Moving rollers stop";
+      description = "Moving rollers down with buttons";
       triggers = [{
         domain = "mqtt";
         device_id = "b71f5e715ba07f7644fd251a67088a76";
         type = "action";
-        subtype = "brightness_stop";
+        subtype = "brightness_move_down";
         trigger = "device";
       }];
       conditions = [ ];
       actions = [
         {
-          type = "turn_off";
-          device_id = "27d5caa44415945ead5325db090dab15";
-          entity_id = "ec64fec62f6a3a9a492408d44ce38c6f";
-          domain = "switch";
+          type = "close";
+          device_id = "a0b97b59fef36eb323951194c5393f3d";
+          entity_id = "7b445699cbabb24f62746d8dc62ff617";
+          domain = "cover";
         }
       ];
       mode = "single";
     }
+    {
+      id = "1733300096307";
+      alias = "Close all rollers";
+      description = "Close all rollers with IKEA left button";
+      trigger = [
+        {
+          domain = "mqtt";
+          device_id = "b71f5e715ba07f7644fd251a67088a76";
+          type = "action";
+          subtype = "arrow_left_click";
+          trigger = "device";
+        }
+      ];
+      condition = [ ];
+      action = [
+        {
+          action = "script.close_all_rollers";
+          metadata = { };
+          data = { };
+        }
+      ];
+      mode = "single";
+    }
+    {
+      id = "1733300096308";
+      alias = "Open all rollers";
+      description = "Open all rollers with IKEA right button";
+      trigger = [
+        {
+          domain = "mqtt";
+          device_id = "b71f5e715ba07f7644fd251a67088a76";
+          type = "action";
+          subtype = "arrow_right_click";
+          trigger = "device";
+        }
+      ];
+      condition = [ ];
+      action = [
+        {
+          action = "script.open_all_rollers";
+          metadata = { };
+          data = { };
+        }
+      ];
+      mode = "single";
+    }
+    {
+      id = "1640298949305";
+      alias = "On motion light up the staircase";
+      trigger = [
+        {
+          platform = "device";
+          type = "motion";
+          device_id = "5fe9cef4ff6223c14b3a3f89ae429adf";
+          entity_id = "binary_sensor.motion_sensor_occupancy";
+          domain = "binary_sensor";
+          for = {
+            hours = 0;
+            minutes = 0;
+            seconds = 1;
+          };
+        }
+      ];
+      condition = [
+        {
+          type = "is_illuminance";
+          condition = "device";
+          device_id = "5fe9cef4ff6223c14b3a3f89ae429adf";
+          entity_id = "sensor.motion_sensor_illuminance_lux";
+          domain = "sensor";
+          below = "4";
+        }
+      ];
+      action = [
+        {
+          action = "switch.turn_on";
+          target = {
+            entity_id = "switch.staircase_light_l2";
+          };
+        }
+        {
+          delay = {
+            hours = 0;
+            minutes = 0;
+            seconds = 15;
+            milliseconds = 0;
+          };
+        }
+        {
+          action = "switch.turn_off";
+          target = {
+            entity_id = "switch.staircase_light_l2";
+          };
+        }
+      ];
+      mode = "single";
+    }
+    # {
+    #   id = "1731010905880";
+    #   alias = "rollerstop";
+    #   description = "Moving rollers stop";
+    #   triggers = [{
+    #     domain = "mqtt";
+    #     device_id = "b71f5e715ba07f7644fd251a67088a76";
+    #     type = "action";
+    #     subtype = "brightness_stop";
+    #     trigger = "device";
+    #   }];
+    #   conditions = [ ];
+    #   actions = [
+    #     {
+    #       type = "stop";
+    #       device_id = "a0b97b59fef36eb323951194c5393f3d";
+    #       entity_id = "7b445699cbabb24f62746d8dc62ff617";
+    #       domain = "cover";
+    #     }
+    #   ];
+    #   mode = "single";
+    # }
     # {
     #   id = "1705223239528";
     #   alias = "Plant light toggle";
@@ -179,6 +294,34 @@ let
     #"scene ui" = "!include scenes.yaml";
     "script manual" = "!include scripts_manual.yaml";
     #"script ui" = "!include scripts.yaml";
+    cover = [
+      {
+        platform = "group";
+        name = "All rollers";
+        unique_id = "cover.all_rollers";
+        entities = [
+          "cover.main_roller"
+          "cover.office_main_roller"
+          "cover.office_side_roller"
+          "cover.office_wc_roller"
+          "cover.kids_roller"
+          "cover.kitchen_roller"
+          "cover.main_side_roller"
+        ];
+      }
+    ];
+    alexa = {
+      smart_home = {
+        filter = {
+          include_entities = [
+            "cover.all_rollers"
+          ];
+          include_domains = [
+            "cover"
+          ];
+        };
+      };
+    };
     default_config = { };
     http = {
       login_attempts_threshold = 5;
@@ -253,11 +396,11 @@ let
       shutters_control = {
         name = "Shutters Control";
         options = [
-          "Off"
-          "Up"
-          "Down"
+          "close"
+          "open"
+          "stop"
         ];
-        initial = "Off";
+        initial = "stop";
         icon = "mdi:window-shutter";
       };
     };
@@ -335,17 +478,31 @@ in
 
   services.postgresql = {
     enable = true;
+
     authentication = ''
       local hass hass ident map=ha
+      local immich immich ident map=immich_map
     '';
+
     identMap = ''
       ha root hass
+      immich_map simas immich
     '';
-    ensureDatabases = [ "hass" ];
+
+    ensureDatabases = [ "hass" "immich" ];
+
     ensureUsers = [
-      { name = "hass"; ensureDBOwnership = true; }
+      {
+        name = "hass";
+        ensureDBOwnership = true;
+      }
+      {
+        name = "immich";
+        ensureDBOwnership = true;
+      }
     ];
   };
+
 
   virtualisation.oci-containers = {
     backend = "docker";

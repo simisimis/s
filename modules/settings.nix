@@ -139,6 +139,11 @@ with lib;
             description = "bitwarden cli session ID";
           };
         };
+        immich = {
+          dbPass = mkOption {
+            type = with types; uniq str;
+          };
+        };
       };
 
       gitRepos = {

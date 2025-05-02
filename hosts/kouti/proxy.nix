@@ -26,6 +26,9 @@ let
   vaultwardenEnv = builtins.toFile "vaultwarden.env" ''
     ADMIN_TOKEN="${config.settings.services.vaultwarden.adminToken}"
   '';
+  immichEnv = builtins.toFile "immich.env" ''
+    DB_PASSWORD="${config.settings.services.immich.dbPass}"
+  '';
 
 in
 {
@@ -248,6 +251,20 @@ in
             middlewares = "authelia@file";
             tls.certResolver = "letsEncrypt";
           };
+          esp = {
+            service = "esp";
+            rule = "Host(`esp.narbuto.lt`)";
+            entryPoints = "https";
+            middlewares = "authelia@file";
+            tls.certResolver = "letsEncrypt";
+          };
+          img = {
+            service = "img";
+            rule = "Host(`img.narbuto.lt`)";
+            entryPoints = "https";
+            #middlewares = "authelia@file";
+            tls.certResolver = "letsEncrypt";
+          };
         };
         services = {
           authelia.loadBalancer.servers = [{ url = "http://localhost:9092/"; }];
@@ -257,6 +274,8 @@ in
           gitea.loadBalancer.servers = [{ url = "http://localhost:3000/"; }];
           hass.loadBalancer.servers = [{ url = "http://localhost:8123/"; }];
           z2m.loadBalancer.servers = [{ url = "http://localhost:8521/"; }];
+          esp.loadBalancer.servers = [{ url = "http://localhost:6052/"; }];
+          img.loadBalancer.servers = [{ url = "http://localhost:2283/"; }];
         };
       };
     };
@@ -318,6 +337,29 @@ in
     #user = "git";
     #group = "users";
   };
+  #######################
+  ### --- ESPHome --- ###
+  #######################
+  services.esphome.enable = true;
+  services.esphome.usePing = true;
+
+  #######################
+  ### --- Immich  --- ###
+  #######################
+  services.immich = {
+    enable = true;
+    user = "simas";
+    group = "users";
+    mediaLocation = "/srv/media/immich";
+    secretsFile = "${immichEnv}";
+    database.host = "127.0.0.1";
+    machine-learning.environment = {
+      MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
+      MPLCONFIGDIR = "/var/cache/immich/matplotlib";
+      HF_TOKEN_PATH = "/var/cache/immich/huggingface/token";
+    };
+  };
+
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
