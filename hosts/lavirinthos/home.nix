@@ -340,7 +340,8 @@ in
     fantasque-sans-mono
     font-awesome_5
     roboto-mono
-    (nerdfonts.override { fonts = [ "Mononoki" "FiraCode" ]; })
+    nerd-fonts.mononoki
+    nerd-fonts.firacode
     material-icons
     adwaita-icon-theme
     libappindicator

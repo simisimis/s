@@ -9,7 +9,6 @@
     ../../modules/settings.nix
     ./hardware-configuration.nix
   ];
-  age.secrets.secret1.file = ./secret1.age;
 
   nixpkgs.overlays = [ (import ../../overlays) ];
 
@@ -21,8 +20,13 @@
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;
   networking.interfaces.enp5s0.useDHCP = true;
+  networking.interfaces.enp11s0f3u4u3.useDHCP = true;
 
-  hardware.video.hidpi.enable = true;
+
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
   security.pam.services.swaylock = { };
   #virtualisation.virtualbox.host.enableExtensionPack = true;
   services.openssh.enable = true;
@@ -34,6 +38,7 @@
 
   services.syncthing = {
     enable = true;
+    group = "users";
     # Folder for Syncthing's settings and keys
     configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
     settings = {
@@ -44,4 +49,17 @@
       };
     };
   };
+  security.sudo.extraRules = [{
+    groups = [ "wheel" ];
+    commands = [
+      {
+        command = "${pkgs.systemd}/bin/systemctl restart *";
+        options = [ "NOPASSWD" ];
+      }
+      {
+        command = "${pkgs.systemd}/bin/journalctl *";
+        options = [ "NOPASSWD" ];
+      }
+    ];
+  }];
 }

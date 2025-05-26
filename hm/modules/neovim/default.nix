@@ -20,7 +20,7 @@ in
       lua << EOF
       ${initLua}
       EOF
-      '';
+    '';
     plugins = with pkgs.vimPlugins; [
       # Syntax / Language Support ##########################
       # Collection of common configurations for the Nvim LSP client
@@ -69,7 +69,7 @@ in
       #vim-airline
       lualine-nvim
       nerdtree
-      nvim-compe
+      nvim-cmp
       nvim-treesitter
 
       vim-signify

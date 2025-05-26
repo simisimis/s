@@ -27,7 +27,7 @@ in
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
 
   security.rtkit.enable = true;
   services.pipewire = {
@@ -77,7 +77,7 @@ in
     fira-mono
     fira-code
     fira-code-symbols
-    (nerdfonts.override { fonts = [ "DroidSansMono" ]; })
+    nerd-fonts.droid-sans-mono
   ];
 
   # List packages installed in system profile. To search, run:
@@ -145,6 +145,6 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 
 }

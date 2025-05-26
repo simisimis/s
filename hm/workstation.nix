@@ -54,8 +54,6 @@ in
 
     #dev
     unstable.obsidian
-    #unstable.cargo-espflash
-    unstable.terraform
     go
     golint
     delve
@@ -82,75 +80,70 @@ in
 
 
   # services
-  services.gpg-agent.pinentryPackage = pkgs.pinentry-gtk2;
+  services.gpg-agent.pinentry.package = pkgs.pinentry-all;
 
   programs.vscode = with pkgs; {
     enable = false;
-    extensions = with vscode-extensions; [
-      golang.go
-      hashicorp.terraform
-      vscodevim.vim
-      redhat.vscode-yaml
-      redhat.java
-      ms-vscode-remote.remote-ssh
+    profiles.default = {
+      extensions = with vscode-extensions; [
+        golang.go
+        hashicorp.terraform
+        vscodevim.vim
+        redhat.vscode-yaml
+        redhat.java
+        ms-vscode-remote.remote-ssh
 
-      # third party extensions
-      #arrterian.nix-env-selector
-      brettm12345.nixfmt-vscode
-      bbenoist.nix
-    ];
-    userSettings = {
-      "telemetry.enableCrashReporter" = false;
-      "telemetry.enableTelemetry" = false;
-      # ViM settings
-      "vim.normalModeKeyBindingsNonRecursive" = [{
-        "before" = [ "u" ];
-        "after" = [ ];
-        "commands" = [{
-          "command" = "undo";
-          "args" = [ ];
-        }];
-      }
-        {
-          "before" = [ "<C-r>" ];
+        # third party extensions
+        #arrterian.nix-env-selector
+        brettm12345.nixfmt-vscode
+        bbenoist.nix
+      ];
+      userSettings = {
+        "telemetry.enableCrashReporter" = false;
+        "telemetry.enableTelemetry" = false;
+        # ViM settings
+        "vim.normalModeKeyBindingsNonRecursive" = [{
+          "before" = [ "u" ];
           "after" = [ ];
           "commands" = [{
-            "command" = "redo";
+            "command" = "undo";
             "args" = [ ];
           }];
-        }];
-      "go.toolsManagement.autoUpdate" = false;
-      #      "go.formatTool" = "gofmt";
-      #      "go.lintTool" = "golint";
-      #      "go.lintOnSave" = "file";
-      #      "go.useLanguageServer" = true;
-      #      "go.toolsEnvVars" = {
-      #        "GOFLAGS" = "-tags=sandbox,integration,e2e";
-      #      };
-      "window.zoomLevel" = 0;
-      "editor.formatOnSave" = true;
-
-      "workbench.colorTheme" = "Solarized Light";
-      "workbench.iconTheme" = null;
-      "workbench.colorCustomizations" = {
-        "editor.selectionBackground" = "#edcda8";
-        "editor.selectionHighlightBackground" = "#edcda8";
-      };
-      "explorer.confirmDragAndDrop" = false;
-      "search.useIgnoreFiles" = false;
-      "explorer.confirmDelete" = false;
-      "editor.fontFamily" = "'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
-      "java.jdt.ls.java.home" = "${pkgs.jdk11}/lib/openjdk";
-      "java.configuration.runtimes" = [
-        {
-          "name" = "JavaSE-11";
-          "path" = "${pkgs.jdk11}/lib/openjdk";
-          "default" = true;
         }
-      ];
-      "java.project.referencedLibraries" = [
-        "/home/snarbutas/development/java/algorithmsp1/lib/algs4.jar"
-      ];
+          {
+            "before" = [ "<C-r>" ];
+            "after" = [ ];
+            "commands" = [{
+              "command" = "redo";
+              "args" = [ ];
+            }];
+          }];
+        "go.toolsManagement.autoUpdate" = false;
+        "window.zoomLevel" = 0;
+        "editor.formatOnSave" = true;
+
+        "workbench.colorTheme" = "Solarized Light";
+        "workbench.iconTheme" = null;
+        "workbench.colorCustomizations" = {
+          "editor.selectionBackground" = "#edcda8";
+          "editor.selectionHighlightBackground" = "#edcda8";
+        };
+        "explorer.confirmDragAndDrop" = false;
+        "search.useIgnoreFiles" = false;
+        "explorer.confirmDelete" = false;
+        "editor.fontFamily" = "'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
+        "java.jdt.ls.java.home" = "${pkgs.jdk11}/lib/openjdk";
+        "java.configuration.runtimes" = [
+          {
+            "name" = "JavaSE-11";
+            "path" = "${pkgs.jdk11}/lib/openjdk";
+            "default" = true;
+          }
+        ];
+        "java.project.referencedLibraries" = [
+          "/home/snarbutas/development/java/algorithmsp1/lib/algs4.jar"
+        ];
+      };
     };
   };
   programs.zellij.enable = true;

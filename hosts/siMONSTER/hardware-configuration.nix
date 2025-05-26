@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
@@ -14,28 +15,30 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "zroot/ROOT/default";
+    {
+      device = "zroot/ROOT/default";
       fsType = "zfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B8FB-2245";
+    {
+      device = "/dev/disk/by-uuid/B8FB-2245";
       fsType = "vfat";
     };
 
   fileSystems."/home" =
-    { device = "zroot/DATA/home";
+    {
+      device = "zroot/DATA/home";
       fsType = "zfs";
     };
 
   fileSystems."/tmp" =
-    { device = "zroot/ROOT/tmp";
+    {
+      device = "zroot/ROOT/tmp";
       fsType = "zfs";
     };
 
   swapDevices = [ ];
 
-  nix.maxJobs = lib.mkDefault 4;
-  # High-DPI console
   #console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 }

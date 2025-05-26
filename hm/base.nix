@@ -160,7 +160,7 @@ in
         };
       }
     ];
-    initExtra = ''
+    initContent = ''
       ## This is the way... to traverse through history
       bindkey "^[OA" history-beginning-search-backward
       bindkey "^[OB" history-beginning-search-forward

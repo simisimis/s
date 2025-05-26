@@ -178,9 +178,15 @@
   security.sudo.enable = true;
   security.sudo.extraRules = [{
     groups = [ "wheel" ];
-    commands = [{
-      command = "${pkgs.systemd}/bin/systemctl restart *";
-      options = [ "NOPASSWD" ];
-    }];
+    commands = [
+      {
+        command = "${pkgs.systemd}/bin/systemctl restart *";
+        options = [ "NOPASSWD" ];
+      }
+      {
+        command = "${pkgs.systemd}/bin/journalctl *";
+        options = [ "NOPASSWD" ];
+      }
+    ];
   }];
 }
