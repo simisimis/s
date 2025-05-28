@@ -163,7 +163,6 @@
   services.syncthing = {
     enable = true;
     user = config.settings.usr.name;
-    # Folder for Syncthing's settings and keys
     configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
     settings = {
       folders = {

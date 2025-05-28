@@ -40,5 +40,6 @@
 
   swapDevices = [ ];
 
+  networking.useDHCP = lib.mkDefault true;
   #console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 }

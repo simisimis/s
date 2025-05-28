@@ -5,15 +5,7 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
-  version = "25.1.9";
   wallpaper = ./wallpaper.jpg;
-  plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
-    version = "${version}";
-    src = pkgs.fetchurl {
-      url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-      hash = "sha256-iNgMsQ6JDPRNKssvgVyZ9z8aUFzemboYgm1wIjuERog=";
-    };
-  });
 in
 {
   settings = import ./vars.nix;
@@ -283,7 +275,6 @@ in
     kustomize
     libGL
     gping
-    plasticityNew
     chromium
     #logseq
     subsurface
@@ -321,31 +312,6 @@ in
     eza
     tldr
     darktable
-    # start wayland
-    swaylock
-    swayidle
-    wl-clipboard
-    ethtool
-    mako # notification daemon
-    wofi
-    wofi-emoji
-    wtype
-    waybar
-    slurp
-    grim
-    brightnessctl
-    pamixer
-    wdisplays
-
-    fantasque-sans-mono
-    font-awesome_5
-    roboto-mono
-    nerd-fonts.mononoki
-    nerd-fonts.firacode
-    material-icons
-    adwaita-icon-theme
-    libappindicator
-    # end wayland
 
     #system
     cifs-utils

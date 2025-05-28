@@ -57,6 +57,7 @@ in
   services.gnome.at-spi2-core.enable = true;
 
   # List services that you want to enable:
+  services.udisks2.enable = true;
   services.udev.packages = [ pkgs.chrysalis ];
   services.udev.extraRules = ''
     SUBSYSTEM=="usb", ATTR{idVendor}=="3297", ATTR{idProduct}=="1969",TAG+="uaccess"

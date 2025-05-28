@@ -5,6 +5,14 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
+  plasticityVersion = "25.1.9";
+  plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
+    version = "${plasticityVersion}";
+    src = pkgs.fetchurl {
+      url = "https://github.com/nkallen/plasticity/releases/download/v${plasticityVersion}/Plasticity-${plasticityVersion}-1.x86_64.rpm";
+      hash = "sha256-iNgMsQ6JDPRNKssvgVyZ9z8aUFzemboYgm1wIjuERog=";
+    };
+  });
 in
 {
   settings = import ./vars.nix;
@@ -29,6 +37,9 @@ in
 
     settings = {
       exec-once = [ "waybar" "systemctl --user restart kanshi" ];
+      env = [
+        "ELECTRON_OZONE_PLATFORM_HINT,auto"
+      ];
 
 
       general = {
@@ -118,33 +129,14 @@ in
     ];
   }];
   home.packages = with pkgs; [
-    # start wayland
-    swaylock
-    swayidle
-    wl-clipboard
-    ethtool
-    mako # notification daemonhome.
-    wofi
-    waybar
-    slurp
-    grim
-    brightnessctl
-    pamixer
-    wdisplays
-
-    fantasque-sans-mono
-    font-awesome_5
-    roboto-mono
-    nerd-fonts.mononoki
-    material-icons
-    adwaita-icon-theme
-    libappindicator
-    # end wayland
     # system
     rclone
     #saleae-logic
 
-    plasticity
+    (writeShellScriptBin "plasticity" ''
+      exec ${plasticityNew}/bin/Plasticity --ozone-platform=wayland --use-gl=egl
+    '')
+    unstable.prusa-slicer
     #minecraft
     #airshipper
   ];

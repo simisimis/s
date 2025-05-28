@@ -17,14 +17,38 @@ in
 
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
+    # start wayland
+    swaylock
+    swayidle
+    waybar
+    wdisplays
+    mako # notification daemon
+    wtype
+    waybar
+    wl-clipboard
+    wofi
+    wofi-emoji
+
+    fantasque-sans-mono
+    font-awesome_5
+    roboto-mono
+    nerd-fonts.mononoki
+    material-icons
+    adwaita-icon-theme
+    libappindicator
+    # end wayland
     #utils
+    ethtool
+    brightnessctl
+    pamixer
+    slurp
+    grim
+    (writeShellScriptBin "trimgrim" ''
+      slurp | grim -g - - | wl-copy && wl-paste > ~/Pictures/slurps/$(date +'%d-%m-%y_%H_%M_grim.png')
+    '')
     pavucontrol
     speedcrunch
-    scrot
     flameshot
-    xclip
-    xorg.xeyes
-    termite
     nemo
     nushell
 

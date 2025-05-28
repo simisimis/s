@@ -20,7 +20,7 @@
   networking.hostId = config.settings.hw.hostId;
   networking.hostName = config.settings.hw.hostName;
   networking.interfaces.enp5s0.useDHCP = true;
-  networking.interfaces.enp11s0f3u4u3.useDHCP = true;
+  networking.interfaces.enp5s1.useDHCP = true;
 
 
   hardware.graphics = {
@@ -34,12 +34,12 @@
   services.udev.extraRules = ''
     # saleae logic analyser
     SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
+    SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="10:98:19:57:bc:9d", NAME="enp5s1"
   '';
 
   services.syncthing = {
     enable = true;
-    group = "users";
-    # Folder for Syncthing's settings and keys
+    user = config.settings.usr.name;
     configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
     settings = {
       folders = {
