@@ -289,6 +289,8 @@ in
     unstable.prusa-slicer
     jira-cli-go
     grpcurl
+    xh
+    du-dust
     actionlint
     tmate
     gh
@@ -446,22 +448,21 @@ in
 
   services.mako = {
     enable = true;
-    anchor = "bottom-right";
-    font = "JetBrainsMono Nerd Font 12";
-    backgroundColor = "#44485b";
-    textColor = "#c0caf5";
-    width = 350;
-    margin = "0,20,20";
-    padding = "10";
-    borderSize = 2;
-    borderColor = "#414868";
-    borderRadius = 5;
-    defaultTimeout = 5000;
-    groupBy = "summary";
-    extraConfig = ''
-      [grouped]
-      format=<b>%s</b>\n%b
-    '';
+    settings = {
+      anchor = "bottom-right";
+      font = "JetBrainsMono Nerd Font 12";
+      backgroundColor = "#44485b";
+      textColor = "#c0caf5";
+      width = 350;
+      margin = "0,20,20";
+      padding = "10";
+      borderSize = 2;
+      borderColor = "#414868";
+      borderRadius = 5;
+      defaultTimeout = 5000;
+      groupBy = "summary";
+      format = "<b>%s</b>\n%b";
+    };
   };
 
   programs.ssh = {
@@ -496,7 +497,7 @@ in
     cdpath = [
       "~/dev"
     ];
-    initExtra = ''
+    initContent = ''
       source <(kubectl completion zsh)
       export JAVA_HOME="${pkgs.jdk23}"
       export BW_SESSION="${config.settings.services.vaultwarden.sessionId}"

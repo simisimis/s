@@ -51,6 +51,7 @@ in
     flameshot
     nemo
     nushell
+    pinentry-all
 
     #web
     (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
