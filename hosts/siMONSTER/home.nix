@@ -5,14 +5,6 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
-  plasticityVersion = "25.1.9";
-  plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
-    version = "${plasticityVersion}";
-    src = pkgs.fetchurl {
-      url = "https://github.com/nkallen/plasticity/releases/download/v${plasticityVersion}/Plasticity-${plasticityVersion}-1.x86_64.rpm";
-      hash = "sha256-iNgMsQ6JDPRNKssvgVyZ9z8aUFzemboYgm1wIjuERog=";
-    };
-  });
 in
 {
   settings = import ./vars.nix;
@@ -133,9 +125,6 @@ in
     rclone
     #saleae-logic
 
-    (writeShellScriptBin "plasticity" ''
-      exec ${plasticityNew}/bin/Plasticity --ozone-platform=wayland --use-gl=egl
-    '')
     unstable.prusa-slicer
     #minecraft
     #airshipper

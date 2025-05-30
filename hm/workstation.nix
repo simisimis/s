@@ -8,6 +8,14 @@ let
       android_sdk.accept_license = true;
     };
   };
+  plasticityVersion = "25.1.9";
+  plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
+    version = "${plasticityVersion}";
+    src = pkgs.fetchurl {
+      url = "https://github.com/nkallen/plasticity/releases/download/v${plasticityVersion}/Plasticity-${plasticityVersion}-1.x86_64.rpm";
+      hash = "sha256-iNgMsQ6JDPRNKssvgVyZ9z8aUFzemboYgm1wIjuERog=";
+    };
+  });
 in
 {
   imports = [
@@ -46,12 +54,15 @@ in
     (writeShellScriptBin "trimgrim" ''
       slurp | grim -g - - | wl-copy && wl-paste > ~/Pictures/slurps/$(date +'%d-%m-%y_%H_%M_grim.png')
     '')
+    (writeShellScriptBin "plasticity" ''
+      exec ${plasticityNew}/bin/Plasticity --ozone-platform=wayland --use-gl=egl
+    '')
     pavucontrol
     speedcrunch
     flameshot
     nemo
     nushell
-    pinentry-all
+    pinentry-gtk2
 
     #web
     (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
@@ -105,7 +116,7 @@ in
 
 
   # services
-  services.gpg-agent.pinentry.package = pkgs.pinentry-all;
+  services.gpg-agent.pinentry.package = pkgs.pinentry-gtk2;
 
   programs.vscode = with pkgs; {
     enable = false;
