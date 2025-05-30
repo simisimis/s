@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
 {
   # services
-  services.gpg-agent.pinentryPackage = pkgs.pinentry-curses;
+  services.gpg-agent.pinentry.package = pkgs.pinentry-curses;
 }

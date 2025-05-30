@@ -37,7 +37,6 @@ in
   ###########################
   services.cloudflared = {
     enable = true;
-    user = "${config.settings.usr.name}";
     tunnels."${config.settings.hw.hostName}" = {
       credentialsFile =
         builtins.toFile "credentialsFile.json" (builtins.toJSON config.settings.services.cloudflared.tunnelCredentials);
