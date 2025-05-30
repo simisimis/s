@@ -76,6 +76,20 @@
       ctrl_interface_group=wheel
     '';
   };
+  networking.wg-quick.interfaces.wg0 = {
+    address = config.settings.hw.wg.addresses;
+    dns = config.settings.hw.wg.dns;
+    privateKey = config.settings.hw.wg.privateKey;
+
+    peers = lib.mapAttrsToList
+      (client: clientAttrs: {
+        publicKey = clientAttrs.publicKey;
+        allowedIPs = clientAttrs.allowedIPs;
+        endpoint = clientAttrs.endpoint;
+        persistentKeepalive = 25;
+      })
+      config.settings.hw.wg.peers;
+  };
   environment.systemPackages = with pkgs; [
     zoom-us
     tailscale
@@ -135,7 +149,7 @@
   services = {
     trezord.enable = true;
   };
-  services.tailscale.enable = true;
+  services.tailscale.enable = false;
   services.openssh.enable = false;
   services.openssh.openFirewall = false;
   # Open ports in the firewall.
