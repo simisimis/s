@@ -96,6 +96,8 @@ in
   #   wget vim
   # ];
   environment.systemPackages = with pkgs; [
+    kubectl
+    kubernetes-helm
     cloudflared
     home-manager
     tailscale
@@ -121,11 +123,23 @@ in
     # always allow traffic from your Tailscale network
     trustedInterfaces = [ "tailscale0" ];
 
-    allowedUDPPorts = [ config.services.tailscale.port ];
+    allowedUDPPorts = [ config.services.tailscale.port 8472 ];
 
-    allowedTCPPorts = [ 1400 ];
+    allowedTCPPorts = [ 1400 6443 2379 2380 ];
 
     checkReversePath = "loose";
+  };
+
+  services.k3s = {
+    enable = true;
+    role = "server";
+    token = config.settings.services.k3s.token;
+    extraFlags = [
+      "--node-ip=${config.settings.services.k3s.nodeIP}"
+      "--advertise-address=${config.settings.services.k3s.nodeIP}"
+      "--node-external-ip=${config.settings.services.k3s.nodeIP}"
+      "--tls-san=${config.settings.services.k3s.nodeIP}"
+    ];
   };
 
   # List services that you want to enable:

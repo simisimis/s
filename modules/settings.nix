@@ -162,6 +162,16 @@ with lib;
             type = with types; uniq str;
           };
         };
+        k3s = {
+          token = mkOption {
+            type = with types; uniq str;
+            description = "Randomized common secret";
+          };
+          nodeIP = mkOption {
+            type = with types; uniq str;
+            description = "Nodes IP on which to listen";
+          };
+        };
         vaultwarden = {
           adminToken = mkOption {
             type = with types; uniq str;
