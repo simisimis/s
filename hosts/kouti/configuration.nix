@@ -75,6 +75,21 @@ in
     '';
   };
 
+  networking.wg-quick.interfaces.wg0 = {
+    address = config.settings.hw.wg.addresses;
+    dns = config.settings.hw.wg.dns;
+    privateKey = config.settings.hw.wg.privateKey;
+
+    peers = lib.mapAttrsToList
+      (client: clientAttrs: {
+        publicKey = clientAttrs.publicKey;
+        allowedIPs = clientAttrs.allowedIPs;
+        endpoint = clientAttrs.endpoint;
+        persistentKeepalive = 25;
+      })
+      config.settings.hw.wg.peers;
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   # environment.systemPackages = with pkgs; [
