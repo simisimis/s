@@ -133,7 +133,7 @@
   services.resolved.enable = true;
   services.resolved.extraConfig = ''
     [Resolve]
-    DNS=${config.settings.hw.wg.dns}
+    DNS=${lib.concatStringsSep " " config.settings.hw.wg.dns}
     Domains=~casa
   '';
 
