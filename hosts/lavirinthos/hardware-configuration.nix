@@ -4,34 +4,39 @@
 { config, lib, pkgs, modulesPath, ... }:
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "snd_soc_rt715_sdca" "snd_soc_rt1316_sdw" "snd_sof_pci_intel_tgl" "snd_hda_intel" "snd_soc_sof_sdw" "i915" "kvm-intel" "v4l2loopback"];
+  boot.kernelModules = [ "snd_soc_rt715_sdca" "snd_soc_rt1316_sdw" "snd_sof_pci_intel_tgl" "snd_hda_intel" "snd_soc_sof_sdw" "i915" "kvm-intel" "v4l2loopback" ];
   boot.kernelParams = [ "i915.force_probe=46a6" ];
   boot.extraModprobeConfig = ''
     options v4l2loopback exclusive_caps=1 card_label="Intel MIPI Camera"
   '';
 
   fileSystems."/" =
-    { device = "zpool/LAVIRINTHOS/root";
+    {
+      device = "zpool/LAVIRINTHOS/root";
       fsType = "zfs";
     };
 
   fileSystems."/nix" =
-    { device = "zpool/LAVIRINTHOS/nix";
+    {
+      device = "zpool/LAVIRINTHOS/nix";
       fsType = "zfs";
     };
 
   fileSystems."/home" =
-    { device = "zpool/LAVIRINTHOS/home";
+    {
+      device = "zpool/LAVIRINTHOS/home";
       fsType = "zfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/D688-3864";
+    {
+      device = "/dev/disk/by-uuid/D688-3864";
       fsType = "vfat";
     };
 
@@ -41,7 +46,7 @@
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
+  networking.useDHCP = lib.mkDefault false;
   # networking.interfaces.enp0s13f0u1.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
