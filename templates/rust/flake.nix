@@ -27,6 +27,7 @@
         devShells.default = mkShell {
           buildInputs = [
             just
+            bacon
             (fenix.packages.${system}.stable.withComponents [
               "cargo"
               "clippy"

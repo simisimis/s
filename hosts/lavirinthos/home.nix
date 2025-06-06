@@ -450,18 +450,17 @@ in
     enable = true;
     settings = {
       anchor = "bottom-right";
-      font = "JetBrainsMono Nerd Font 12";
-      backgroundColor = "#44485b";
-      textColor = "#c0caf5";
+      font = "Fira Code 12";
+      background-color = "#44485b";
+      text-color = "#c0caf5";
       width = 350;
       margin = "0,20,20";
       padding = "10";
-      borderSize = 2;
-      borderColor = "#414868";
-      borderRadius = 5;
-      defaultTimeout = 5000;
-      groupBy = "summary";
-      format = "<b>%s</b>\n%b";
+      border-size = 2;
+      border-color = "#414868";
+      border-radius = 5;
+      default-timeout = 5000;
+      group-by = "summary";
     };
   };
 
