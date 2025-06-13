@@ -128,6 +128,9 @@
     storageDriver = "zfs";
   };
   users.users."${config.settings.usr.name}".extraGroups = [ "trezord" ];
+  users.users."${config.settings.usr.name}".openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
+  ];
 
   # List services that you want to enable:
   services.resolved.enable = true;

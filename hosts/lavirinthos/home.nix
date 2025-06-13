@@ -469,14 +469,7 @@ in
       CanonicalizeHostname = "yes";
     };
 
-    extraConfig = ''
-      AddKeysToAgent yes
-    '';
     matchBlocks = {
-      "192.168.178.73" = {
-        user = "simas";
-        identityFile = config.settings.usr.ssh.siMONSTER.identityFile;
-      };
       "*.hz.minaprotocol.network" = {
         user = "root";
         identityFile = config.settings.usr.ssh.hz.identityFile;

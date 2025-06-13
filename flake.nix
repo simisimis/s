@@ -6,6 +6,8 @@
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
 
     binfiles = {
       url = "git+ssh://gitea@kouti:22/simas/binfiles?ref=master";
@@ -35,6 +37,7 @@
         inherit system;
         modules = [
           { _module.args = args; }
+          inputs.disko.nixosModules.disko
           ./hosts/${host}/configuration.nix
         ];
       };
@@ -64,6 +67,7 @@
         backute = mkHome "simas" "backute" "headless";
         polyphemus = mkHome "simas" "polyphemus" "headless";
         kouti = mkHome "simas" "kouti" "headless";
+        clotho = mkHome "simas" "clotho" "headless";
         devops = mkHome "simonas" "devops" "headless";
       };
       gnosis = self.homeConfigurations.gnosis.activationPackage;
@@ -74,6 +78,7 @@
         lavirinthos = mkHost "lavirinthos";
         polyphemus = mkHost "polyphemus";
         kouti = mkHost "kouti";
+        clotho = mkHost "clotho";
       }; #nixosConfigurations
       devShell.x86_64-linux = pkgs.mkShell {
         buildInputs = with pkgs; [
