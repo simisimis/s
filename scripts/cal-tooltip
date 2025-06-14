@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+output="$(cal -3 -m --color=always |sed 's#\x1B\[7m\([ 0-9]\+\)\x1B\[0m#<b>\1</b>#' |sed -e 's/\s/ /g')"
+
+date=$(date +"%a %d %H:%M")
+text="📆 ${date}"
+tooltip="$(echo "$output" | sed -z 's/\n/\\n/g')"
+#tooltip=${tooltip::-2}
+
+echo "{\"text\":\""$text"\", \"tooltip\":\""$tooltip"\"}"
+exit 0

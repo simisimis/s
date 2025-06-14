@@ -1,5 +1,5 @@
 # hm workstation
-{ config, nixpkgs-unstable, pkgs, binfiles, autoPatchelfHook, ... }:
+{ config, nixpkgs-unstable, pkgs, autoPatchelfHook, ... }:
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
@@ -51,9 +51,9 @@ in
     pamixer
     slurp
     grim
-    (writeShellScriptBin "trimgrim" ''
-      slurp | grim -g - - | wl-copy && wl-paste > ~/Pictures/slurps/$(date +'%d-%m-%y_%H_%M_grim.png')
-    '')
+    (writeShellScriptBin "trimgrim" (builtins.readFile ../scripts/trimgrim))
+    (writeShellScriptBin "cal-tooltip" (builtins.readFile ../scripts/cal-tooltip))
+    (writeShellScriptBin "browser" (builtins.readFile ../scripts/browser))
     (writeShellScriptBin "plasticity" ''
       exec ${plasticityNew}/bin/Plasticity --ozone-platform=wayland --use-gl=egl
     '')
@@ -603,7 +603,6 @@ in
     '';
     systemd.enable = false;
   };
-  home.file."bin".source = binfiles.outPath;
   home.file.".xinitrc".text = ''
     if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
       eval $(dbus-launch --exit-with-session --sh-syntax)

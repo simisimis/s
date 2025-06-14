@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+menu=$(gopass ls --flat | wofi --show=dmenu -p "gopass")
+
+if [[ $menu == \|* ]]; then
+    eval echo \"$@\" $menu > /dev/null 2>&1 &
+else
+    eval gopass show -c $menu \"$@\" > /dev/null 2>&1 &
+fi

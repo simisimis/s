@@ -1,22 +1,5 @@
 {
   "nodes": {
-    "binfiles": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1747116088,
-        "narHash": "sha256-nwIHfRB5xMZEvnyPAcoh1KeCcnTAuoGMOqCRWkCQcic=",
-        "ref": "master",
-        "rev": "9f5bed636eeaf77f12b719be76ca56bcc9f75a03",
-        "revCount": 20,
-        "type": "git",
-        "url": "ssh://gitea@kouti:22/simas/binfiles"
-      },
-      "original": {
-        "ref": "master",
-        "type": "git",
-        "url": "ssh://gitea@kouti:22/simas/binfiles"
-      }
-    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -90,7 +73,6 @@
     },
     "root": {
       "inputs": {
-        "binfiles": "binfiles",
         "disko": "disko",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",

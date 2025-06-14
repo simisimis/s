@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+slurp | grim -g - - | wl-copy && wl-paste > ~/Pictures/slurps/$(date +'%d-%m-%y_%H_%M_grim.png')

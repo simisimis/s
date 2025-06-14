@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+menu=$(echo -e "firefox \nbrave --profile-directory=Default\n| wl-copy -n\n" | wofi --show=dmenu -p "Open URL with:" )
+STR=$@
+#SUB='meet.google.com'
+#if [[ "$STR" == *"$SUB"* ]]; then
+#  STR="${STR}&authuser=1"
+#fi
+if [[ $menu == \|* ]]; then
+    eval echo \"$STR\" $menu > /dev/null 2>&1 &
+else
+    eval $menu \"$STR\" > /dev/null 2>&1 &
+fi

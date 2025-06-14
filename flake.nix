@@ -9,10 +9,6 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    binfiles = {
-      url = "git+ssh://gitea@kouti:22/simas/binfiles?ref=master";
-      flake = false;
-    }; #binfiles
     # ipu6-softisp = {
     #   url = "git+ssh://code.tvl.fyi/depot.git:/users/flokli/ipu6-softisp.git";
     #   flake = false;

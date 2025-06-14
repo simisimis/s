@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+#  adjust screen brightness
+#
+#
+# Script to adjust screen brightness
+function usage_and_exit {
+    echo "Usage: $(basename ${0}) <param1>"
+    exit 1
+}
+# Exit if we have an incorrect number of arguments
+if [ ${#} -ne 1 ]; then
+    usage_and_exit
+fi
+BRIGHTNESS=$(( $(</sys/class/backlight/intel_backlight/brightness)+${1} ))
+if (( $BRIGHTNESS < 7500 )) && (( $BRIGHTNESS > 0 ))
+then
+    echo $BRIGHTNESS > "/sys/class/backlight/intel_backlight/brightness"
+fi
+echo $(( 100*$BRIGHTNESS/7500 ))

@@ -335,6 +335,8 @@ in
     #web
     unstable.ledger-live-desktop
 
+    #scripts
+    (writeShellScriptBin "brightness" (builtins.readFile ../../scripts/brightness))
   ];
 
 
