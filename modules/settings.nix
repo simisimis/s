@@ -176,6 +176,10 @@ with lib;
             type = with types; uniq str;
             description = "Nodes IP on which to listen";
           };
+          serverAddr = mkOption {
+            type = with types; uniq str;
+            description = "Server address of k3s cluster to join to";
+          };
         };
         vaultwarden = {
           adminToken = mkOption {

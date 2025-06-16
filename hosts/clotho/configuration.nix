@@ -137,6 +137,7 @@ in
     enable = true;
     role = "server";
     token = config.settings.services.k3s.token;
+    serverAddr = config.settings.services.k3s.serverAddr;
     extraFlags = [
       "--node-ip=${config.settings.services.k3s.nodeIP}"
       "--advertise-address=${config.settings.services.k3s.nodeIP}"
