@@ -57,24 +57,20 @@
     in
     {
       homeConfigurations = {
-        gnosis = mkHome "snarbutas" "gnosis" "workstation";
         lavirinthos = mkHome "simonas" "lavirinthos" "workstation";
         siMONSTER = mkHome "simas" "siMONSTER" "workstation";
-        backute = mkHome "simas" "backute" "headless";
-        polyphemus = mkHome "simas" "polyphemus" "headless";
         kouti = mkHome "simas" "kouti" "headless";
         clotho = mkHome "simas" "clotho" "headless";
+        lachesis = mkHome "simas" "lachesis" "headless";
         devops = mkHome "simonas" "devops" "headless";
       };
       gnosis = self.homeConfigurations.gnosis.activationPackage;
       nixosConfigurations = {
-        gnosis = mkHost "gnosis";
-        backute = mkHost "backute";
         siMONSTER = mkHost "siMONSTER";
         lavirinthos = mkHost "lavirinthos";
-        polyphemus = mkHost "polyphemus";
         kouti = mkHost "kouti";
         clotho = mkHost "clotho";
+        lachesis = mkHost "lachesis";
       }; #nixosConfigurations
       devShell.x86_64-linux = pkgs.mkShell {
         buildInputs = with pkgs; [

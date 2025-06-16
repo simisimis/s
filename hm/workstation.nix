@@ -414,7 +414,7 @@ in
         format = "{}";
         return-type = "json";
         interval = 60;
-        exec = "~/bin/cal-tooltip";
+        exec = "cal-tooltip";
       };
       "custom/power" = {
         format = "🔌";
