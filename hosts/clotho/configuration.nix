@@ -2,19 +2,14 @@
 #    Clotho (spins the thread of life)
 #    Lachesis (measures it)
 #    Atropos (cuts it)
-{ config, lib, pkgs, nixpkgs-unstable, ... }:
-let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
-in
+{ config, lib, pkgs, ... }:
 {
   settings = import ./vars.nix;
 
   imports = [
     ../../nixos/base.nix
     ../../modules/settings.nix
+    ../../modules/k3s
     ./hardware-configuration.nix
     ./disko-config.nix
   ];
@@ -41,12 +36,11 @@ in
     };
   };
 
-  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  environment.etc."iproute2/rt_tables.d/wg.conf".text = "200 wg_table\n";
+  #environment.etc."iproute2/rt_tables.d/wg.conf".text = "200 wg_table\n";
   networking = {
     hostId = config.settings.hw.hostId;
     hostName = config.settings.hw.hostName;
@@ -75,31 +69,31 @@ in
       '';
     };
 
-    wg-quick.interfaces.wg0 = {
-      address = config.settings.hw.wg.addresses;
-      privateKey = config.settings.hw.wg.privateKey;
+    # wg-quick.interfaces.wg0 = {
+    #   address = config.settings.hw.wg.addresses;
+    #   privateKey = config.settings.hw.wg.privateKey;
 
-      peers = lib.mapAttrsToList
-        (client: clientAttrs: {
-          publicKey = clientAttrs.publicKey;
-          allowedIPs = clientAttrs.allowedIPs;
-          endpoint = clientAttrs.endpoint;
-          persistentKeepalive = 25;
-        })
-        config.settings.hw.wg.peers;
-      table = "wg_table";
-      postUp = ''
-        ip route add ${config.settings.hw.wg.ips} dev wg0 table wg_table
-        ip rule add to ${config.settings.hw.wg.ips} table wg_table priority 100
-      '';
-      postDown = ''
-        ip route del ${config.settings.hw.wg.ips} dev wg0 table wg_table
-        ip rule del to ${config.settings.hw.wg.ips} table wg_table priority 100
-      '';
-    };
+    #   peers = lib.mapAttrsToList
+    #     (client: clientAttrs: {
+    #       publicKey = clientAttrs.publicKey;
+    #       allowedIPs = clientAttrs.allowedIPs;
+    #       endpoint = clientAttrs.endpoint;
+    #       persistentKeepalive = 25;
+    #     })
+    #     config.settings.hw.wg.peers;
+    #   table = "wg_table";
+    #   postUp = ''
+    #     ip route add ${config.settings.hw.wg.ips} dev wg0 table wg_table
+    #     ip rule add to ${config.settings.hw.wg.ips} table wg_table priority 100
+    #   '';
+    #   postDown = ''
+    #     ip route del ${config.settings.hw.wg.ips} dev wg0 table wg_table
+    #     ip rule del to ${config.settings.hw.wg.ips} table wg_table priority 100
+    #   '';
+    # };
 
     firewall = {
-      enable = true;
+      enable = false;
 
       trustedInterfaces = [ "tailscale0" ];
       allowedUDPPorts = [ config.services.tailscale.port 8472 ];
@@ -114,37 +108,17 @@ in
   environment.systemPackages = with pkgs; [
     kubectl
     kubernetes-helm
+    helmfile
+    cilium-cli
     cloudflared
+    pinentry-curses
     home-manager
     tailscale
     pv
     pciutils
-    esphome
-    immich-cli
   ];
 
-  # List services that you want to enable:
-  services.resolved.enable = true;
-  services.resolved.extraConfig = ''
-    [Resolve]
-    DNS=${lib.concatStringsSep " " config.settings.hw.wg.dns}
-    Domains=~casa
-  '';
   services.tailscale.enable = true;
-  #services.tailscale.permitCertUid = "traefik";
-
-  services.k3s = {
-    enable = true;
-    role = "server";
-    token = config.settings.services.k3s.token;
-    serverAddr = config.settings.services.k3s.serverAddr;
-    extraFlags = [
-      "--node-ip=${config.settings.services.k3s.nodeIP}"
-      "--advertise-address=${config.settings.services.k3s.nodeIP}"
-      "--node-external-ip=${config.settings.services.k3s.nodeIP}"
-      "--tls-san=${config.settings.services.k3s.nodeIP}"
-    ];
-  };
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
@@ -159,5 +133,5 @@ in
   };
 
   # Virtualization
-  virtualisation.docker.enable = true;
+  virtualisation.docker.enable = false;
 }

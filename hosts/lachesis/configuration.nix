@@ -17,6 +17,7 @@ in
     ../../modules/settings.nix
     ./hardware-configuration.nix
     ./disko-config.nix
+    ./k3s/k3s.nix
   ];
 
   nix.settings.trusted-users = [ "@wheel" ];
@@ -76,19 +77,6 @@ in
   ];
 
   services.tailscale.enable = false;
-
-  services.k3s = {
-    enable = true;
-    role = "server";
-    token = config.settings.services.k3s.token;
-    serverAddr = config.settings.services.k3s.serverAddr;
-    extraFlags = [
-      "--node-ip=${config.settings.services.k3s.nodeIP}"
-      "--advertise-address=${config.settings.services.k3s.nodeIP}"
-      "--node-external-ip=${config.settings.services.k3s.nodeIP}"
-      "--tls-san=${config.settings.services.k3s.nodeIP}"
-    ];
-  };
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"

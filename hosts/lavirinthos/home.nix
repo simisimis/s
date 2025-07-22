@@ -6,8 +6,7 @@ let
     config = { allowUnfree = true; };
   };
   wallpaper = ./wallpaper.jpg;
-in
-{
+in {
   settings = import ./vars.nix;
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
@@ -20,7 +19,8 @@ in
     extraConfig = {
       github.user = config.settings.usr.username;
       alias = {
-        hist = "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        hist =
+          "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
       };
       fetch.prune = true;
       fetch.pruneTags = true;
@@ -54,26 +54,27 @@ in
         titlebar = false;
         border = 0;
       };
-      floating = {
-        titlebar = false;
-      };
+      floating = { titlebar = false; };
       keybindings =
-        let
-          modifier = config.wayland.windowManager.sway.config.modifier;
-        in
-        lib.mkOptionDefault {
+        let modifier = config.wayland.windowManager.sway.config.modifier;
+        in lib.mkOptionDefault {
           "${modifier}+g" = "move workspace to output left";
           "${modifier}+b" = "move workspace to output up";
           "${modifier}+Shift+t" = "exec trimgrim";
           "${modifier}+Shift+p" = "exec wofipass";
           "${modifier}+Shift+b" = "exec wofi-emoji";
           "${modifier}+Shift+q" = "kill";
-          "${modifier}+Shift+l" = "exec swaylock -f -i ~/Pictures/texture1_1.jpg -t";
-          "${modifier}+d" = "exec ${pkgs.wofi}/bin/wofi --show run | ${pkgs.findutils}/bin/xargs swaymsg exec --";
-          "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
-          "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+          "${modifier}+Shift+l" =
+            "exec swaylock -f -i ~/Pictures/texture1_1.jpg -t";
+          "${modifier}+d" =
+            "exec ${pkgs.wofi}/bin/wofi --show run | ${pkgs.findutils}/bin/xargs swaymsg exec --";
+          "XF86AudioRaiseVolume" =
+            "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
+          "XF86AudioLowerVolume" =
+            "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
           "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
-          "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle";
+          "XF86AudioMicMute" =
+            "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle";
           "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
           "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
           "XF86AudioPlay" = "exec playerctl play-pause";
@@ -90,8 +91,7 @@ in
     enable = true;
 
     settings = {
-      exec-once = [ "waybar" "systemctl --user restart kanshi" ];
-
+      #exec-once = [ "waybar" "systemctl --user restart kanshi" ];
 
       general = {
         gaps_in = 1;
@@ -155,16 +155,11 @@ in
         "SUPER SHIFT, C, exit"
       ];
       # Move/resize windows with super + drag
-      bindm = [
-        "SUPER, mouse:272, movewindow"
-        "SUPER, mouse:273, resizewindow"
-      ];
-
+      bindm =
+        [ "SUPER, mouse:272, movewindow" "SUPER, mouse:273, resizewindow" ];
 
       # https://wiki.hyprland.org/Configuring/Variables/#misc
-      misc = {
-        force_default_wallpaper = 2;
-      };
+      misc = { force_default_wallpaper = 2; };
       # https://easings.net/#easeOutQuint
       bezier = "ease_out_quint, 0.22, 1, 0.36, 1";
       # Disable all animations, except for workspace switching.
@@ -179,23 +174,20 @@ in
     };
   };
   services.kanshi.enable = true;
+  services.kanshi.systemdTarget = "hyprland-session.target";
   services.kanshi.settings = [
     {
       profile.name = "singleAR";
       profile.outputs = [
         {
-          criteria = "LBT Rokid Max Unknown";
+          criteria = "Nreal XREAL One Pro Unknown";
           position = "0,0";
           status = "enable";
           scale = 1.0;
-          mode = "1920x1080@60Hz";
+          mode = "1920x1080@120Hz";
         }
         {
           criteria = "eDP-1";
-          status = "disable";
-        }
-        {
-          criteria = "Dell Inc. DELL U2720Q F7MFTS2";
           status = "disable";
         }
       ];
@@ -250,14 +242,12 @@ in
     }
     {
       profile.name = "single";
-      profile.outputs = [
-        {
-          criteria = "eDP-1";
-          position = "0,0";
-          status = "enable";
-          scale = 1.0;
-        }
-      ];
+      profile.outputs = [{
+        criteria = "eDP-1";
+        position = "0,0";
+        status = "enable";
+        scale = 1.0;
+      }];
     }
   ];
   services = {
@@ -304,9 +294,6 @@ in
     unstable.helmfile
     ksd
     ssm-session-manager-plugin
-    postgresql
-    dhall-json
-    minikube
     graphviz
     exiftool
     du-dust
@@ -322,7 +309,8 @@ in
 
     #dev
     jdk11
-    (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
+    (google-cloud-sdk.withExtraComponents
+      [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     kubectx
     kubectl
     k9s
@@ -336,9 +324,9 @@ in
     unstable.ledger-live-desktop
 
     #scripts
-    (writeShellScriptBin "brightness" (builtins.readFile ../../scripts/brightness))
+    (writeShellScriptBin "brightness"
+      (builtins.readFile ../../scripts/brightness))
   ];
-
 
   programs.wezterm = {
     enable = true;
@@ -373,26 +361,25 @@ in
         selection_fg = "#303446";
       };
     };
-    extraConfig =
-      ''
-        return {
-          enable_tab_bar = false,
-          harfbuzz_features = {"calt=0", "cv01", "cv02", "cv04", "ss01", "ss03", "ss04", "cv31", "cv08", "cv30", "cv27"},
-          font = wezterm.font('Fira Code', { weight = 'Light'}),
-          font_size = 12,
-          color_scheme = "simColors",
-          -- #Scrollback
-          -- #scrollback_lines = 10000,
+    extraConfig = ''
+      return {
+        enable_tab_bar = false,
+        harfbuzz_features = {"calt=0", "cv01", "cv02", "cv04", "ss01", "ss03", "ss04", "cv31", "cv08", "cv30", "cv27"},
+        font = wezterm.font('Fira Code', { weight = 'Light'}),
+        font_size = 12,
+        color_scheme = "simColors",
+        -- #Scrollback
+        -- #scrollback_lines = 10000,
 
-          -- Window
-          window_padding = {
-            left = 10,
-            right = 10,
-            top = 10,
-            bottom = 10,
-          },
-        }
-      '';
+        -- Window
+        window_padding = {
+          left = 10,
+          right = 10,
+          top = 10,
+          bottom = 10,
+        },
+      }
+    '';
   };
   programs.alacritty = {
     enable = true;
@@ -467,9 +454,7 @@ in
   };
 
   programs.ssh = {
-    extraOptionOverrides = {
-      CanonicalizeHostname = "yes";
-    };
+    extraOptionOverrides = { CanonicalizeHostname = "yes"; };
 
     matchBlocks = {
       "*.hz.minaprotocol.network" = {
@@ -488,9 +473,7 @@ in
     };
   };
   programs.zsh = {
-    cdpath = [
-      "~/dev"
-    ];
+    cdpath = [ "~/dev" ];
     initContent = ''
       source <(kubectl completion zsh)
       export JAVA_HOME="${pkgs.jdk23}"
@@ -535,17 +518,15 @@ in
       kubectl = "kubecolor";
       k = "kubecolor";
     };
-    plugins = [
-      {
-        name = "fzf-tab";
-        src = pkgs.fetchFromGitHub {
-          owner = "Aloxaf";
-          repo = "fzf-tab";
-          rev = "v1.1.1";
-          sha256 = "sha256-0/YOL1/G2SWncbLNaclSYUz7VyfWu+OB8TYJYm4NYkM=";
-        };
-      }
-    ];
+    plugins = [{
+      name = "fzf-tab";
+      src = pkgs.fetchFromGitHub {
+        owner = "Aloxaf";
+        repo = "fzf-tab";
+        rev = "v1.1.1";
+        sha256 = "sha256-0/YOL1/G2SWncbLNaclSYUz7VyfWu+OB8TYJYm4NYkM=";
+      };
+    }];
   };
   programs.zoxide.enable = true;
   programs.yazi = {
@@ -580,38 +561,28 @@ in
         }
       ];
       opener = {
-        text = [
-          {
-            run = ''hx "$@" '';
-            for = "linux";
-          }
-        ];
-        zathura = [
-          {
-            run = ''zathura "$@"'';
-            block = true;
-          }
-        ];
-        image = [
-          {
-            run = ''imv "$@" '';
-            block = true;
-            for = "linux";
-          }
-        ];
-        video = [
-          {
-            run = ''mpv "$@" '';
-            block = true;
-            for = "linux";
-          }
-        ];
-        reveal = [
-          {
-            run = ''${pkgs.exiftool}/bin/exiftool "$1";'';
-            block = true;
-          }
-        ];
+        text = [{
+          run = ''hx "$@" '';
+          for = "linux";
+        }];
+        zathura = [{
+          run = ''zathura "$@"'';
+          block = true;
+        }];
+        image = [{
+          run = ''imv "$@" '';
+          block = true;
+          for = "linux";
+        }];
+        video = [{
+          run = ''mpv "$@" '';
+          block = true;
+          for = "linux";
+        }];
+        reveal = [{
+          run = ''${pkgs.exiftool}/bin/exiftool "$1";'';
+          block = true;
+        }];
       };
     };
   };

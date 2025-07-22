@@ -179,6 +179,7 @@ with lib;
           serverAddr = mkOption {
             type = with types; uniq str;
             description = "Server address of k3s cluster to join to";
+            default = "";
           };
         };
         vaultwarden = {
@@ -201,38 +202,6 @@ with lib;
         };
       };
 
-      gitRepos = {
-        binfiles = {
-          ref = mkOption {
-            default = "master";
-            type = with types; uniq str;
-          };
-          rev = mkOption {
-            default = "6e65c87f701529a68403647f47db937c7477c9f5";
-            type = with types; uniq str;
-          };
-        };
-        awesome = {
-          ref = mkOption {
-            default = "master";
-            type = with types; uniq str;
-          };
-          rev = mkOption {
-            default = "4abfaf5740c5ac8b5664f2d678cacd50957ad49f";
-            type = with types; uniq str;
-          };
-        };
-        zshd = {
-          ref = mkOption {
-            default = "master";
-            type = with types; uniq str;
-          };
-          rev = mkOption {
-            default = "3cd0a4e86cc0d4aea9ab13ad5f81ca4bdda90a35";
-            type = with types; uniq str;
-          };
-        };
-      };
       profile = mkOption {
         default = "simi";
         type = with types; uniq str;

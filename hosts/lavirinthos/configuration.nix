@@ -1,6 +1,5 @@
 # lavirinthos host specific configuration
-{ config, lib, pkgs, ... }:
-{
+{ config, lib, pkgs, ... }: {
   settings = import ./vars.nix;
 
   imports = [
@@ -9,14 +8,9 @@
     ../../modules/settings.nix
     ./hardware-configuration.nix
   ];
-  nixpkgs.overlays = [
-    (import ../../overlays)
-  ];
+  nixpkgs.overlays = [ (import ../../overlays) ];
 
-  hardware.firmware = with pkgs; [
-    linux-firmware
-    sof-firmware
-  ];
+  hardware.firmware = with pkgs; [ linux-firmware sof-firmware ];
   systemd.services.v4l2-relayd = {
     enable = true;
     wantedBy = [ "multi-user.target" ];
@@ -30,11 +24,12 @@
     ];
   };
   #boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    # ipu6-drivers
-    # ivsc-driver
-    v4l2loopback
-  ];
+  boot.extraModulePackages = with config.boot.kernelPackages;
+    [
+      # ipu6-drivers
+      # ivsc-driver
+      v4l2loopback
+    ];
   services = {
     zfs = {
       trim.enable = true;
@@ -46,7 +41,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
-  environment.etc."iproute2/rt_tables.d/wg.conf".text = "200 wg_table\n";
+  environment.etc."iproute2/rt_tables.d/wg.conf".text = ''
+    200 wg_table
+  '';
   networking = {
     hosts = { };
     hostId = config.settings.hw.hostId;
@@ -58,11 +55,8 @@
     wireless = {
       enable = true; # Enables wireless support via wpa_supplicant.
       interfaces = [ "wlp0s20f3" ];
-      networks = (lib.mapAttrs
-        (name: value: {
-          pskRaw = "${value}";
-        })
-        config.settings.hw.wifi); #//
+      networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; })
+        config.settings.hw.wifi); # //
       #{ "ssid" = {
       # psk = "password";
       #  extraConfig = ''
@@ -80,14 +74,12 @@
       address = config.settings.hw.wg.addresses;
       privateKey = config.settings.hw.wg.privateKey;
 
-      peers = lib.mapAttrsToList
-        (client: clientAttrs: {
-          publicKey = clientAttrs.publicKey;
-          allowedIPs = clientAttrs.allowedIPs;
-          endpoint = clientAttrs.endpoint;
-          persistentKeepalive = 25;
-        })
-        config.settings.hw.wg.peers;
+      peers = lib.mapAttrsToList (client: clientAttrs: {
+        publicKey = clientAttrs.publicKey;
+        allowedIPs = clientAttrs.allowedIPs;
+        endpoint = clientAttrs.endpoint;
+        persistentKeepalive = 25;
+      }) config.settings.hw.wg.peers;
       table = "wg_table";
       postUp = ''
         ip route add ${config.settings.hw.wg.ips} dev wg0 table wg_table
@@ -127,10 +119,12 @@
     enable = true;
     storageDriver = "zfs";
   };
-  users.users."${config.settings.usr.name}".extraGroups = [ "trezord" ];
-  users.users."${config.settings.usr.name}".openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
-  ];
+  users.users."${config.settings.usr.name}" = {
+    extraGroups = [ "trezord" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
+    ];
+  };
 
   # List services that you want to enable:
   services.resolved.enable = true;
@@ -145,12 +139,13 @@
   services.zfs.autoSnapshot = {
     enable = true;
     hourly = 0;
-    daily = 7;
+    daily = 2;
     weekly = 1;
-    monthly = 1;
+    monthly = 0;
     frequent = 0;
   };
-  services.udev.packages = [ pkgs.chrysalis pkgs.trezor-udev-rules pkgs.openocd ];
+  services.udev.packages =
+    [ pkgs.chrysalis pkgs.trezor-udev-rules pkgs.openocd ];
   services.udev.extraRules = ''
     SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"
     ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="wheel", MODE="0664"
@@ -158,9 +153,7 @@
     SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
   '';
 
-  services = {
-    trezord.enable = true;
-  };
+  services = { trezord.enable = true; };
   services.tailscale.enable = true;
   services.openssh.enable = false;
   services.openssh.openFirewall = false;
@@ -175,12 +168,7 @@
         "bluez5.enable-sbc-xq" = true;
         "bluez5.enable-msbc" = true;
         "bluez5.enable-hw-volume" = true;
-        "bluez5.roles" = [
-          "hsp_hs"
-          "hsp_ag"
-          "hfp_hf"
-          "hfp_ag"
-        ];
+        "bluez5.roles" = [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" ];
       };
     };
   };
@@ -188,11 +176,13 @@
   services.syncthing = {
     enable = true;
     user = config.settings.usr.name;
-    configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
+    configDir =
+      "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
     settings = {
       folders = {
         "papyrus" = {
-          path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+          path =
+            "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
         };
       };
     };

@@ -17,7 +17,7 @@ in
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.firewall.enable = true;
+  networking.firewall.enable = lib.mkDefault true;
   #networking.firewall.allowedTCPPorts = [ 8384 22000 ];
   #networking.firewall.allowedUDPPorts = [ 22000 21027 ];
 

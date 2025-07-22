@@ -8,20 +8,17 @@ let
       android_sdk.accept_license = true;
     };
   };
-  plasticityVersion = "25.1.9";
+  plasticityVersion = "25.2.1";
   plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
     version = "${plasticityVersion}";
     src = pkgs.fetchurl {
-      url = "https://github.com/nkallen/plasticity/releases/download/v${plasticityVersion}/Plasticity-${plasticityVersion}-1.x86_64.rpm";
-      hash = "sha256-iNgMsQ6JDPRNKssvgVyZ9z8aUFzemboYgm1wIjuERog=";
+      url =
+        "https://github.com/nkallen/plasticity/releases/download/v${plasticityVersion}/Plasticity-${plasticityVersion}-1.x86_64.rpm";
+      hash = "sha256-M0TjHTTVs37QwG8XCy4+R0mD7Ttipwebd7+IHWhA7UI=";
     };
   });
-in
-{
-  imports = [
-    ./modules/zellij
-    ./modules/helix
-  ];
+in {
+  imports = [ ./modules/zellij ./modules/helix ];
 
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
@@ -52,20 +49,25 @@ in
     slurp
     grim
     (writeShellScriptBin "trimgrim" (builtins.readFile ../scripts/trimgrim))
-    (writeShellScriptBin "cal-tooltip" (builtins.readFile ../scripts/cal-tooltip))
+    (writeShellScriptBin "cal-tooltip"
+      (builtins.readFile ../scripts/cal-tooltip))
     (writeShellScriptBin "browser" (builtins.readFile ../scripts/browser))
     (writeShellScriptBin "plasticity" ''
       exec ${plasticityNew}/bin/Plasticity --ozone-platform=wayland --use-gl=egl
     '')
     pavucontrol
     speedcrunch
-    flameshot
+    (flameshot.override {
+      # Enable USE_WAYLAND_GRIM compile flag
+      enableWlrSupport = true;
+    })
     nemo
     nushell
     pinentry-gtk2
 
     #web
-    (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
+    (pkgs.wrapFirefox
+      (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
     (brave.override { commandLineArgs = [ "--ozone-platform-hint=auto" ]; })
 
     #media
@@ -108,12 +110,25 @@ in
     wasm-bindgen-cli
     # rustup
     #rnix-lsp
-    (python312.withPackages (ps: with ps; [ pyserial west intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools shapely ]))
+    (python312.withPackages (ps:
+      with ps; [
+        pyserial
+        west
+        intelhex
+        termcolor
+        crcmod
+        requests
+        ruamel_yaml
+        pip
+        yamllint
+        flake8
+        setuptools
+        shapely
+      ]))
     gitAndTools.gitflow
 
     #unstable.prusa-slicer
   ];
-
 
   # services
   services.gpg-agent.pinentry.package = pkgs.pinentry-gtk2;
@@ -138,14 +153,15 @@ in
         "telemetry.enableCrashReporter" = false;
         "telemetry.enableTelemetry" = false;
         # ViM settings
-        "vim.normalModeKeyBindingsNonRecursive" = [{
-          "before" = [ "u" ];
-          "after" = [ ];
-          "commands" = [{
-            "command" = "undo";
-            "args" = [ ];
-          }];
-        }
+        "vim.normalModeKeyBindingsNonRecursive" = [
+          {
+            "before" = [ "u" ];
+            "after" = [ ];
+            "commands" = [{
+              "command" = "undo";
+              "args" = [ ];
+            }];
+          }
           {
             "before" = [ "<C-r>" ];
             "after" = [ ];
@@ -153,7 +169,8 @@ in
               "command" = "redo";
               "args" = [ ];
             }];
-          }];
+          }
+        ];
         "go.toolsManagement.autoUpdate" = false;
         "window.zoomLevel" = 0;
         "editor.formatOnSave" = true;
@@ -167,18 +184,16 @@ in
         "explorer.confirmDragAndDrop" = false;
         "search.useIgnoreFiles" = false;
         "explorer.confirmDelete" = false;
-        "editor.fontFamily" = "'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
+        "editor.fontFamily" =
+          "'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
         "java.jdt.ls.java.home" = "${pkgs.jdk11}/lib/openjdk";
-        "java.configuration.runtimes" = [
-          {
-            "name" = "JavaSE-11";
-            "path" = "${pkgs.jdk11}/lib/openjdk";
-            "default" = true;
-          }
-        ];
-        "java.project.referencedLibraries" = [
-          "/home/snarbutas/development/java/algorithmsp1/lib/algs4.jar"
-        ];
+        "java.configuration.runtimes" = [{
+          "name" = "JavaSE-11";
+          "path" = "${pkgs.jdk11}/lib/openjdk";
+          "default" = true;
+        }];
+        "java.project.referencedLibraries" =
+          [ "/home/snarbutas/development/java/algorithmsp1/lib/algs4.jar" ];
       };
     };
   };
@@ -287,10 +302,7 @@ in
     enable = true;
     settings = [{
       "height" = 30;
-      "modules-left" = [
-        "sway/workspaces"
-        "hyprland/workspaces"
-      ];
+      "modules-left" = [ "sway/workspaces" "hyprland/workspaces" ];
       "modules-right" = [
         "network"
         "network#wl"
@@ -358,9 +370,7 @@ in
         format = "{usage}% 🧠";
         tooltip = false;
       };
-      "memory" = {
-        format = "{}% ";
-      };
+      "memory" = { format = "{}% "; };
       "battery" = {
         states = {
           warning = 30;
@@ -418,7 +428,8 @@ in
       };
       "custom/power" = {
         format = "🔌";
-        on-click = "swaynag -m'Are you sure?' -b 'Suspend' 'systemctl suspend; pkill swaynag'";
+        on-click =
+          "swaynag -m'Are you sure?' -b 'Suspend' 'systemctl suspend; pkill swaynag'";
         tooltip = false;
       };
       "custom/vpn" = {
