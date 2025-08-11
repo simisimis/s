@@ -29,7 +29,6 @@ in {
     wdisplays
     mako # notification daemon
     wtype
-    waybar
     wl-clipboard
     wofi
     wofi-emoji
@@ -300,6 +299,7 @@ in {
   };
   programs.waybar = {
     enable = true;
+    systemd.enable = true;
     settings = [{
       "height" = 30;
       "modules-left" = [ "sway/workspaces" "hyprland/workspaces" ];
@@ -612,7 +612,6 @@ in {
           background-color: #000000;
       }
     '';
-    systemd.enable = false;
   };
   home.file.".xinitrc".text = ''
     if test -z "$DBUS_SESSION_BUS_ADDRESS"; then

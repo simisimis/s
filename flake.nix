@@ -29,33 +29,34 @@
       };
       args = inputs;
 
-      mkHost = host: inputs.nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-          { _module.args = args; }
-          inputs.disko.nixosModules.disko
-          ./hosts/${host}/configuration.nix
-        ];
-      };
-      mkHome = user: host: type: inputs.home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [
-          { _module.args = args; }
-          ./hosts/${host}/home.nix
-          ./hm/base.nix
-          ./hm/${type}.nix
-          ./modules/settings.nix
-          {
-            home = {
-              username = user;
-              homeDirectory = "/home/${user}";
-              stateVersion = "25.05";
-            };
-          }
-        ];
-      };
-    in
-    {
+      mkHost = host:
+        inputs.nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            { _module.args = args; }
+            inputs.disko.nixosModules.disko
+            ./hosts/${host}/configuration.nix
+          ];
+        };
+      mkHome = user: host: type:
+        inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [
+            { _module.args = args; }
+            ./hosts/${host}/home.nix
+            ./hm/base.nix
+            ./hm/${type}.nix
+            ./modules/settings.nix
+            {
+              home = {
+                username = user;
+                homeDirectory = "/home/${user}";
+                stateVersion = "25.05";
+              };
+            }
+          ];
+        };
+    in {
       homeConfigurations = {
         lavirinthos = mkHome "simonas" "lavirinthos" "workstation";
         siMONSTER = mkHome "simas" "siMONSTER" "workstation";
@@ -71,7 +72,7 @@
         kouti = mkHost "kouti";
         clotho = mkHost "clotho";
         lachesis = mkHost "lachesis";
-      }; #nixosConfigurations
+      }; # nixosConfigurations
       devShell.x86_64-linux = pkgs.mkShell {
         buildInputs = with pkgs; [
           nmap
@@ -79,6 +80,7 @@
           openssl
           pkg-config
           nodejs_20
+          #postgresql_16
           #cmake
           #ninja
           #(python312.withPackages (ps: with ps; [ pyserial west pyelftools intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools shapely ]))
@@ -97,5 +99,5 @@
         };
       };
       defaultTemplate = self.templates.rust;
-    }; #outputs
+    }; # outputs
 }
