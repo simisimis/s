@@ -1,5 +1,5 @@
 # hm workstation
-{ config, nixpkgs-unstable, pkgs, autoPatchelfHook, ... }:
+{ config, nixpkgs-unstable, pkgs, ... }:
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
@@ -18,7 +18,7 @@ let
     };
   });
 in {
-  imports = [ ./modules/zellij ./modules/helix ];
+  imports = [ ./modules/zellij ./modules/helix ./modules/jujutsu ];
 
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
@@ -198,6 +198,7 @@ in {
   };
   programs.zellij.enable = true;
   programs.helix.enable = true;
+  programs.jujutsu.enable = true;
   programs.zathura.enable = true;
   programs.rofi.enable = true;
   programs.rofi.theme = "Pop-Dark.rasi";
@@ -684,4 +685,22 @@ in {
       padding: 5px;
     }
   '';
+  dconf.settings = {
+    "org/gnome/desktop/interface" = { color-scheme = "prefer-dark"; };
+  };
+
+  gtk = {
+    enable = true;
+    font.name = "Noto Sans";
+    theme.name = "Adwaita Dark";
+    theme.package = pkgs.gnome-themes-extra;
+    gtk3.extraConfig = { gtk-application-prefer-dark-theme = true; };
+    gtk4.extraConfig = { gtk-application-prefer-dark-theme = true; };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "adwaita";
+    style.name = "adwaita-dark";
+  };
 }

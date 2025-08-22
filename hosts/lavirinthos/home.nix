@@ -319,6 +319,7 @@ in {
     saleae-logic
     jetbrains.idea-community
     dioxus-cli
+    radicle-node
 
     #web
     unstable.ledger-live-desktop

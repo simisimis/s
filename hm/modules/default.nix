@@ -1,8 +1,1 @@
-{
-  imports = [
-    ./neovim
-    ./starship.nix
-    ./zellij
-    ./helix
-  ];
-}
+{ imports = [ ./neovim ./starship.nix ./zellij ./helix ./jujutsu ]; }
