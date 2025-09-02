@@ -10,7 +10,7 @@
       "--node-external-ip=${nodeIP}"
       "--tls-san=${nodeIP}"
       "--write-kubeconfig-mode=0644"
-      #"--disable=local-storage"
+      "--disable=local-storage"
       "--disable=servicelb" # Disable built-in Klipper LoadBalancer
       "--disable=traefik" # Disable built-in ingress controller
       "--disable=metrics-server" # If you use a different metrics solution

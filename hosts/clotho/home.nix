@@ -5,11 +5,8 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
-in
-{
-  imports = [
-    ../../hm/modules/helix
-  ];
+in {
+  imports = [ ../../hm/modules/helix ];
   programs.helix.enable = true;
 
   settings = import ./vars.nix;
@@ -19,10 +16,8 @@ in
   programs.git = {
     userName = config.settings.usr.fullName;
     userEmail = config.settings.usr.email;
-    signing.key = "2920A534209891E7";
-    extraConfig = {
-      github.user = config.settings.usr.username;
-    };
+    signing.key = "355FDA1C9F563EC7";
+    extraConfig = { github.user = config.settings.usr.username; };
   };
 
   home.username = config.settings.usr.name;
