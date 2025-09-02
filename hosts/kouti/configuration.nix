@@ -15,6 +15,7 @@ in
     ./hass.nix
     ./hardware-configuration.nix
     ./proxy.nix
+    ../../modules/k3s
   ];
 
   nixpkgs.overlays = [ (import ../../overlays) ];
@@ -95,7 +96,7 @@ in
     };
 
     firewall = {
-      enable = true;
+      enable = false;
 
       trustedInterfaces = [ "tailscale0" ];
       allowedUDPPorts = [ config.services.tailscale.port 8472 ];
@@ -128,18 +129,6 @@ in
   '';
   services.tailscale.enable = true;
   #services.tailscale.permitCertUid = "traefik";
-
-  services.k3s = {
-    enable = true;
-    role = "server";
-    token = config.settings.services.k3s.token;
-    extraFlags = [
-      "--node-ip=${config.settings.services.k3s.nodeIP}"
-      "--advertise-address=${config.settings.services.k3s.nodeIP}"
-      "--node-external-ip=${config.settings.services.k3s.nodeIP}"
-      "--tls-san=${config.settings.services.k3s.nodeIP}"
-    ];
-  };
 
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;
