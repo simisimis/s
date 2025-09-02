@@ -1,4 +1,4 @@
-{ config, lib, ... }: {
+{ config, pkgs, lib, ... }: {
   services.k3s = with config.settings.services.k3s; {
     enable = true;
     role = "server";
@@ -23,4 +23,8 @@
     ];
     clusterInit = (config.settings.hw.hostName == "clotho");
   };
+  systemd.tmpfiles.rules = [
+    "L+ /sbin/zfs - - - - ${pkgs.zfs}/bin/zfs"
+    "L+ /sbin/zpool - - - - ${pkgs.zfs}/bin/zpool"
+  ];
 }
