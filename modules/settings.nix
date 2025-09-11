@@ -8,12 +8,8 @@ with lib;
     settings = {
       platform = {
         aws = {
-          accessKey = mkOption {
-            type = with types; uniq str;
-          };
-          accessSecret = mkOption {
-            type = with types; uniq str;
-          };
+          accessKey = mkOption { type = with types; uniq str; };
+          accessSecret = mkOption { type = with types; uniq str; };
         };
       };
       usr = {
@@ -154,17 +150,15 @@ with lib;
           };
         };
         authelia = {
-          jwtSecret = mkOption {
-            type = with types; uniq str;
-          };
-          storageEncryptionKey = mkOption {
-            type = with types; uniq str;
-          };
-          sessionSecret = mkOption {
-            type = with types; uniq str;
-          };
-          userPassword = mkOption {
-            type = with types; uniq str;
+          jwtSecret = mkOption { type = with types; uniq str; };
+          storageEncryptionKey = mkOption { type = with types; uniq str; };
+          sessionSecret = mkOption { type = with types; uniq str; };
+          userPassword = mkOption { type = with types; uniq str; };
+        };
+        etcd = {
+          hosts = mkOption {
+            default = { };
+            description = "etcd members";
           };
         };
         k3s = {
@@ -183,9 +177,7 @@ with lib;
           };
         };
         vaultwarden = {
-          adminToken = mkOption {
-            type = with types; uniq str;
-          };
+          adminToken = mkOption { type = with types; uniq str; };
           domain = mkOption {
             type = with types; uniq str;
             description = "Vaultwarden url";
@@ -195,11 +187,7 @@ with lib;
             description = "bitwarden cli session ID";
           };
         };
-        immich = {
-          dbPass = mkOption {
-            type = with types; uniq str;
-          };
-        };
+        immich = { dbPass = mkOption { type = with types; uniq str; }; };
       };
 
       profile = mkOption {
@@ -212,31 +200,15 @@ with lib;
         '';
       };
       hass = {
-        latitude = mkOption {
-          type = with types; uniq str;
-        };
-        longitude = mkOption {
-          type = with types; uniq str;
-        };
-        mqttPass = mkOption {
-          type = with types; uniq str;
-        };
-        gcalId = mkOption {
-          type = with types; uniq str;
-        };
-        gcalSecret = mkOption {
-          type = with types; uniq str;
-        };
-        zigbee2mqttPass = mkOption {
-          type = with types; uniq str;
-        };
+        latitude = mkOption { type = with types; uniq str; };
+        longitude = mkOption { type = with types; uniq str; };
+        mqttPass = mkOption { type = with types; uniq str; };
+        gcalId = mkOption { type = with types; uniq str; };
+        gcalSecret = mkOption { type = with types; uniq str; };
+        zigbee2mqttPass = mkOption { type = with types; uniq str; };
         mosquittoUsers = {
-          sensor = mkOption {
-            type = with types; uniq str;
-          };
-          hass = mkOption {
-            type = with types; uniq str;
-          };
+          sensor = mkOption { type = with types; uniq str; };
+          hass = mkOption { type = with types; uniq str; };
         };
       };
     };
