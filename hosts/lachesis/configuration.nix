@@ -15,9 +15,9 @@ in
   imports = [
     ../../nixos/base.nix
     ../../modules/settings.nix
+    ../../modules/k3s
     ./hardware-configuration.nix
     ./disko-config.nix
-    ./k3s/k3s.nix
   ];
 
   nix.settings.trusted-users = [ "@wheel" ];
@@ -55,7 +55,7 @@ in
     firewall = {
       enable = true;
 
-      allowedUDPPorts = [ 8472 ];
+      allowedUDPPorts = [ 8472 config.services.tailscale.port 51820 ];
       allowedTCPPorts = [ 1400 6443 2379 2380 ];
       checkReversePath = "loose";
     };
@@ -76,7 +76,8 @@ in
     immich-cli
   ];
 
-  services.tailscale.enable = false;
+  services.tailscale.enable = true;
+  services.k3s.enable = lib.mkForce false;
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
