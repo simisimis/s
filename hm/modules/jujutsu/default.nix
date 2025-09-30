@@ -25,6 +25,7 @@ in {
           conflict-marker-style = "git";
           diff-formatter = ":git";
           movement.edit = true;
+          paginate = "never";
         };
       };
     };

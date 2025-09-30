@@ -9,6 +9,7 @@ with pkgs; {
     nodePackages.prettier
     nixfmt-classic
     nil
+    clang-tools
     terraform-ls
     gopls
     rustfmt
@@ -122,6 +123,7 @@ with pkgs; {
           nix.flake.autoEvalInputs = true;
         };
       };
+      clangd = { command = "${pkgs.clang-tools}/bin/clangd"; };
     };
   };
 }

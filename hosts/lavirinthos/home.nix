@@ -261,6 +261,7 @@ in {
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    gsettings-desktop-schemas
     arduino-ide
     kustomize
     libGL
@@ -301,6 +302,7 @@ in {
     eza
     tldr
     darktable
+    aichat
 
     #system
     cifs-utils
@@ -308,7 +310,7 @@ in {
     restic
 
     #dev
-    jdk11
+    jdk23
     (google-cloud-sdk.withExtraComponents
       [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     kubectx
@@ -363,7 +365,9 @@ in {
       };
     };
     extraConfig = ''
+      local os = require "os";
       return {
+        default_ssh_auth_sock = os.getenv 'SSH_AUTH_SOCK',
         enable_tab_bar = false,
         harfbuzz_features = {"calt=0", "cv01", "cv02", "cv04", "ss01", "ss03", "ss04", "cv31", "cv08", "cv30", "cv27"},
         font = wezterm.font('Fira Code', { weight = 'Light'}),
