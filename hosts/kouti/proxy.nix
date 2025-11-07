@@ -217,19 +217,6 @@ in
             entryPoints = [ "http" "https" ];
             tls.certResolver = "letsEncrypt";
           };
-          plex = {
-            service = "plex";
-            rule = "Host(`plex.narbuto.lt`)";
-            entryPoints = [ "http" "https" ];
-            tls.certResolver = "letsEncrypt";
-          };
-          transmission = {
-            service = "transmission";
-            rule = "Host(`dl.narbuto.lt`)";
-            entryPoints = "https";
-            middlewares = "authelia@file";
-            tls.certResolver = "letsEncrypt";
-          };
           vaultwarden = {
             service = "vaultwarden";
             rule = "Host(`vault.narbuto.lt`)";
@@ -268,8 +255,6 @@ in
         services = {
           authelia.loadBalancer.servers = [{ url = "http://localhost:9092/"; }];
           vaultwarden.loadBalancer.servers = [{ url = "http://localhost:8000/"; }];
-          plex.loadBalancer.servers = [{ url = "http://localhost:32400/"; }];
-          transmission.loadBalancer.servers = [{ url = "http://localhost:9091/"; }];
           gitea.loadBalancer.servers = [{ url = "http://localhost:3000/"; }];
           hass.loadBalancer.servers = [{ url = "http://localhost:8123/"; }];
           z2m.loadBalancer.servers = [{ url = "http://localhost:8521/"; }];
@@ -302,27 +287,6 @@ in
       DOMAIN = config.settings.services.vaultwarden.domain;
       SIGNUPS_ALLOWED = true;
     };
-  };
-  ####################
-  ### --- Plex --- ###
-  ####################
-  services.plex = {
-    enable = true;
-    user = config.settings.usr.name;
-    group = "users";
-    openFirewall = true;
-  };
-  ############################
-  ### --- Transmission --- ###
-  ############################
-  services.transmission = {
-    enable = true;
-    user = config.settings.usr.name;
-    group = "users";
-    settings.rpc-bind-address = "0.0.0.0";
-    #settings.rpc-authentication-required = false;
-    settings.rpc-host-whitelist-enabled = false;
-    settings.download-dir = "/srv/media/movies";
   };
   #####################
   ### --- Gitea --- ###
