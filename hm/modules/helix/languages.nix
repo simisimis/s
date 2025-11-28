@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 with pkgs; {
   home.packages = [
     shellcheck
@@ -13,9 +13,22 @@ with pkgs; {
     terraform-ls
     gopls
     rustfmt
+    helix-gpt
+    shfmt
+    typescript-language-server
   ];
   programs.helix.languages = {
     language = [
+      {
+        name = "bash";
+        language-servers = [ "bash-language-server" "buffer-language-server" ];
+        file-types = [ "sh" "bash" "zsh" ];
+        formatter = {
+          command = lib.getExe shfmt;
+          args = [ "-i" "2" "-" ];
+        };
+        auto-format = true;
+      }
       {
         name = "nix";
         auto-format = true;
@@ -77,8 +90,23 @@ with pkgs; {
         name = "markdown";
         language-servers = [ "buffer-language-server" ];
       }
+      {
+        name = "typescript";
+        language-servers =
+          [ "typescript-language-server" "buffer-language-server" ];
+        auto-format = true;
+      }
     ];
     language-server = {
+      gpt = {
+        command = lib.getExe helix-gpt;
+        args = [
+          "--handler"
+          "copilot"
+          "--copilotApiKey"
+          "${config.settings.programs.helix.copilotApiKey}"
+        ];
+      };
       buffer-language-server = { command = "buffer-language-server"; };
       bash-language-server = {
         command = lib.getExe nodePackages.bash-language-server;

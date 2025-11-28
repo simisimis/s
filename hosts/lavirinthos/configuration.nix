@@ -55,6 +55,7 @@
     wireless = {
       enable = true; # Enables wireless support via wpa_supplicant.
       interfaces = [ "wlp0s20f3" ];
+      fallbackToWPA2 = false;
       networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; })
         config.settings.hw.wifi); # //
       #{ "ssid" = {

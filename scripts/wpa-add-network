@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# by https://github.com/koenw
+set -euo pipefail
+
+ssid=${1}
+psk=${2:-""}
+
+id=$(wpa_cli add_network | sed -n 's/^\([0-9]\+\)/\1/p')
+
+wpa_cli set_network "$id" ssid "\"$ssid\""
+
+if test -n "$psk"; then
+  wpa_cli set_network "$id" psk "\"$psk\""
+else
+  wpa_cli set_network "$id" key_mgmt NONE
+fi
+
+wpa_cli enable_network "$id"

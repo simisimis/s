@@ -261,6 +261,7 @@ in {
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    helm-docs
     gsettings-desktop-schemas
     arduino-ide
     kustomize
@@ -303,6 +304,7 @@ in {
     tldr
     darktable
     aichat
+    opencode
 
     #system
     cifs-utils
@@ -329,6 +331,8 @@ in {
     #scripts
     (writeShellScriptBin "brightness"
       (builtins.readFile ../../scripts/brightness))
+    (writeShellScriptBin "wpa-add"
+      (builtins.readFile ../../scripts/wpa-add-network))
   ];
 
   programs.wezterm = {
