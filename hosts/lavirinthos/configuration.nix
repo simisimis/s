@@ -135,7 +135,7 @@
     Domains=~casa
   '';
 
-  services.logind.extraConfig = "HandlePowerKey=suspend";
+  services.logind.powerKey = "suspend";
 
   services.zfs.autoSnapshot = {
     enable = true;

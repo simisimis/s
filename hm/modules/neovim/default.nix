@@ -3,12 +3,9 @@ let
   initLua = builtins.readFile ./init.lua;
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
-    config = {
-      allowUnfree = true;
-    };
+    config = { allowUnfree = true; };
   };
-in
-{
+in {
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-unwrapped;
@@ -45,11 +42,10 @@ in
       # Snippet completion source for nvim-cmp
       cmp-vsnip
 
-
       # To enable more of the features of rust-analyzer, such as inlay hints and more!
-      rust-tools-nvim
-      rust-vim
-      copilot-vim
+      #rust-tools-nvim
+      #rust-vim
+      #copilot-vim
 
       # Snippet engine
       vim-vsnip

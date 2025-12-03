@@ -8,13 +8,13 @@ let
       android_sdk.accept_license = true;
     };
   };
-  plasticityVersion = "25.2.1";
+  plasticityVersion = "25.2.11";
   plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
     version = "${plasticityVersion}";
     src = pkgs.fetchurl {
       url =
         "https://github.com/nkallen/plasticity/releases/download/v${plasticityVersion}/Plasticity-${plasticityVersion}-1.x86_64.rpm";
-      hash = "sha256-M0TjHTTVs37QwG8XCy4+R0mD7Ttipwebd7+IHWhA7UI=";
+      hash = "sha256-aqc6CDR3yBOGaRr+VjXQrTXZKvr9kqzaqcu5y30clCA=";
     };
   });
 in {
@@ -117,14 +117,14 @@ in {
         termcolor
         crcmod
         requests
-        ruamel_yaml
+        ruamel-yaml
         pip
         yamllint
         flake8
         setuptools
         shapely
       ]))
-    gitAndTools.gitflow
+    gitflow
 
     #unstable.prusa-slicer
   ];

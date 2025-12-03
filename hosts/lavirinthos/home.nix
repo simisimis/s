@@ -11,12 +11,12 @@ in {
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
   programs.home-manager.enable = true;
+  programs.diff-so-fancy.enable = true;
   programs.git = {
-    userName = config.settings.usr.fullName;
-    userEmail = config.settings.usr.email;
-    diff-so-fancy.enable = true;
     signing.key = "55887CDF19112610";
-    extraConfig = {
+    settings = {
+      user.email = config.settings.usr.email;
+      user.name = config.settings.usr.fullName;
       github.user = config.settings.usr.username;
       alias = {
         hist =
@@ -282,7 +282,7 @@ in {
     jira-cli-go
     grpcurl
     xh
-    du-dust
+    dust
     actionlint
     tmate
     gh
@@ -298,7 +298,7 @@ in {
     ssm-session-manager-plugin
     graphviz
     exiftool
-    du-dust
+    dust
     procs
     eza
     tldr
@@ -312,7 +312,7 @@ in {
     restic
 
     #dev
-    jdk23
+    jdk25
     (google-cloud-sdk.withExtraComponents
       [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     kubectx
@@ -485,7 +485,7 @@ in {
     cdpath = [ "~/dev" ];
     initContent = ''
       source <(kubectl completion zsh)
-      export JAVA_HOME="${pkgs.jdk23}"
+      export JAVA_HOME="${pkgs.jdk25}"
       export BW_SESSION="${config.settings.services.vaultwarden.sessionId}"
       #export JIRA_API_TOKEN=""
       #export AWS_PROFILE=""

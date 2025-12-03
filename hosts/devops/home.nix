@@ -5,11 +5,8 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
-in
-{
-  imports = [
-    ../../hm/modules/helix
-  ];
+in {
+  imports = [ ../../hm/modules/helix ];
   programs.helix.enable = true;
 
   settings = import ./vars.nix;
@@ -53,14 +50,15 @@ in
     ksd
     ssm-session-manager-plugin
     postgresql
-    du-dust
+    dust
     procs
     eza
     tldr
     darktable
     ethtool
     #dev
-    (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
+    (google-cloud-sdk.withExtraComponents
+      [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     kubectx
     kubectl
     k9s
@@ -69,9 +67,7 @@ in
   ];
   systemd.user.tmpfiles.rules = [ "d %h/dev/MinaFoundation 755 - - - -" ];
   programs.zsh = {
-    cdpath = [
-      "~/dev/MinaFoundation"
-    ];
+    cdpath = [ "~/dev/MinaFoundation" ];
     initExtra = ''
       source ~/.nix-profile/etc/profile.d/nix.sh
       source <(kubectl completion zsh)

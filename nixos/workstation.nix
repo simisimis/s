@@ -4,17 +4,12 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
-in
-{
+in {
   # Extra kernel modules
   # Register a v4l2loopback device at boot
-  boot.kernelModules = [
-    "v4l2loopback"
-  ];
+  boot.kernelModules = [ "v4l2loopback" ];
   # Extra kernel modules
-  boot.extraModulePackages = [
-    config.boot.kernelPackages.v4l2loopback
-  ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
   environment.systemPackages = with pkgs; [
     linuxPackages.v4l2loopback
@@ -27,8 +22,9 @@ in
     videoDrivers = [ config.settings.hw.videoDrv ];
     displayManager.startx.enable = true;
     xkb.layout = "us";
-    xkb.options = "altwin:swap_lalt_lwin,terminate:ctrl_alt_bksp,caps:none,eurosign:e";
-    wacom.enable = true;
+    xkb.options =
+      "altwin:swap_lalt_lwin,terminate:ctrl_alt_bksp,caps:none,eurosign:e";
+    wacom.enable = false;
     #libinput.touchpad.tapping = false;
     windowManager.awesome.enable = true;
   };

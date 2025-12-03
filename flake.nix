@@ -2,9 +2,9 @@
   description = "Sims' nix config root flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager/release-25.05";
+    home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
@@ -51,7 +51,7 @@
               home = {
                 username = user;
                 homeDirectory = "/home/${user}";
-                stateVersion = "25.05";
+                stateVersion = "25.11";
               };
             }
           ];
@@ -83,7 +83,7 @@
           #postgresql_16
           #cmake
           #ninja
-          #(python312.withPackages (ps: with ps; [ pyserial west pyelftools intelhex termcolor crcmod requests ruamel_yaml pip yamllint flake8 setuptools shapely ]))
+          #(python312.withPackages (ps: with ps; [ pyserial west pyelftools intelhex termcolor crcmod requests ruamel-yaml pip yamllint flake8 setuptools shapely ]))
         ];
         shellHook = ''
           user_shell=$(getent passwd "$(whoami)" |cut -d: -f 7)

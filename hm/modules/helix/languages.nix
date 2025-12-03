@@ -3,7 +3,7 @@ with pkgs; {
   home.packages = [
     shellcheck
     nodePackages.bash-language-server
-    nodePackages.dockerfile-language-server-nodejs
+    dockerfile-language-server
     nodePackages.yaml-language-server
     nodePackages.vscode-json-languageserver
     nodePackages.prettier
@@ -136,7 +136,7 @@ with pkgs; {
       };
 
       docker-langserver = {
-        command = lib.getExe nodePackages.dockerfile-language-server-nodejs;
+        command = lib.getExe dockerfile-language-server;
         args = [ "--stdio" ];
       };
       vscode-json-language-server = {

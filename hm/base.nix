@@ -3,16 +3,10 @@
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
-    config = {
-      allowUnfree = true;
-    };
+    config = { allowUnfree = true; };
   };
-in
-{
-  imports = [
-    ./modules/starship.nix
-    ./modules/neovim
-  ];
+in {
+  imports = [ ./modules/starship.nix ./modules/neovim ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -62,6 +56,7 @@ in
   };
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     matchBlocks = {
       "kouti" = {
         user = "gitea";
@@ -75,13 +70,11 @@ in
   };
   programs.bat = {
     enable = true;
-    config = {
-      theme = "DarkNeon";
-    };
+    config = { theme = "DarkNeon"; };
   };
   programs.git = {
     enable = true;
-    extraConfig = {
+    settings = {
       hub.protocol = "https";
       color.ui = true;
       pull.rebase = true;

@@ -4,8 +4,7 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
-in
-{
+in {
 
   nix.extraOptions = ''
     keep-outputs = false
@@ -41,10 +40,7 @@ in
     overrideFolders = true;
     settings = {
 
-      devices = (lib.mapAttrs
-        (name: value: {
-          id = "${value}";
-        })
+      devices = (lib.mapAttrs (name: value: { id = "${value}"; })
         config.settings.services.syncthing.ids);
       folders = {
         "papyrus" = {
@@ -85,10 +81,7 @@ in
   environment.systemPackages = with pkgs; [
     tcpdump
     #system
-    glxinfo
-    xf86_input_wacom
-    wacomtablet
-    libwacom
+    mesa-demos
     libinput
     wev
     sshfs
@@ -145,6 +138,6 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.05"; # Did you read the comment?
+  system.stateVersion = "25.11"; # Did you read the comment?
 
 }
