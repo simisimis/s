@@ -70,7 +70,7 @@ in {
   };
   programs.bat = {
     enable = true;
-    config = { theme = "DarkNeon"; };
+    config = { theme = "TwoDark"; };
   };
   programs.git = {
     enable = true;

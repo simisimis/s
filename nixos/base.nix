@@ -90,6 +90,7 @@ in {
     curl
     dig
     neovim
+    helix
     git
     tig
     git-crypt

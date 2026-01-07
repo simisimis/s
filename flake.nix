@@ -58,6 +58,7 @@
         };
     in {
       homeConfigurations = {
+        icarus = mkHome "simonas" "icarus" "workstation";
         lavirinthos = mkHome "simonas" "lavirinthos" "workstation";
         siMONSTER = mkHome "simas" "siMONSTER" "workstation";
         kouti = mkHome "simas" "kouti" "headless";
@@ -68,6 +69,7 @@
       gnosis = self.homeConfigurations.gnosis.activationPackage;
       nixosConfigurations = {
         siMONSTER = mkHost "siMONSTER";
+        icarus = mkHost "icarus";
         lavirinthos = mkHost "lavirinthos";
         kouti = mkHost "kouti";
         clotho = mkHost "clotho";

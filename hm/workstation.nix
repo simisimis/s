@@ -62,7 +62,7 @@ in {
     })
     nemo
     nushell
-    pinentry-gtk2
+    pinentry-gnome3
 
     #web
     (pkgs.wrapFirefox
@@ -130,7 +130,8 @@ in {
   ];
 
   # services
-  services.gpg-agent.pinentry.package = pkgs.pinentry-gtk2;
+  services.gnome-keyring.enable = true;
+  services.gpg-agent.pinentry.package = pkgs.pinentry-gnome3;
 
   programs.vscode = with pkgs; {
     enable = false;
