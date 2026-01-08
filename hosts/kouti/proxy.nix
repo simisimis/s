@@ -211,12 +211,6 @@ in
             entryPoints = "https";
             tls.certResolver = "letsEncrypt";
           };
-          gitea = {
-            service = "gitea";
-            rule = "Host(`git.narbuto.lt`)";
-            entryPoints = [ "http" "https" ];
-            tls.certResolver = "letsEncrypt";
-          };
           vaultwarden = {
             service = "vaultwarden";
             rule = "Host(`vault.narbuto.lt`)";
@@ -255,7 +249,6 @@ in
         services = {
           authelia.loadBalancer.servers = [{ url = "http://localhost:9092/"; }];
           vaultwarden.loadBalancer.servers = [{ url = "http://localhost:8000/"; }];
-          gitea.loadBalancer.servers = [{ url = "http://localhost:3000/"; }];
           hass.loadBalancer.servers = [{ url = "http://localhost:8123/"; }];
           z2m.loadBalancer.servers = [{ url = "http://localhost:8521/"; }];
           esp.loadBalancer.servers = [{ url = "http://localhost:6052/"; }];
@@ -287,18 +280,6 @@ in
       DOMAIN = config.settings.services.vaultwarden.domain;
       SIGNUPS_ALLOWED = true;
     };
-  };
-  #####################
-  ### --- Gitea --- ###
-  #####################
-  services.gitea = {
-    enable = true;
-    package = unstable.gitea;
-    settings.server = {
-      SSH_DOMAIN = "kouti";
-    };
-    #user = "git";
-    #group = "users";
   };
   #######################
   ### --- ESPHome --- ###
