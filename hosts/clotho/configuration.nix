@@ -101,6 +101,7 @@
   ];
   users.users."${config.settings.usr.name}".openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIKCyMzo4Y29R3xAo4RIfGmPvNGedP9Bg5ABDtBryDKz"
   ];
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;

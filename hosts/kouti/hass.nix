@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   dataDir = "/var/lib/zigbee2mqtt";
   zigbeeStick = "/dev/serial/by-id/usb-Silicon_Labs_slae.sh_cc2652rb_stick_-_slaesh_s_iot_stuff_00_12_4B_00_23_93_3E_19-if00-port0";
@@ -424,7 +424,8 @@ in
     settings = {
       permit_join = true;
       serial.port = zigbeeStick;
-      homeassistant = true;
+      serial.adapter = "zstack";
+      homeassistant = lib.mkForce true;
       mqtt = {
         server = "mqtt://localhost:1883";
         base_topic = "zigbee2mqtt";

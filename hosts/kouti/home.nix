@@ -17,10 +17,10 @@ in
   nixpkgs.overlays = [ (import ../../overlays) ];
   programs.home-manager.enable = true;
   programs.git = {
-    userName = config.settings.usr.fullName;
-    userEmail = config.settings.usr.email;
     signing.key = "C455F25E7EB90CA0";
-    extraConfig = {
+    settings = {
+      user.email = config.settings.usr.email;
+      user.name = config.settings.usr.fullName;
       github.user = config.settings.usr.username;
     };
   };

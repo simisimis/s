@@ -35,6 +35,9 @@ in
       '';
     };
   };
+  users.users."${config.settings.usr.name}".openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIKCyMzo4Y29R3xAo4RIfGmPvNGedP9Bg5ABDtBryDKz"
+  ];
 
   #boot.kernelPackages = pkgs.linuxPackages_6_6;
 
