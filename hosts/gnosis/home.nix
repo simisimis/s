@@ -5,8 +5,7 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
-in
-{
+in {
   settings = import ./vars.nix;
   # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
@@ -17,7 +16,8 @@ in
     extraConfig = {
       github.user = config.settings.usr.username;
       alias = {
-        hist = "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        hist =
+          "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
       };
     };
   };
@@ -26,7 +26,7 @@ in
 
   wayland.windowManager.sway = {
     enable = true;
-    wrapperFeatures.gtk = true ;
+    wrapperFeatures.gtk = true;
     extraConfig = ''
       exec_always "systemctl --user restart kanshi.service"
     '';
@@ -38,17 +38,15 @@ in
         };
       };
       terminal = "alacritty";
-      output = { "*" = { bg = "~/Pictures/owl_1080.jpg fit"; } ; };
+      output = { "*" = { bg = "~/Pictures/owl_1080.jpg fit"; }; };
       gaps = {
         inner = 3;
         outer = 0;
         smartBorders = "off";
       };
-      window = {
-        border = 0;
-      };
-      keybindings = let
-        modifier = config.wayland.windowManager.sway.config.modifier;
+      window = { border = 0; };
+      keybindings =
+        let modifier = config.wayland.windowManager.sway.config.modifier;
         in lib.mkOptionDefault {
           #"${modifier}+Return" = "exec ${pkgs.termite}/bin/termite";
           "${modifier}+g" = "move workspace to output left";
@@ -57,18 +55,23 @@ in
           "${modifier}+Shift+p" = "exec wofipass";
           "${modifier}+Shift+b" = "exec wofi-emoji";
           "${modifier}+Shift+q" = "kill";
-          "${modifier}+Shift+l" = "exec swaylock -f -i ~/Pictures/texture1_1.jpg -t";
-          "${modifier}+d" = "exec ${pkgs.wofi}/bin/wofi --show run | ${pkgs.findutils}/bin/xargs swaymsg exec --";
-          "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
-          "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+          "${modifier}+Shift+l" =
+            "exec swaylock -f -i ~/Pictures/texture1_1.jpg -t";
+          "${modifier}+d" =
+            "exec ${pkgs.wofi}/bin/wofi --show run | ${pkgs.findutils}/bin/xargs swaymsg exec --";
+          "XF86AudioRaiseVolume" =
+            "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
+          "XF86AudioLowerVolume" =
+            "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
           "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
-          "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle";
+          "XF86AudioMicMute" =
+            "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle";
           "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
           "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
           "XF86AudioPlay" = "exec playerctl play-pause";
           "XF86AudioNext" = "exec playerctl next";
           "XF86AudioPrev" = "exec playerctl previous";
-        }; 
+        };
       bars = [{
         statusCommand = "-";
         command = "waybar";
@@ -114,7 +117,7 @@ in
       defaultCacheTtlSsh = 86400;
     };
   };
-  
+
   home.packages = with pkgs; [
     exiftool
     du-dust
@@ -122,8 +125,6 @@ in
     eza
     tldr
     # start wayland
-    swaylock
-    swayidle
     wl-clipboard
     ethtool
     mako # notification daemon
@@ -155,9 +156,15 @@ in
     #dev
     jdk11
     hiera-eyaml
-    ruby bundix puppet pdk
+    ruby
+    bundix
+    puppet
+    pdk
     google-cloud-sdk
-    kubectx kubectl k9s stern
+    kubectx
+    kubectl
+    k9s
+    stern
     unstable.terraform
     vagrant
     saleae-logic
@@ -237,13 +244,13 @@ in
     margin = "0,20,20";
     padding = "10";
     borderSize = 2;
-    borderColor="#414868";
+    borderColor = "#414868";
     borderRadius = 5;
     defaultTimeout = 5000;
     groupBy = "summary";
     extraConfig = ''
-    [grouped]
-    format=<b>%s</b>\n%b
+      [grouped]
+      format=<b>%s</b>\n%b
     '';
   };
 
@@ -271,12 +278,10 @@ in
     };
   };
   programs.zsh = {
-    cdpath = [
-      "~/vagrant"
-    ];
+    cdpath = [ "~/vagrant" ];
     initExtra = ''
-    export FANCYPROMPT="\[\033[38;5;202m\][\[\033[38;5;4m\]\t\[\033[38;5;202m\]] \[\033[38;5;3m\]\h \[\033[38;5;6m\]\W \[\033[38;5;41m\]≫\[\033[0m\] "
-    export JAVA_HOME="${pkgs.jdk11}"
+      export FANCYPROMPT="\[\033[38;5;202m\][\[\033[38;5;4m\]\t\[\033[38;5;202m\]] \[\033[38;5;3m\]\h \[\033[38;5;6m\]\W \[\033[38;5;41m\]≫\[\033[0m\] "
+      export JAVA_HOME="${pkgs.jdk11}"
     '';
   };
 }

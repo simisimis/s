@@ -50,18 +50,10 @@
     interfaces.wlp1s0.useDHCP = true;
 
     wireless = {
-      enable = true; # Enables wireless support via wpa_supplicant.
+      enable = false;
       interfaces = [ "wlp1s0" ];
       networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; })
-        config.settings.hw.wifi); # //
-      #{ "ssid" = {
-      # psk = "password";
-      #  extraConfig = ''
-      #    key_mgmt=NONE
-      #    '';
-      #  };
-      #};
-
+        config.settings.hw.wifi);
       extraConfig = ''
         ctrl_interface=/run/wpa_supplicant
         ctrl_interface_group=wheel

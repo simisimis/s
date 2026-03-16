@@ -22,6 +22,7 @@ in {
         };
 
         ui = {
+          default-command = "log";
           conflict-marker-style = "git";
           diff-formatter = ":git";
           movement.edit = true;

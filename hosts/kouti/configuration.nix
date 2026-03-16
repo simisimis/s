@@ -5,19 +5,17 @@ let
     system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
-in
-{
+in {
   settings = import ./vars.nix;
 
   imports = [
     ../../nixos/base.nix
     ../../modules/settings.nix
-    ./hass.nix
     ./hardware-configuration.nix
-    ./proxy.nix
     ../../modules/k3s
   ];
 
+  nix.settings.trusted-users = [ "@wheel" ];
   nixpkgs.overlays = [ (import ../../overlays) ];
 
   boot.initrd = {
@@ -28,7 +26,9 @@ in
         enable = true;
         port = 2222;
         hostKeys = [ "/etc/secrets/initrd/initrd-openssh-key" ];
-        authorizedKeys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDS2T9+Qp59L9WbAI4/tT4YgP3V4N8rLVPkLxlYDvrZ+Wz0CHzzCSWP6DsD//UIKsVkf+gG4w320mx/kj8rL+qaj6xnMheL/Pt8S4i7gt3fAknoyj9PvSY00cis8g9bWYq1kESls33zase6eaR0NAAwg+6ujc6sAGN9/ipp5ivzExo74slp0EgQpS6VAWyhxa1XOSm5iOT1poA+SSVSdWvIYcL0IiCdTMlU06MP15tHzyA8IeFLvD7WwNQjAcQmoxrxYE9+QnkOJkAkY0TyPDV47ub4VqOM3nCNWsL9MSFh9GGFNr6c6w4Xr67vm2cZFwQ2Qq4//jpXvH8hHfTbNdrN" ];
+        authorizedKeys = [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDS2T9+Qp59L9WbAI4/tT4YgP3V4N8rLVPkLxlYDvrZ+Wz0CHzzCSWP6DsD//UIKsVkf+gG4w320mx/kj8rL+qaj6xnMheL/Pt8S4i7gt3fAknoyj9PvSY00cis8g9bWYq1kESls33zase6eaR0NAAwg+6ujc6sAGN9/ipp5ivzExo74slp0EgQpS6VAWyhxa1XOSm5iOT1poA+SSVSdWvIYcL0IiCdTMlU06MP15tHzyA8IeFLvD7WwNQjAcQmoxrxYE9+QnkOJkAkY0TyPDV47ub4VqOM3nCNWsL9MSFh9GGFNr6c6w4Xr67vm2cZFwQ2Qq4//jpXvH8hHfTbNdrN"
+        ];
       };
       postCommands = ''
         echo "zfs load-key -a; killall zfs" >> /root/.profile
@@ -46,7 +46,9 @@ in
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  environment.etc."iproute2/rt_tables.d/wg.conf".text = "200 wg_table\n";
+  environment.etc."iproute2/rt_tables.d/wg.conf".text = ''
+    200 wg_table
+  '';
   networking = {
     hostId = config.settings.hw.hostId;
     hostName = config.settings.hw.hostName;
@@ -56,19 +58,8 @@ in
     wireless = {
       enable = true; # Enables wireless support via wpa_supplicant.
       interfaces = [ "wlp1s0" ];
-      networks = (lib.mapAttrs
-        (name: value: {
-          pskRaw = "${value}";
-        })
-        config.settings.hw.wifi); #//
-      #{ "ssid" = {
-      # psk = "password";
-      #  extraConfig = ''
-      #    key_mgmt=NONE
-      #    '';
-      #  };
-      #};
-
+      networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; })
+        config.settings.hw.wifi);
       extraConfig = ''
         ctrl_interface=/run/wpa_supplicant
         ctrl_interface_group=wheel
@@ -79,14 +70,12 @@ in
       address = config.settings.hw.wg.addresses;
       privateKey = config.settings.hw.wg.privateKey;
 
-      peers = lib.mapAttrsToList
-        (client: clientAttrs: {
-          publicKey = clientAttrs.publicKey;
-          allowedIPs = clientAttrs.allowedIPs;
-          endpoint = clientAttrs.endpoint;
-          persistentKeepalive = 25;
-        })
-        config.settings.hw.wg.peers;
+      peers = lib.mapAttrsToList (client: clientAttrs: {
+        publicKey = clientAttrs.publicKey;
+        allowedIPs = clientAttrs.allowedIPs;
+        endpoint = clientAttrs.endpoint;
+        persistentKeepalive = 25;
+      }) config.settings.hw.wg.peers;
       table = "wg_table";
       postUp = ''
         ip route add ${config.settings.hw.wg.ips} dev wg0 table wg_table
@@ -106,7 +95,6 @@ in
       allowedTCPPorts = [ 1400 6443 2379 2380 ];
       checkReversePath = "loose";
     };
-
 
   };
   # List packages installed in system profile. To search, run:
@@ -140,9 +128,7 @@ in
     enable = true;
     settings = {
       folders = {
-        "papyrus" = {
-          path = config.services.syncthing.dataDir + "/papyrus";
-        };
+        "papyrus" = { path = config.services.syncthing.dataDir + "/papyrus"; };
       };
     };
   };

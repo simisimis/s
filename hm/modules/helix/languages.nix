@@ -65,7 +65,7 @@ with pkgs; {
         name = "gotmpl";
         auto-format = true;
         language-servers = [ "gopls" "buffer-language-server" ];
-        file-types = [ "yaml" "tpl" ];
+        file-types = [ "gotmpl" "tpl" ];
       }
       {
         name = "toml";
@@ -74,7 +74,7 @@ with pkgs; {
       {
         name = "yaml";
         language-servers = [ "yaml-language-server" "buffer-language-server" ];
-        file-types = [ ];
+        file-types = [ "yaml" ];
       }
       {
         name = "json";

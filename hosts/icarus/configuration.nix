@@ -28,7 +28,8 @@
     };
   };
 
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_17;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
+  boot.zfs.package = pkgs.zfs_unstable;
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -40,6 +41,7 @@
     hostId = config.settings.hw.hostId;
     hostName = config.settings.hw.hostName;
     interfaces.wlp194s0.useDHCP = true;
+    interfaces.eth0.useDHCP = true;
 
     wireless = {
       enable = true; # Enables wireless support via wpa_supplicant.
@@ -126,14 +128,10 @@
     Domains=~casa
   '';
 
+  programs.nix-ld.enable = true;
   services.logind.settings.Login.HandlePowerKey = "suspend";
 
-  services.udev.packages =
-    [ pkgs.chrysalis pkgs.trezor-udev-rules pkgs.openocd ];
-  services.udev.extraRules = ''
-    # saleae logic analyser
-    SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
-  '';
+  services.udev.packages = [ pkgs.chrysalis pkgs.trezor-udev-rules ];
 
   services.trezord.enable = true;
   services.tailscale.enable = true;
@@ -194,6 +192,7 @@
   services.fprintd.enable = true;
 
   security.pam.services.swaylock.fprintAuth = true;
+  security.pam.services.hyprlock.fprintAuth = true;
   security.pam.services.sudo.fprintAuth = true;
   security.pam.services.polkit-1.fprintAuth = true;
   security.pam.services.sddm.fprintAuth = true;

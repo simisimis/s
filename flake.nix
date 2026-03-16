@@ -9,10 +9,6 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    # ipu6-softisp = {
-    #   url = "git+ssh://code.tvl.fyi/depot.git:/users/flokli/ipu6-softisp.git";
-    #   flake = false;
-    # }; #ipu6-softisp
   };
 
   outputs = { self, ... }@inputs:
@@ -56,6 +52,32 @@
             }
           ];
         };
+      mkBaseEnv = pkgs:
+        pkgs.buildEnv {
+          name = "common-docker-env";
+
+          paths = [
+            pkgs.bashInteractive
+            pkgs.cacert
+            pkgs.openssl
+            pkgs.tzdata
+            pkgs.glibcLocales
+            pkgs.coreutils
+            pkgs.findutils
+            pkgs.procps
+            pkgs.dockerTools.shadowSetup
+            pkgs.shadow
+            pkgs.which
+
+            pkgs.curl
+            pkgs.jq
+            pkgs.gnutar
+            pkgs.gzip
+            pkgs.lz4
+            pkgs.neovim
+          ];
+          pathsToLink = [ "/bin" "/etc" "/share" ];
+        };
     in {
       homeConfigurations = {
         icarus = mkHome "simonas" "icarus" "workstation";
@@ -75,13 +97,33 @@
         clotho = mkHost "clotho";
         lachesis = mkHost "lachesis";
       }; # nixosConfigurations
+      packages.radicle-node = pkgs.dockerTools.buildLayeredImage {
+        name = "simisimis/radicle-node";
+        tag = "latest";
+        contents = [ pkgs.radicle-node (mkBaseEnv pkgs) ];
+
+        config = {
+          #Entrypoint = [ "${pkgs.radicle-node}/bin/radicle-node" ];
+          Entrypoint = [ "${pkgs.bashInteractive}/bin/bash" ];
+          Env = [
+            "TZ=UTC"
+            "TZDIR=${pkgs.tzdata}/share/zoneinfo"
+            "SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
+
+            "RAD_HOME=/data/.radicle"
+          ];
+          #Cmd = [ "-p" "1925" ];
+          WorkingDir = "/data";
+        };
+      };
+
       devShell.x86_64-linux = pkgs.mkShell {
         buildInputs = with pkgs; [
           nmap
           stdenv
           openssl
           pkg-config
-          nodejs_20
+          nodejs_24
           #postgresql_16
           #cmake
           #ninja

@@ -23,8 +23,8 @@ in {
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     # start wayland
-    swaylock
-    swayidle
+    hyprlock
+    hypridle
     waybar
     wdisplays
     mako # notification daemon
@@ -75,7 +75,6 @@ in {
     feh
     imv
     gimp
-    obs-studio
     ffmpeg-full
     mpv-unwrapped
     spotify
