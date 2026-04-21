@@ -8,6 +8,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+    llm-agents.url = "github:numtide/llm-agents.nix";
 
   };
 
@@ -29,7 +30,7 @@
         inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            { _module.args = args; }
+            { _module.args = args // { llmAgents = inputs."llm-agents"; }; }
             inputs.disko.nixosModules.disko
             ./hosts/${host}/configuration.nix
           ];
@@ -38,7 +39,7 @@
         inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            { _module.args = args; }
+            { _module.args = args // { llmAgents = inputs."llm-agents"; }; }
             ./hosts/${host}/home.nix
             ./hm/base.nix
             ./hm/${type}.nix

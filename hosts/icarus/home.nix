@@ -1,5 +1,5 @@
 # lavirinthos specific home manager configuration
-{ config, pkgs, nixpkgs-unstable, lib, ... }:
+{ config, pkgs, nixpkgs-unstable, lib, llmAgents, ... }:
 let
   unstable = import nixpkgs-unstable {
     system = "x86_64-linux";
@@ -91,18 +91,18 @@ in {
     enable = true;
 
     settings = {
-      #exec-once = [ "waybar" "systemctl --user restart kanshi" ];
 
       general = {
         gaps_in = 1;
         gaps_out = 2;
       };
-      # ********** Key Bindings **********
-      # See https://wiki.hyprland.org/Configuring/Binds/ for more.
 
+      device = [{
+        name = "tpps/2-synaptics-trackpoint";
+        sensitivity = -0.9;
+      }];
       "$launcher" = "wofi --show run";
       "$browser" = "firefox";
-      #"$terminal" = "alacritty";
       "$terminal" = "wezterm";
 
       # https://wiki.hyprland.org/Configuring/Variables/#input
@@ -274,8 +274,9 @@ in {
     tldr
     darktable
     aichat
-    opencode
+    unstable.opencode
     unstable.codex
+    llmAgents.packages.${pkgs.system}.pi
 
     #system
     cifs-utils
@@ -343,6 +344,7 @@ in {
       local os = require "os";
       return {
         default_ssh_auth_sock = os.getenv 'SSH_AUTH_SOCK',
+        enable_kitty_keyboard = true,
         enable_tab_bar = false,
         harfbuzz_features = {"calt=0", "cv01", "cv02", "cv04", "ss01", "ss03", "ss04", "cv31", "cv08", "cv30", "cv27"},
         font = wezterm.font('Fira Code', { weight = 'Light'}),

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, nixpkgs-unstable, ... }:
+let
+  unstable = import nixpkgs-unstable {
+    system = "x86_64-linux";
+    config = { allowUnfree = true; };
+  };
+in {
   settings = import ./vars.nix;
 
   imports = [
@@ -102,6 +108,8 @@
     home-manager
     docker-compose
     chrysalis
+    vulkan-tools
+    unstable.llama-cpp-vulkan
   ];
 
   hardware.bluetooth.enable = true;
@@ -167,27 +175,12 @@
       };
     };
   };
-  services.ollama = {
+  services.llama-cpp = {
     enable = false;
-    #acceleration = "rocm";
+    model = "/home/${config.settings.usr.name}/dev/llm/Qwen3.5-9B-Q4_K_M.gguf";
+    package = unstable.llama-cpp-vulkan;
   };
 
-  services.open-webui = {
-    enable = false;
-    port = 11111;
-    environment = {
-      ANONYMIZED_TELEMETRY = "False";
-      DO_NOT_TRACK = "True";
-      SCARF_NO_ANALYTICS = "True";
-      OLLAMA_API_BASE_URL = "http://127.0.0.1:11434";
-      WEBUI_AUTH = "False";
-
-      ENABLE_RAG_WEB_SEARCH = "True";
-      RAG_WEB_SEARCH_ENGINE = "duckduckgo";
-      RAG_WEB_SEARCH_RESULT_COUNT = "3";
-      RAG_WEB_SEARCH_CONCURRENT_REQUESTS = "10";
-    };
-  };
   services.dbus.packages = [ pkgs.gcr ];
   services.fprintd.enable = true;
 
