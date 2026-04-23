@@ -3,26 +3,34 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    flake-utils.url = "github:numtide/flake-utils";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
-    llm-agents.url = "github:numtide/llm-agents.nix";
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs.systems.follows = "flake-utils/systems";
+    };
 
   };
 
-  outputs = { self, ... }@inputs:
+  outputs = { self, flake-utils, llm-agents, ... }@inputs:
     let
       system = "x86_64-linux";
 
+      nixpkgsConfig = {
+        allowUnfree = true;
+        android_sdk.accept_license = true;
+      };
       pkgs = import inputs.nixpkgs {
         inherit system;
-        config = { allowUnfree = true; };
+        config = nixpkgsConfig;
       };
       unstable = import inputs.nixpkgs-unstable {
         inherit system;
-        config = { allowUnfree = true; };
+        config = nixpkgsConfig;
       };
       args = inputs;
 
@@ -30,7 +38,11 @@
         inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            { _module.args = args // { llmAgents = inputs."llm-agents"; }; }
+            {
+              _module.args = args // {
+                inherit llm-agents unstable;
+              };
+            }
             inputs.disko.nixosModules.disko
             ./hosts/${host}/configuration.nix
           ];
@@ -39,7 +51,11 @@
         inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            { _module.args = args // { llmAgents = inputs."llm-agents"; }; }
+            {
+              _module.args = args // {
+                inherit llm-agents unstable;
+              };
+            }
             ./hosts/${host}/home.nix
             ./hm/base.nix
             ./hm/${type}.nix
@@ -79,7 +95,7 @@
           ];
           pathsToLink = [ "/bin" "/etc" "/share" ];
         };
-    in {
+    in flake-utils.lib.eachSystemPassThrough [ system ] (_: {
       homeConfigurations = {
         icarus = mkHome "simonas" "icarus" "workstation";
         lavirinthos = mkHome "simonas" "lavirinthos" "workstation";
@@ -89,7 +105,6 @@
         lachesis = mkHome "simas" "lachesis" "headless";
         devops = mkHome "simonas" "devops" "headless";
       };
-      gnosis = self.homeConfigurations.gnosis.activationPackage;
       nixosConfigurations = {
         siMONSTER = mkHost "siMONSTER";
         icarus = mkHost "icarus";
@@ -98,6 +113,14 @@
         clotho = mkHost "clotho";
         lachesis = mkHost "lachesis";
       }; # nixosConfigurations
+      templates = {
+        rust = {
+          path = ./templates/rust;
+          description = "Rust template, using buildRustPackage";
+        };
+      };
+      defaultTemplate = self.templates.rust;
+    }) // flake-utils.lib.eachSystem [ system ] (_: {
       packages.radicle-node = pkgs.dockerTools.buildLayeredImage {
         name = "simisimis/radicle-node";
         tag = "latest";
@@ -118,7 +141,7 @@
         };
       };
 
-      devShell.x86_64-linux = pkgs.mkShell {
+      devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           nmap
           stdenv
@@ -134,15 +157,6 @@
           user_shell=$(getent passwd "$(whoami)" |cut -d: -f 7)
           exec "$user_shell"
         '';
-
-      }; # devShell
-
-      templates = {
-        rust = {
-          path = ./templates/rust;
-          description = "Rust template, using buildRustPackage";
-        };
       };
-      defaultTemplate = self.templates.rust;
-    }; # outputs
+    }); # outputs
 }

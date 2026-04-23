@@ -1,11 +1,6 @@
 # lavirinthos specific home manager configuration
-{ config, pkgs, nixpkgs-unstable, lib, llmAgents, ... }:
-let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
-  wallpaper = ./wallpaper.jpg;
+{ config, pkgs, unstable, lib, llm-agents, ... }:
+let wallpaper = ./wallpaper.jpg;
 in {
   settings = import ./vars.nix;
   # import overlays
@@ -276,7 +271,8 @@ in {
     aichat
     unstable.opencode
     unstable.codex
-    llmAgents.packages.${pkgs.system}.pi
+    llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi
+    unstable.mongodb-compass
 
     #system
     cifs-utils

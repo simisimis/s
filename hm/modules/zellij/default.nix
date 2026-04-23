@@ -1,10 +1,5 @@
-{ lib, pkgs, nixpkgs-unstable, config, ... }:
-let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
-in {
+{ lib, pkgs, unstable, config, ... }:
+{
   config = lib.mkIf config.programs.zellij.enable {
     programs.zellij = {
       package = unstable.zellij;

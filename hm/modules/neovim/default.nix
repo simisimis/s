@@ -1,10 +1,6 @@
-{ pkgs, nixpkgs-unstable, ... }:
+{ pkgs, unstable, ... }:
 let
   initLua = builtins.readFile ./init.lua;
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
 in {
   programs.neovim = {
     enable = true;

@@ -2,13 +2,7 @@
 #    Clotho (spins the thread of life)
 #    Lachesis (measures it)
 #    Atropos (cuts it)
-{ config, lib, pkgs, nixpkgs-unstable, ... }:
-let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
-in
+{ config, lib, pkgs, unstable, ... }:
 {
   settings = import ./vars.nix;
 

@@ -1,13 +1,6 @@
 # hm workstation
-{ config, nixpkgs-unstable, pkgs, ... }:
+{ config, unstable, pkgs, ... }:
 let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = {
-      allowUnfree = true;
-      android_sdk.accept_license = true;
-    };
-  };
   plasticityVersion = "25.2.11";
   plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
     version = "${plasticityVersion}";

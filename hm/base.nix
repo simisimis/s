@@ -1,11 +1,6 @@
 # hm base
-{ config, pkgs, nixpkgs-unstable, ... }:
-let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
-in {
+{ config, pkgs, unstable, ... }:
+{
   imports = [ ./modules/starship.nix ./modules/neovim ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

@@ -1,10 +1,6 @@
 # lavirinthos specific home manager configuration
-{ config, pkgs, nixpkgs-unstable, lib, ... }:
+{ config, pkgs, unstable, lib, ... }:
 let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
   wallpaper = ./wallpaper.jpg;
 in {
   settings = import ./vars.nix;

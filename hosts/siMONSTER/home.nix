@@ -1,11 +1,5 @@
 # siMONSTER specific home manager configuration
-{ config, pkgs, nixpkgs-unstable, lib, ... }:
-let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
-in
+{ config, pkgs, unstable, lib, ... }:
 {
   settings = import ./vars.nix;
   # import overlays

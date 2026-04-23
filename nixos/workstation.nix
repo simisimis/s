@@ -1,17 +1,12 @@
-{ config, nixpkgs-unstable, ... }:
-let
-  pkgs = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
-in {
+{ config, unstable, ... }:
+{
   # Extra kernel modules
   # Register a v4l2loopback device at boot
   boot.kernelModules = [ "v4l2loopback" ];
   # Extra kernel modules
   boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with unstable; [
     linuxPackages.v4l2loopback
     chrysalis
   ];
@@ -35,7 +30,7 @@ in {
 
   # Flatpak
   services.flatpak.enable = true;
-  xdg = with pkgs; {
+  xdg = with unstable; {
     portal = {
       enable = true;
       extraPortals = [
@@ -54,7 +49,7 @@ in {
 
   # List services that you want to enable:
   services.udisks2.enable = true;
-  services.udev.packages = [ pkgs.chrysalis ];
+  services.udev.packages = [ unstable.chrysalis ];
   services.udev.extraRules = ''
     SUBSYSTEM=="usb", ATTR{idVendor}=="3297", ATTR{idProduct}=="1969",TAG+="uaccess"
   '';

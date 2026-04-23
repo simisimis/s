@@ -1,11 +1,6 @@
 # backute specific home manager configuration
-{ config, pkgs, nixpkgs-unstable, ... }:
-let
-  unstable = import nixpkgs-unstable {
-    system = "x86_64-linux";
-    config = { allowUnfree = true; };
-  };
-in {
+{ config, pkgs, unstable, ... }:
+{
   imports = [ ../../hm/modules/helix ];
   programs.helix.enable = true;
 
