@@ -1,5 +1,5 @@
 # lavirinthos specific home manager configuration
-{ config, pkgs, unstable, lib, llm-agents, ... }:
+{ config, pkgs, unstable, lib, llm-agents, rtk-nix, ... }:
 let wallpaper = ./wallpaper.jpg;
 in {
   settings = import ./vars.nix;
@@ -271,7 +271,8 @@ in {
     aichat
     unstable.opencode
     unstable.codex
-    llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi
+    llm-agents.packages.${stdenv.hostPlatform.system}.pi
+    rtk-nix.packages.${stdenv.hostPlatform.system}.rtk
     unstable.mongodb-compass
 
     #system

@@ -13,6 +13,11 @@
       url = "github:numtide/llm-agents.nix";
       inputs.systems.follows = "flake-utils/systems";
     };
+    rtk-nix = {
+      url = "github:hypervideo/rtk-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
 
   };
 
@@ -38,11 +43,7 @@
         inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            {
-              _module.args = args // {
-                inherit llm-agents unstable;
-              };
-            }
+            { _module.args = args // { inherit llm-agents unstable; }; }
             inputs.disko.nixosModules.disko
             ./hosts/${host}/configuration.nix
           ];
@@ -51,11 +52,7 @@
         inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            {
-              _module.args = args // {
-                inherit llm-agents unstable;
-              };
-            }
+            { _module.args = args // { inherit llm-agents unstable; }; }
             ./hosts/${host}/home.nix
             ./hm/base.nix
             ./hm/${type}.nix
