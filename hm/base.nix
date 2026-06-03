@@ -1,7 +1,6 @@
 # hm base
-{ config, pkgs, unstable, ... }:
-{
-  imports = [ ./modules/starship.nix ./modules/neovim ];
+{ config, pkgs, unstable, ... }: {
+  imports = [ ./modules/starship.nix ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -52,16 +51,6 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
-      "kouti" = {
-        user = "gitea";
-        identityFile = config.settings.usr.ssh.gitea.identityFile;
-        extraOptions = {
-          AddKeysToAgent = "yes";
-          PubKeyAuthentication = "yes";
-        };
-      };
-    };
   };
   programs.bat = {
     enable = true;
@@ -78,35 +67,6 @@
     };
   };
 
-  programs.tmux = {
-    enable = true;
-    terminal = "screen-256color";
-    shortcut = "s";
-    historyLimit = 30000;
-    baseIndex = 1;
-    extraConfig = ''
-      set-window-option -g mode-keys vi
-
-      # mouse select copy buffer
-      set -g mouse on
-
-      # bind broadcast toggle
-      bind-key b setw synchronize-panes
-
-      # clear scrollbuffer
-      bind-key C-l send-keys C-l \; clear-history
-
-      # format status bar
-      set -g status-left "#[fg=colour105,bg=colour241,bold] #S #[fg=colour123,bg=colour241]☵ "
-      set -g status-right ""
-      setw -g window-status-format "#[fg=colour105,bg=colour241] #I#[fg=colour105,bg=colour241] #W ⋮"
-      setw -g window-status-current-format "#[fg=colour123,bg=colour241]|#[fg=colour123,bg=colour241] ⋲ #[fg=colour123,Bg:=colour241] #W #[fg=colour123,bg=colour241] ⋺ |"
-      set -g status-bg "colour241"
-
-      # A temp file to fiddle with tmux conf
-      bind r source-file ~/.config/tmux/fiddle.conf
-    '';
-  };
   programs.starship.enable = true;
   programs.zsh = {
     enable = true;
@@ -117,7 +77,6 @@
       save = 50000;
       ignoreDups = true;
     };
-    #shellAliases = import ./home/aliases.nix;
     shellAliases = {
       ls = "ls -F --color=auto";
       ll = "ls -lh";
@@ -159,15 +118,11 @@
       export PATH="$HOME/bin:$HOME/.cargo/bin:$GOPATH/bin:$PATH"
     '';
     sessionVariables = rec {
-      #NVIM_TUI_ENABLE_TRUE_COLOR = "1";
-      #HOME_MANAGER_CONFIG = /b/etc/nix/home.nix;
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=3";
-      #DEV_ALLOW_ITERM2_INTEGRATION = "1";
 
       EDITOR = "hx";
       VISUAL = EDITOR;
       GIT_EDITOR = EDITOR;
-      #BAT_THEME="dark_neon";
       # java apps on wayland like android-studio or arduino
       _JAVA_AWT_WM_NONREPARENTING = 1;
       LIBVA_DRIVER_NAME = "iHD";

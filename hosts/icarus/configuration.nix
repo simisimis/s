@@ -1,5 +1,14 @@
 { config, lib, pkgs, unstable, ... }:
-{
+let
+  zfsCompatibleKernelPackages = lib.filterAttrs (name: kernelPackages:
+    (builtins.match "linux_[0-9]+_[0-9]+" name) != null
+    && (builtins.tryEval kernelPackages).success
+    && (!kernelPackages.${config.boot.zfs.package.kernelModuleAttribute}.meta.broken))
+    pkgs.linuxKernel.packages;
+  latestKernelPackage = lib.last
+    (lib.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version))
+      (builtins.attrValues zfsCompatibleKernelPackages));
+in {
   settings = import ./vars.nix;
 
   imports = [
@@ -16,6 +25,9 @@
     enable = true;
     enable32Bit = true;
   };
+
+  services.seatd.enable = true;
+
   services.zfs = {
     trim.enable = true;
     autoScrub.enable = true;
@@ -29,8 +41,9 @@
     };
   };
 
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
+  boot.kernelPackages = latestKernelPackage;
   boot.zfs.package = pkgs.zfs_unstable;
+  boot.zfs.forceImportRoot = false;
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -48,19 +61,15 @@
       enable = true; # Enables wireless support via wpa_supplicant.
       interfaces = [ "wlp194s0" ];
       networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; })
-        config.settings.hw.wifi); # //
-      #{ "ssid" = {
-      # psk = "password";
-      #  extraConfig = ''
-      #    key_mgmt=NONE
-      #    '';
-      #  };
-      #};
+        config.settings.hw.wifi) // {
+          "SPACES" = {
+            extraConfig = ''
+              key_mgmt=NONE
+            '';
+          };
+        };
 
-      extraConfig = ''
-        ctrl_interface=/run/wpa_supplicant
-        ctrl_interface_group=wheel
-      '';
+      userControlled = true;
     };
 
     wg-quick.interfaces.wg0 = {
@@ -118,19 +127,21 @@
     storageDriver = "zfs";
   };
   users.users."${config.settings.usr.name}" = {
-    extraGroups = [ "trezord" ];
+    extraGroups = [ "trezord" "seat" "wpa_supplicant" ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
     ];
   };
 
-  services.resolved.enable = true;
-  services.resolved.extraConfig = ''
-    [Resolve]
-    DNS=${lib.concatStringsSep " " config.settings.hw.wg.dns}
-    Domains=~casa
-  '';
+  services.resolved = {
+    enable = true;
+    settings.Resolve = {
+      DNS = config.settings.hw.wg.dns;
+      Domains = [ "~casa" ];
+    };
+  };
 
+  programs.dconf.enable = true;
   programs.nix-ld.enable = true;
   services.logind.settings.Login.HandlePowerKey = "suspend";
 
@@ -179,7 +190,6 @@
   services.dbus.packages = [ pkgs.gcr ];
   services.fprintd.enable = true;
 
-  security.pam.services.swaylock.fprintAuth = true;
   security.pam.services.hyprlock.fprintAuth = true;
   security.pam.services.sudo.fprintAuth = true;
   security.pam.services.polkit-1.fprintAuth = true;

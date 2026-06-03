@@ -2,18 +2,17 @@
 with pkgs; {
   home.packages = [
     shellcheck
-    nodePackages.bash-language-server
+    bash-language-server
     dockerfile-language-server
-    nodePackages.yaml-language-server
-    nodePackages.vscode-json-languageserver
-    nodePackages.prettier
+    yaml-language-server
+    vscode-json-languageserver
+    prettier
     nixfmt-classic
     nil
     clang-tools
     terraform-ls
     gopls
     rustfmt
-    helix-gpt
     shfmt
     typescript-language-server
   ];
@@ -98,18 +97,9 @@ with pkgs; {
       }
     ];
     language-server = {
-      gpt = {
-        command = lib.getExe helix-gpt;
-        args = [
-          "--handler"
-          "copilot"
-          "--copilotApiKey"
-          "${config.settings.programs.helix.copilotApiKey}"
-        ];
-      };
       buffer-language-server = { command = "buffer-language-server"; };
       bash-language-server = {
-        command = lib.getExe nodePackages.bash-language-server;
+        command = lib.getExe bash-language-server;
         args = [ "start" ];
       };
       gopls = { command = lib.getExe gopls; };
@@ -125,7 +115,7 @@ with pkgs; {
         };
       };
       yaml-language-server = {
-        command = lib.getExe nodePackages.yaml-language-server;
+        command = lib.getExe yaml-language-server;
         args = [ "--stdio" ];
         config = { yaml.keyOrdering = false; };
       };
@@ -140,7 +130,7 @@ with pkgs; {
         args = [ "--stdio" ];
       };
       vscode-json-language-server = {
-        command = lib.getExe nodePackages.vscode-json-languageserver;
+        command = lib.getExe vscode-json-languageserver;
         args = [ "--stdio" ];
         config = { provideFormatter = true; };
       };

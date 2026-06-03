@@ -1,5 +1,4 @@
-{ config, lib, pkgs, unstable, ... }:
-{
+{ config, lib, pkgs, unstable, ... }: {
 
   nix.extraOptions = ''
     keep-outputs = false
@@ -46,17 +45,15 @@
     };
   };
   programs.zsh.enable = true;
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
     mutableUsers = false;
     defaultUserShell = pkgs.zsh;
-    extraGroups.vboxusers.members = [ config.settings.usr.name ];
     users."${config.settings.usr.name}" = {
       createHome = true;
       home = "/home/${config.settings.usr.name}";
       isNormalUser = true;
       group = "users";
-      extraGroups = [ "wheel" "audio" "video" "docker" "vboxusers" "dialout" ];
+      extraGroups = [ "wheel" "audio" "video" "docker" "input" "dialout" ];
       useDefaultShell = true;
       hashedPassword = config.settings.usr.pwdHash;
     };
@@ -134,6 +131,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
+  system.stateVersion = "26.05"; # Did you read the comment?
 
 }

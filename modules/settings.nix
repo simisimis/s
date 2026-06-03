@@ -116,10 +116,6 @@ with lib;
           };
         };
       };
-      programs.helix.copilotApiKey = mkOption {
-        type = with types; uniq str;
-        description = "Copilot API key for helix-gpt";
-      };
       services = {
         jira = {
           apiToken = mkOption {

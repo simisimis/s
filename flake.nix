@@ -2,26 +2,16 @@
   description = "Sims' nix config root flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
-    llm-agents = {
-      url = "github:numtide/llm-agents.nix";
-      inputs.systems.follows = "flake-utils/systems";
-    };
-    rtk-nix = {
-      url = "github:hypervideo/rtk-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-
   };
 
-  outputs = { self, flake-utils, llm-agents, ... }@inputs:
+  outputs = { self, flake-utils, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -43,7 +33,7 @@
         inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            { _module.args = args // { inherit llm-agents unstable; }; }
+            { _module.args = args // { inherit unstable; }; }
             inputs.disko.nixosModules.disko
             ./hosts/${host}/configuration.nix
           ];
@@ -52,7 +42,7 @@
         inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            { _module.args = args // { inherit llm-agents unstable; }; }
+            { _module.args = args // { inherit unstable; }; }
             ./hosts/${host}/home.nix
             ./hm/base.nix
             ./hm/${type}.nix
@@ -61,7 +51,7 @@
               home = {
                 username = user;
                 homeDirectory = "/home/${user}";
-                stateVersion = "25.11";
+                stateVersion = "26.05";
               };
             }
           ];
@@ -95,7 +85,6 @@
     in flake-utils.lib.eachSystemPassThrough [ system ] (_: {
       homeConfigurations = {
         icarus = mkHome "simonas" "icarus" "workstation";
-        lavirinthos = mkHome "simonas" "lavirinthos" "workstation";
         siMONSTER = mkHome "simas" "siMONSTER" "workstation";
         kouti = mkHome "simas" "kouti" "headless";
         clotho = mkHome "simas" "clotho" "headless";
@@ -105,7 +94,6 @@
       nixosConfigurations = {
         siMONSTER = mkHost "siMONSTER";
         icarus = mkHost "icarus";
-        lavirinthos = mkHost "lavirinthos";
         kouti = mkHost "kouti";
         clotho = mkHost "clotho";
         lachesis = mkHost "lachesis";

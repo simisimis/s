@@ -1,10 +1,8 @@
-# lavirinthos specific home manager configuration
-{ config, pkgs, unstable, lib, llm-agents, rtk-nix, ... }:
-let wallpaper = ./wallpaper.jpg;
-in {
+# host specific home manager configuration
+{ config, pkgs, unstable, ... }: {
   settings = import ./vars.nix;
-  # import overlays
   nixpkgs.overlays = [ (import ../../overlays) ];
+
   programs.home-manager.enable = true;
   programs.diff-so-fancy.enable = true;
   programs.git = {
@@ -24,149 +22,10 @@ in {
   home.username = config.settings.usr.name;
   home.homeDirectory = "/home/${config.settings.usr.name}";
 
-  wayland.windowManager.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-    extraConfig = ''
-      exec_always "systemctl --user restart kanshi.service"
-    '';
-    config = {
-      modifier = "Mod4";
-      input = {
-        "type:keyboard" = {
-          xkb_layout = "us,lt,gr";
-          xkb_options = "ctrl:nocaps,grp:ctrl_space_toggle";
-        };
-      };
-      terminal = "wezterm";
-      output."*".bg = "${wallpaper} fit";
-      gaps = {
-        inner = 3;
-        outer = 0;
-        smartBorders = "off";
-      };
-      window = {
-        titlebar = false;
-        border = 0;
-      };
-      floating = { titlebar = false; };
-      keybindings =
-        let modifier = config.wayland.windowManager.sway.config.modifier;
-        in lib.mkOptionDefault {
-          "${modifier}+g" = "move workspace to output left";
-          "${modifier}+b" = "move workspace to output up";
-          "${modifier}+Shift+t" = "exec trimgrim";
-          "${modifier}+Shift+p" = "exec wofipass";
-          "${modifier}+Shift+b" = "exec wofi-emoji";
-          "${modifier}+Shift+q" = "kill";
-          "${modifier}+Shift+l" =
-            "exec swaylock -f -i ~/Pictures/texture1_1.jpg -t";
-          "${modifier}+d" =
-            "exec ${pkgs.wofi}/bin/wofi --show run | ${pkgs.findutils}/bin/xargs swaymsg exec --";
-          "XF86AudioRaiseVolume" =
-            "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
-          "XF86AudioLowerVolume" =
-            "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
-          "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
-          "XF86AudioMicMute" =
-            "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle";
-          "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
-          "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
-          "XF86AudioPlay" = "exec playerctl play-pause";
-          "XF86AudioNext" = "exec playerctl next";
-          "XF86AudioPrev" = "exec playerctl previous";
-        };
-      bars = [{
-        statusCommand = "-";
-        command = "waybar";
-      }];
-    };
-  };
   wayland.windowManager.hyprland = {
     enable = true;
-
-    settings = {
-
-      general = {
-        gaps_in = 1;
-        gaps_out = 2;
-      };
-
-      device = [{
-        name = "tpps/2-synaptics-trackpoint";
-        sensitivity = -0.9;
-      }];
-      "$launcher" = "wofi --show run";
-      "$browser" = "firefox";
-      "$terminal" = "wezterm";
-
-      # https://wiki.hyprland.org/Configuring/Variables/#input
-      input = {
-        kb_layout = "us,lt,gr";
-        kb_options = "ctrl:nocaps,grp:ctrl_space_toggle";
-      };
-
-      bind = [
-        # Launch programs.
-        "SUPER, D, exec, $launcher"
-
-        "SUPER, Return, exec, $terminal"
-        # Quit current program.
-        "SUPER SHIFT, Q, killactive"
-        # Toggle fullscreen.
-        "SUPER, F, fullscreen"
-        # Focus windows.
-        "SUPER, up, movefocus, u"
-        "SUPER, down, movefocus, d"
-        "SUPER, left, movefocus, l"
-        "SUPER, right, movefocus, r"
-        # Focus workspace by number.
-        "SUPER, 1, workspace, 1"
-        "SUPER, 2, workspace, 2"
-        "SUPER, 3, workspace, 3"
-        "SUPER, 4, workspace, 4"
-        "SUPER, 5, workspace, 5"
-        "SUPER, 6, workspace, 6"
-        "SUPER, 7, workspace, 7"
-        "SUPER, 8, workspace, 8"
-        # Focus prev/next workspace.
-        "CTRL SUPER, left, workspace, r-1"
-        "CTRL SUPER, right, workspace, r+1"
-        # Send window to the given desktop.
-        "SUPER SHIFT, 1, movetoworkspace, 1"
-        "SUPER SHIFT, 2, movetoworkspace, 2"
-        "SUPER SHIFT, 3, movetoworkspace, 3"
-        "SUPER SHIFT, 4, movetoworkspace, 4"
-        "SUPER SHIFT, 5, movetoworkspace, 5"
-        "SUPER SHIFT, 6, movetoworkspace, 6"
-        "SUPER SHIFT, 7, movetoworkspace, 7"
-        "SUPER SHIFT, 8, movetoworkspace, 8"
-
-        # Print screen
-        "SUPER SHIFT, T, exec, trimgrim"
-        # Insert emoji
-        "SUPER SHIFT, B, exec, wofi-emoji"
-        # Quit Hyprland.
-        "SUPER SHIFT, C, exit"
-      ];
-      # Move/resize windows with super + drag
-      bindm =
-        [ "SUPER, mouse:272, movewindow" "SUPER, mouse:273, resizewindow" ];
-
-      # https://wiki.hyprland.org/Configuring/Variables/#misc
-      misc = { force_default_wallpaper = 2; };
-      # https://easings.net/#easeOutQuint
-      bezier = "ease_out_quint, 0.22, 1, 0.36, 1";
-      # Disable all animations, except for workspace switching.
-      animation = [
-        "workspaces, 1, 5, ease_out_quint, slide"
-        "windows, 0"
-        "layers, 0"
-        "fade, 0"
-        "border, 0"
-        "borderangle, 0"
-      ];
-    };
+    configType = "lua";
+    extraConfig = builtins.readFile ./hyprland.lua;
   };
   services.kanshi.enable = true;
   services.kanshi.systemdTarget = "hyprland-session.target";
@@ -212,6 +71,22 @@ in {
         scale = 1.0;
       }];
     }
+    {
+      profile.name = "office";
+      profile.outputs = [
+        {
+          criteria = "Samsung Electric Company S32B80P HNBWA00004";
+          position = "0,0";
+          scale = 1.5;
+          mode = "3840x2160@60.00Hz";
+          status = "enable";
+        }
+        {
+          criteria = "eDP-1";
+          status = "disable";
+        }
+      ];
+    }
   ];
   services = {
     gpg-agent = {
@@ -224,43 +99,23 @@ in {
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    zoom-us
-    blender-hip
-    helm-docs
+    blender
     gsettings-desktop-schemas
     arduino-ide
-    kustomize
     libGL
-    gping
-    chromium
-    #logseq
     subsurface
     mtr
-    ansible
     bambu-studio
-    nodejs-slim_20
-    unstable.zed-editor
+    nodejs-slim_26
     just
     pre-commit
-    ec2-api-tools
     unstable.prusa-slicer
-    jira-cli-go
     grpcurl
     xh
     dust
     actionlint
     tmate
     gh
-    #unstable.awscli2
-    awscli2
-    eksctl
-    eks-node-viewer
-    kubernetes-helm
-    kubecolor
-    krew
-    unstable.helmfile
-    ksd
-    ssm-session-manager-plugin
     graphviz
     exiftool
     dust
@@ -268,12 +123,10 @@ in {
     eza
     tldr
     darktable
-    aichat
-    unstable.opencode
     unstable.codex
-    llm-agents.packages.${stdenv.hostPlatform.system}.pi
-    rtk-nix.packages.${stdenv.hostPlatform.system}.rtk
-    unstable.mongodb-compass
+    pi-coding-agent
+    rtk
+    meld
 
     #system
     cifs-utils
@@ -281,18 +134,31 @@ in {
     restic
 
     #dev
-    jdk25
-    (google-cloud-sdk.withExtraComponents
-      [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
+    helm-docs
+    kustomize
+    ec2-api-tools
+    awscli2
+    #eksctl
+    #eks-node-viewer
+    #ssm-session-manager-plugin
+    kubernetes-helm
+    kubecolor
+    krew
+    unstable.helmfile
+    ksd
+    #(google-cloud-sdk.withExtraComponents
+    #  [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     doctl
     kubectx
     kubectl
     k9s
     stern
     unstable.terraform
-    saleae-logic
+
+    #saleae-logic
     dioxus-cli
     radicle-node
+    jdk25
 
     #web
     unstable.ledger-live-desktop
@@ -502,21 +368,18 @@ in {
 
   programs.ssh = {
     extraOptionOverrides = { CanonicalizeHostname = "yes"; };
-
-    matchBlocks = {
+    settings = {
       "*.zeko.io" = {
-        user = "nixos";
-        identityFile = config.settings.usr.ssh.hz.identityFile;
+        User = "nixos";
+        IdentityFile = config.settings.usr.ssh.hz.identityFile;
         port = 2203;
-        extraOptions = {
-          AddKeysToAgent = "yes";
-          PubKeyAuthentication = "yes";
-          ControlMaster = "auto";
-          ControlPath = "~/.ssh/master-%r@%h:%p";
-          ControlPersist = "600";
-          StrictHostKeyChecking = "no";
-          UserKnownHostsFile = "/dev/null";
-        };
+        AddKeysToAgent = "yes";
+        PubKeyAuthentication = "yes";
+        ControlMaster = "auto";
+        ControlPath = "~/.ssh/master-%r@%h:%p";
+        ControlPersist = "600";
+        StrictHostKeyChecking = "no";
+        UserKnownHostsFile = "/dev/null";
       };
     };
   };

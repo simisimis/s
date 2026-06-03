@@ -1,5 +1,5 @@
 # hm workstation
-{ config, unstable, pkgs, ... }:
+{ lib, config, unstable, pkgs, ... }:
 let
   plasticityVersion = "25.2.11";
   plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
@@ -16,6 +16,7 @@ in {
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     # start wayland
+    blueman
     hyprlock
     hypridle
     waybar
@@ -125,119 +126,12 @@ in {
   services.gnome-keyring.enable = true;
   services.gpg-agent.pinentry.package = pkgs.pinentry-gnome3;
 
-  programs.vscode = with pkgs; {
-    enable = false;
-    profiles.default = {
-      extensions = with vscode-extensions; [
-        golang.go
-        hashicorp.terraform
-        vscodevim.vim
-        redhat.vscode-yaml
-        redhat.java
-        ms-vscode-remote.remote-ssh
-
-        # third party extensions
-        #arrterian.nix-env-selector
-        brettm12345.nixfmt-vscode
-        bbenoist.nix
-      ];
-      userSettings = {
-        "telemetry.enableCrashReporter" = false;
-        "telemetry.enableTelemetry" = false;
-        # ViM settings
-        "vim.normalModeKeyBindingsNonRecursive" = [
-          {
-            "before" = [ "u" ];
-            "after" = [ ];
-            "commands" = [{
-              "command" = "undo";
-              "args" = [ ];
-            }];
-          }
-          {
-            "before" = [ "<C-r>" ];
-            "after" = [ ];
-            "commands" = [{
-              "command" = "redo";
-              "args" = [ ];
-            }];
-          }
-        ];
-        "go.toolsManagement.autoUpdate" = false;
-        "window.zoomLevel" = 0;
-        "editor.formatOnSave" = true;
-
-        "workbench.colorTheme" = "Solarized Light";
-        "workbench.iconTheme" = null;
-        "workbench.colorCustomizations" = {
-          "editor.selectionBackground" = "#edcda8";
-          "editor.selectionHighlightBackground" = "#edcda8";
-        };
-        "explorer.confirmDragAndDrop" = false;
-        "search.useIgnoreFiles" = false;
-        "explorer.confirmDelete" = false;
-        "editor.fontFamily" =
-          "'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
-        "java.jdt.ls.java.home" = "${pkgs.jdk11}/lib/openjdk";
-        "java.configuration.runtimes" = [{
-          "name" = "JavaSE-11";
-          "path" = "${pkgs.jdk11}/lib/openjdk";
-          "default" = true;
-        }];
-        "java.project.referencedLibraries" =
-          [ "/home/snarbutas/development/java/algorithmsp1/lib/algs4.jar" ];
-      };
-    };
-  };
   programs.zellij.enable = true;
   programs.helix.enable = true;
   programs.jujutsu.enable = true;
   programs.zathura.enable = true;
   programs.rofi.enable = true;
   programs.rofi.theme = "Pop-Dark.rasi";
-  programs.termite = {
-    enable = true;
-    font = "Meslo LG S DZ 12";
-    backgroundColor = "rgba(63, 63, 63, 0.5)";
-    scrollbackLines = 10000;
-    foregroundColor = "dedede";
-    foregroundBoldColor = "dedede";
-    cursorColor = "#6f6f6f";
-    colorsExtra = ''
-      # black
-      color0  = #2e3436
-      color8  = #555753
-
-      # red
-      color1  = #fc3e3e
-      color9  = #f06464
-
-      # green
-      color2  = #66b31e`
-      color10 = #8ae234
-
-      # yellow
-      color3  = #f6d922
-      color11 = #fce94f
-
-      # blue
-      color4  = #5183c4
-      color12 = #729fcf
-
-      # magenta
-      color5  = #c36ccf
-      color13 = #c164b6
-
-      # cyan
-      color6  = #19a5a7
-      color14 = #429bf1
-
-      # white
-      color7  = #d3d7cf
-      color15 = #eeeeec
-
-    '';
-  };
 
   home.file.".local/share/applications/browser.desktop".text = ''
     #!/usr/bin/env xdg-open
@@ -276,18 +170,16 @@ in {
   };
   programs.ssh = {
     enable = true;
-    matchBlocks = {
+    settings = {
       "192.168.178.100" = {
-        user = "simas";
-        identityFile = config.settings.usr.ssh.backute.identityFile;
+        User = "simas";
+        IdentityFile = config.settings.usr.ssh.backute.identityFile;
       };
       "github.com" = {
-        user = "git";
+        User = "git";
         identityFile = config.settings.usr.ssh.github.identityFile;
-        extraOptions = {
-          AddKeysToAgent = "yes";
-          PubKeyAuthentication = "yes";
-        };
+        AddKeysToAgent = "yes";
+        PubKeyAuthentication = "yes";
       };
     };
   };
@@ -296,7 +188,7 @@ in {
     systemd.enable = true;
     settings = [{
       "height" = 30;
-      "modules-left" = [ "sway/workspaces" "hyprland/workspaces" ];
+      "modules-left" = [ "hyprland/workspaces" ];
       "modules-right" = [
         "network"
         "network#wl"
@@ -304,15 +196,20 @@ in {
         "cpu"
         "memory"
         "pulseaudio"
-        "sway/language"
         "hyprland/language"
         "custom/date"
+        "bluetooth"
         "tray"
         "battery"
         "custom/power"
       ];
       "hyprland/workspaces" = {
         format = " {icon} ";
+        on-scroll-up =
+          "hyprctl dispatch 'hl.dsp.focus({ workspace = \"-1\" })'";
+        on-scroll-down =
+          "hyprctl dispatch 'hl.dsp.focus({ workspace = \"+1\" })'";
+
         format-icons = {
           "1" = "🖋";
           "2" = "";
@@ -330,28 +227,6 @@ in {
           "4" = [ ];
           "5" = [ ];
           "6" = [ ];
-        };
-      };
-      "sway/workspaces" = {
-        all-outputs = true;
-        format = " {icon} ";
-        persistent_workspaces = {
-          "1" = [ ];
-          "2" = [ ];
-          "3" = [ ];
-          "4" = [ ];
-          "5" = [ ];
-        };
-        format-icons = {
-          "1" = "";
-          "2" = "";
-          "3" = "";
-          "4" = "";
-          "5" = "";
-          "6" = "🖋";
-          "urgent" = "";
-          "focused" = "";
-          "default" = "";
         };
       };
       "backlight" = {
@@ -414,6 +289,13 @@ in {
         icon-size = 21;
         spacing = 10;
       };
+      "bluetooth" = {
+        format-on = "";
+        format-connected = " {device_alias}";
+        format-off = "";
+        format-disabled = "";
+        on-click-right = "${lib.getExe' pkgs.blueman "blueman-manager"}";
+      };
       "custom/date" = {
         format = "{}";
         return-type = "json";
@@ -425,16 +307,6 @@ in {
         on-click =
           "swaynag -m'Are you sure?' -b 'Suspend' 'systemctl suspend; pkill swaynag'";
         tooltip = false;
-      };
-      "custom/vpn" = {
-        interval = 15;
-        return-type = "json";
-        format = "{icon}";
-        format-icons = [ "" "" ];
-        exec = "exec vpn-handler status json";
-        on-click = "exec vpn-handler start from-other";
-        on-click-middle = "exec vpn-handler stop";
-        on-click-right = "exec vpn-handler start tunnel-all";
       };
     }];
     style = ''
@@ -506,7 +378,7 @@ in {
           margin-right: 0;
       }
 
-      #backlight, #cpu, #memory, #language, #custom-date, #custom-vpn, #battery, #pulseaudio, #network, #tray {
+      #backlight, #cpu, #memory, #language, #bluetooth, #custom-date, #battery, #pulseaudio, #network, #tray {
         background-color: #44485b;
         padding: 5px 10px;
         margin: 2px 0px 0px 0px;
@@ -553,12 +425,8 @@ in {
           color: #4ddede;
       }
 
-      #custom-vpn {
-          color: #e75d4a;
-      }
-
-      #custom-vpn.connected {
-          color: #68de4d;
+      #bluetooth {
+          color: #429bf1;
       }
 
       #custom-power {
@@ -685,7 +553,7 @@ in {
   gtk = {
     enable = true;
     font.name = "Noto Sans";
-    theme.name = "Adwaita Dark";
+    theme.name = "Adwaita-dark";
     theme.package = pkgs.gnome-themes-extra;
     gtk3.extraConfig = { gtk-application-prefer-dark-theme = true; };
     gtk4.extraConfig = { gtk-application-prefer-dark-theme = true; };

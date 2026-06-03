@@ -4,6 +4,7 @@ in {
 
   config = lib.mkIf config.programs.jujutsu.enable {
     home.packages = [ pkgs.jj-fzf pkgs.lazyjj ] ++ guiTools;
+    programs.jjui.enable = true;
     programs.git.ignores = [ ".jj*" ];
     programs.jujutsu = {
       settings = {

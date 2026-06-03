@@ -1,5 +1,4 @@
-{ config, unstable, ... }:
-{
+{ config, unstable, ... }: {
   # Extra kernel modules
   # Register a v4l2loopback device at boot
   boot.kernelModules = [ "v4l2loopback" ];
@@ -26,7 +25,7 @@
   services.libinput.enable = true;
 
   # Virtualization
-  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enable = false;
 
   # Flatpak
   services.flatpak.enable = true;
