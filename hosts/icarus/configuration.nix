@@ -20,6 +20,9 @@ in {
   ];
   nixpkgs.overlays = [ (import ../../overlays) ];
   nix.settings.trusted-users = [ "@wheel" ];
+  nix.settings.access-tokens = [
+    "github.com=${config.settings.platform.github.accessToken}"
+  ];
 
   hardware.graphics = {
     enable = true;

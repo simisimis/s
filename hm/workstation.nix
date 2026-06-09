@@ -11,7 +11,7 @@ let
     };
   });
 in {
-  imports = [ ./modules/zellij ./modules/helix ./modules/jujutsu ];
+  imports = [ ./modules/zellij ./modules/helix ./modules/jujutsu ./modules/hyprland ];
 
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [

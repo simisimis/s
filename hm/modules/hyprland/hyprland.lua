@@ -10,7 +10,7 @@ hl.config({
   general = {
     gaps_in = 1,
     gaps_out = 2,
-    layout = "scrolling",
+    layout = "dwindle",
   },
   input = {
     kb_layout = "us,lt,gr",
@@ -19,26 +19,11 @@ hl.config({
   misc = {
     force_default_wallpaper = 2,
   },
-  scrolling = {
-    column_width = 0.667,
-    focus_fit_method = 1,
-    follow_focus = true,
-    follow_min_visible = 0.4,
-    fullscreen_on_one_column = false,
-    explicit_column_widths = "0.333, 0.667, 1.0",
-  },
-  gestures = {
-    scrolling = {
-      move_snap_to_grid = true,
-      move_snap_cursor = true,
-    },
-  },
-})
 
-hl.gesture({
-  fingers = 3,
-  direction = "horizontal",
-  action = "scroll_move",
+  dwindle = {
+    preserve_split = true,
+    smart_split = true,
+  },
 })
 
 hl.device({
@@ -78,7 +63,7 @@ hl.bind("SUPER + F", hl.dsp.window.fullscreen())
 
 -- Focus windows.
 for _, direction in ipairs({ "up", "down", "left", "right" }) do
-  hl.bind("SUPER + " .. direction, hl.dsp.focus({ direction = direction }))
+  hl.bind("CTRL + SUPER + " .. direction, hl.dsp.focus({ direction = direction }))
 end
 
 -- Focus and move to numbered workspaces.
@@ -88,15 +73,8 @@ for workspace = 1, 8 do
 end
 
 -- Focus prev/next workspace.
-hl.bind("CTRL + SUPER + left", hl.dsp.focus({ workspace = "r-1" }))
-hl.bind("CTRL + SUPER + right", hl.dsp.focus({ workspace = "r+1" }))
-
--- Scrolling layout controls.
-hl.bind("SUPER + H", hl.dsp.layout("move -col"))
-hl.bind("SUPER + L", hl.dsp.layout("move +col"))
-hl.bind("SUPER + minus", hl.dsp.layout("colresize -conf"))
-hl.bind("SUPER + equal", hl.dsp.layout("colresize +conf"))
-hl.bind("SUPER + A", hl.dsp.layout("fit all"))
+hl.bind("SUPER + left", hl.dsp.focus({ workspace = "r-1" }))
+hl.bind("SUPER + right", hl.dsp.focus({ workspace = "r+1" }))
 
 -- Utilities.
 hl.bind("SUPER + SHIFT + T", hl.dsp.exec_cmd("trimgrim"))

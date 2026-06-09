@@ -39,7 +39,7 @@
     xdg.configFile."zellij/layouts/layout.kdl".source = ./layout.kdl;
 
     programs.zsh.initContent = lib.mkOrder 550 ''
-      if [[ $TERM != "screen-256color" && $TERM != "linux" && -z "$ZELLIJ" ]] ; then
+      if [[ -n "$WEZTERM_PANE" && $TERM != "screen-256color" && $TERM != "linux" && -z "$ZELLIJ" ]] ; then
         if [[ $(zellij ls 2>/dev/null |grep ^work$) = "work" ]]; then
           zellij attach 'work'
         else

@@ -11,6 +11,12 @@ with lib;
           accessKey = mkOption { type = with types; uniq str; };
           accessSecret = mkOption { type = with types; uniq str; };
         };
+        github = {
+          accessToken = mkOption {
+            type = with types; uniq str;
+            description = "GitHub access token for Nix";
+          };
+        };
       };
       usr = {
         name = mkOption {
