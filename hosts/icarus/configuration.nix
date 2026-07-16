@@ -86,14 +86,14 @@ in {
         persistentKeepalive = 25;
       }) config.settings.hw.wg.peers;
       table = "wg_table";
-      postUp = ''
-        ip route add ${config.settings.hw.wg.ips} dev wg0 table wg_table
-        ip rule add to ${config.settings.hw.wg.ips} table wg_table priority 100
-      '';
-      postDown = ''
-        ip route del ${config.settings.hw.wg.ips} dev wg0 table wg_table
-        ip rule del to ${config.settings.hw.wg.ips} table wg_table priority 100
-      '';
+      postUp = lib.concatMapStringsSep "\n" (cidr: ''
+        ip route add ${cidr} dev wg0 table wg_table
+        ip rule add to ${cidr} table wg_table priority 100
+      '') config.settings.hw.wg.ips;
+      postDown = lib.concatMapStringsSep "\n" (cidr: ''
+        ip rule del to ${cidr} table wg_table priority 100
+        ip route del ${cidr} dev wg0 table wg_table
+      '') config.settings.hw.wg.ips;
     };
 
     firewall = {

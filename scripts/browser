@@ -1,12 +1,22 @@
 #!/usr/bin/env bash
-menu=$(echo -e "firefox \nbrave --profile-directory=Default\n| wl-copy -n\n" | wofi --show=dmenu -p "Open URL with:" )
-STR=$@
-#SUB='meet.google.com'
-#if [[ "$STR" == *"$SUB"* ]]; then
-#  STR="${STR}&authuser=1"
-#fi
-if [[ $menu == \|* ]]; then
-    eval echo \"$STR\" $menu > /dev/null 2>&1 &
-else
-    eval $menu \"$STR\" > /dev/null 2>&1 &
-fi
+menu=$(printf '%s\n' \
+  'zen' \
+  'firefox' \
+  'brave --profile-directory=Default' \
+  '| wl-copy -n' |
+  wofi --show=dmenu -p "Open URL with:")
+STR="$*"
+case "$menu" in
+'zen')
+  zen "$STR" >/dev/null 2>&1 &
+  ;;
+'firefox')
+  firefox "$STR" >/dev/null 2>&1 &
+  ;;
+'brave --profile-directory=Default')
+  brave --profile-directory=Default "$STR" >/dev/null 2>&1 &
+  ;;
+'| wl-copy -n')
+  printf '%s' "$STR" | wl-copy -n >/dev/null 2>&1 &
+  ;;
+esac

@@ -92,8 +92,8 @@ with lib;
             description = "The IP addresses of DNS servers";
           };
           ips = mkOption {
-            type = with types; uniq str;
-            default = "";
+            type = with types; listOf (uniq str);
+            default = [ ];
             description = "IPs to access through wg";
           };
           privateKey = mkOption {

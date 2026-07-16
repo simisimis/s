@@ -1,5 +1,5 @@
 # host specific home manager configuration
-{ config, pkgs, unstable, ... }: {
+{ config, pkgs, unstable, zen-browser, ... }: {
   settings = import ./vars.nix;
   nixpkgs.overlays = [ (import ../../overlays) ];
 
@@ -94,6 +94,7 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    zen-browser.packages.x86_64-linux.zen-browser
     blender
     kicad
     gsettings-desktop-schemas

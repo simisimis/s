@@ -1,6 +1,5 @@
 # kouti host specific configuration
-{ config, lib, pkgs, unstable, ... }:
-{
+{ config, lib, pkgs, unstable, ... }: {
   settings = import ./vars.nix;
 
   imports = [
@@ -41,9 +40,6 @@
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  environment.etc."iproute2/rt_tables.d/wg.conf".text = ''
-    200 wg_table
-  '';
   networking = {
     hostId = config.settings.hw.hostId;
     hostName = config.settings.hw.hostName;
@@ -58,27 +54,6 @@
       extraConfig = ''
         ctrl_interface=/run/wpa_supplicant
         ctrl_interface_group=wheel
-      '';
-    };
-
-    wg-quick.interfaces.wg0 = {
-      address = config.settings.hw.wg.addresses;
-      privateKey = config.settings.hw.wg.privateKey;
-
-      peers = lib.mapAttrsToList (client: clientAttrs: {
-        publicKey = clientAttrs.publicKey;
-        allowedIPs = clientAttrs.allowedIPs;
-        endpoint = clientAttrs.endpoint;
-        persistentKeepalive = 25;
-      }) config.settings.hw.wg.peers;
-      table = "wg_table";
-      postUp = ''
-        ip route add ${config.settings.hw.wg.ips} dev wg0 table wg_table
-        ip rule add to ${config.settings.hw.wg.ips} table wg_table priority 100
-      '';
-      postDown = ''
-        ip route del ${config.settings.hw.wg.ips} dev wg0 table wg_table
-        ip rule del to ${config.settings.hw.wg.ips} table wg_table priority 100
       '';
     };
 
@@ -109,11 +84,6 @@
 
   # List services that you want to enable:
   services.resolved.enable = true;
-  services.resolved.extraConfig = ''
-    [Resolve]
-    DNS=${lib.concatStringsSep " " config.settings.hw.wg.dns}
-    Domains=~casa
-  '';
   services.tailscale.enable = true;
   #services.tailscale.permitCertUid = "traefik";
 
