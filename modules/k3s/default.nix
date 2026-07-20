@@ -19,6 +19,7 @@
     extraFlags = [
       "--node-ip=${nodeIP}"
       "--node-external-ip=${nodeIP}"
+      "--advertise-address=${nodeIP}"
       "--tls-san=${nodeIP}"
       "--write-kubeconfig-mode=0644"
       "--disable=local-storage"

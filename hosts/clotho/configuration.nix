@@ -2,7 +2,13 @@
 #    Clotho (spins the thread of life)
 #    Lachesis (measures it)
 #    Atropos (cuts it)
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+let
+  initrdUnlockShell = pkgs.writeShellScript "initrd-zfs-unlock-shell" ''
+    echo "Waiting for initrd password prompts"
+    exec ${config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent
+  '';
+in {
   settings = import ./vars.nix;
 
   imports = [
@@ -22,7 +28,11 @@
   };
   boot.initrd = {
     kernelModules = [ "igc" ];
-    secrets = { "/etc/secrets/initrd/initrd-openssh-key" = null; };
+    #secrets = { "/etc/secrets/initrd/initrd-openssh-key" = null; };
+    systemd = {
+      extraBin.initrd-unlock = "${initrdUnlockShell}";
+      users.root.shell = initrdUnlockShell;
+    };
     network = {
       enable = true;
       ssh = {
@@ -33,15 +43,13 @@
           "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDS2T9+Qp59L9WbAI4/tT4YgP3V4N8rLVPkLxlYDvrZ+Wz0CHzzCSWP6DsD//UIKsVkf+gG4w320mx/kj8rL+qaj6xnMheL/Pt8S4i7gt3fAknoyj9PvSY00cis8g9bWYq1kESls33zase6eaR0NAAwg+6ujc6sAGN9/ipp5ivzExo74slp0EgQpS6VAWyhxa1XOSm5iOT1poA+SSVSdWvIYcL0IiCdTMlU06MP15tHzyA8IeFLvD7WwNQjAcQmoxrxYE9+QnkOJkAkY0TyPDV47ub4VqOM3nCNWsL9MSFh9GGFNr6c6w4Xr67vm2cZFwQ2Qq4//jpXvH8hHfTbNdrN"
         ];
       };
-      postCommands = ''
-        echo "zfs load-key -a; killall zfs" >> /root/.profile
-      '';
     };
   };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.zfs.forceImportRoot = false;
 
   networking = {
     hostId = config.settings.hw.hostId;
@@ -85,6 +93,13 @@
     pv
     pciutils
   ];
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+
+    #settings = { General = { Experimental = true; }; };
+  };
 
   services.tailscale.enable = true;
 
