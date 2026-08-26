@@ -11,7 +11,8 @@ let
     };
   });
 in {
-  imports = [ ./modules/zellij ./modules/helix ./modules/jujutsu ./modules/hyprland ];
+  imports =
+    [ ./modules/zellij ./modules/helix ./modules/jujutsu ./modules/hyprland ];
 
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
@@ -88,7 +89,7 @@ in {
     golint
     delve
     exercism
-    unstable.android-studio
+    #unstable.android-studio
     rust-analyzer
     rustc
     cargo
