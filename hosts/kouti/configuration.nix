@@ -20,7 +20,6 @@ in {
 
   boot.initrd = {
     kernelModules = [ "igc" ];
-    #secrets = { "/etc/secrets/initrd/initrd-openssh-key" = null; };
     systemd = {
       extraBin.initrd-unlock = "${initrdUnlockShell}";
       users.root.shell = initrdUnlockShell;

@@ -1,6 +1,5 @@
 # clotho specific home manager configuration
-{ config, pkgs, unstable, lib, ... }:
-{
+{ config, pkgs, unstable, lib, ... }: {
   imports = [ ../../hm/modules/helix ];
   programs.helix.enable = true;
 
@@ -9,10 +8,12 @@
   nixpkgs.overlays = [ (import ../../overlays) ];
   programs.home-manager.enable = true;
   programs.git = {
-    userName = config.settings.usr.fullName;
-    userEmail = config.settings.usr.email;
     signing.key = "355FDA1C9F563EC7";
-    extraConfig = { github.user = config.settings.usr.username; };
+    settings = {
+      user.email = config.settings.usr.email;
+      user.name = config.settings.usr.fullName;
+      github.user = config.settings.usr.username;
+    };
   };
 
   home.username = config.settings.usr.name;

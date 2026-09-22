@@ -94,6 +94,7 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    unstable.taskwarrior3
     zen-browser.packages.x86_64-linux.zen-browser
     blender
     kicad
