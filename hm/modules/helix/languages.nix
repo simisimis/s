@@ -1,5 +1,10 @@
-{ config, pkgs, lib, ... }:
-with pkgs; {
+{
+  pkgs,
+  lib,
+  ...
+}:
+with pkgs;
+{
   home.packages = [
     shellcheck
     bash-language-server
@@ -7,7 +12,7 @@ with pkgs; {
     yaml-language-server
     vscode-json-languageserver
     prettier
-    nixfmt-classic
+    nixfmt
     nil
     clang-tools
     terraform-ls
@@ -20,68 +25,116 @@ with pkgs; {
     language = [
       {
         name = "bash";
-        language-servers = [ "bash-language-server" "buffer-language-server" ];
-        file-types = [ "sh" "bash" "zsh" ];
+        language-servers = [
+          "bash-language-server"
+          "buffer-language-server"
+        ];
+        file-types = [
+          "sh"
+          "bash"
+          "zsh"
+        ];
         formatter = {
           command = lib.getExe shfmt;
-          args = [ "-i" "2" "-" ];
+          args = [
+            "-i"
+            "2"
+            "-"
+          ];
         };
         auto-format = true;
       }
       {
         name = "nix";
         auto-format = true;
-        formatter = { command = lib.getExe nixfmt-classic; };
-        language-servers = [ "nil" "buffer-language-server" ];
+        formatter = {
+          command = lib.getExe nixfmt;
+        };
+        language-servers = [
+          "nil"
+          "buffer-language-server"
+        ];
       }
       {
         name = "hcl";
         auto-format = true;
         language-id = "terraform";
-        language-servers = [ "terraform" "buffer-language-server" ];
+        language-servers = [
+          "terraform"
+          "buffer-language-server"
+        ];
       }
       {
         name = "tfvars";
         auto-format = true;
         language-id = "terraform-vars";
-        language-servers = [ "terraform" "buffer-language-server" ];
+        language-servers = [
+          "terraform"
+          "buffer-language-server"
+        ];
       }
       {
         name = "rust";
         auto-format = true;
-        language-servers = [ "rust-analyzer" "buffer-language-server" ];
+        language-servers = [
+          "rust-analyzer"
+          "buffer-language-server"
+        ];
         formatter = {
           command = lib.getExe rustfmt;
-          args = [ "--edition" "2024" ];
+          args = [
+            "--edition"
+            "2024"
+          ];
         };
       }
       {
         name = "go";
         auto-format = true;
-        language-servers = [ "gopls" "buffer-language-server" ];
+        language-servers = [
+          "gopls"
+          "buffer-language-server"
+        ];
       }
       {
         name = "gotmpl";
         auto-format = true;
-        language-servers = [ "gopls" "buffer-language-server" ];
-        file-types = [ "gotmpl" "tpl" ];
+        language-servers = [
+          "gopls"
+          "buffer-language-server"
+        ];
+        file-types = [
+          "gotmpl"
+          "tpl"
+        ];
       }
       {
         name = "toml";
-        file-types = [ ".editorconfig" "toml" ];
+        file-types = [
+          ".editorconfig"
+          "toml"
+        ];
       }
       {
         name = "yaml";
-        language-servers = [ "yaml-language-server" "buffer-language-server" ];
+        language-servers = [
+          "yaml-language-server"
+          "buffer-language-server"
+        ];
         file-types = [ "yaml" ];
       }
       {
         name = "json";
         auto-format = true;
-        language-servers =
-          [ "vscode-json-language-server" "buffer-language-server" ];
+        language-servers = [
+          "vscode-json-language-server"
+          "buffer-language-server"
+        ];
         formatter = {
-          args = [ "--parser" "json" ];
+          args = [
+            "--parser"
+            "json"
+          ];
           command = "prettier";
         };
       }
@@ -91,18 +144,24 @@ with pkgs; {
       }
       {
         name = "typescript";
-        language-servers =
-          [ "typescript-language-server" "buffer-language-server" ];
+        language-servers = [
+          "typescript-language-server"
+          "buffer-language-server"
+        ];
         auto-format = true;
       }
     ];
     language-server = {
-      buffer-language-server = { command = "buffer-language-server"; };
+      buffer-language-server = {
+        command = "buffer-language-server";
+      };
       bash-language-server = {
         command = lib.getExe bash-language-server;
         args = [ "start" ];
       };
-      gopls = { command = lib.getExe gopls; };
+      gopls = {
+        command = lib.getExe gopls;
+      };
       rust-analyzer = {
         command = lib.getExe rust-analyzer;
         config.rust-analyzer = {
@@ -117,12 +176,17 @@ with pkgs; {
       yaml-language-server = {
         command = lib.getExe yaml-language-server;
         args = [ "--stdio" ];
-        config = { yaml.keyOrdering = false; };
+        config = {
+          yaml.keyOrdering = false;
+        };
       };
       terraform = {
         command = lib.getExe terraform-ls;
         args = [ "serve" ];
-        filetypes = [ "terraform" "hcl" ];
+        filetypes = [
+          "terraform"
+          "hcl"
+        ];
       };
 
       docker-langserver = {
@@ -132,16 +196,20 @@ with pkgs; {
       vscode-json-language-server = {
         command = lib.getExe vscode-json-languageserver;
         args = [ "--stdio" ];
-        config = { provideFormatter = true; };
+        config = {
+          provideFormatter = true;
+        };
       };
       nil = {
         command = lib.getExe nil;
         config = {
-          formatting.command = [ (lib.getExe nixfmt-classic) ];
+          formatting.command = [ (lib.getExe nixfmt) ];
           nix.flake.autoEvalInputs = true;
         };
       };
-      clangd = { command = "${pkgs.clang-tools}/bin/clangd"; };
+      clangd = {
+        command = "${pkgs.clang-tools}/bin/clangd";
+      };
     };
   };
 }

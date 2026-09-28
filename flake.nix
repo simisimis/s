@@ -4,6 +4,9 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     flake-utils.url = "github:numtide/flake-utils";
+    jj-starship.url = "github:dmmulroy/jj-starship";
+    jj-starship.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    jj-starship.inputs.flake-utils.follows = "flake-utils";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -13,7 +16,8 @@
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, flake-utils, ... }@inputs:
+  outputs =
+    { self, flake-utils, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -31,20 +35,30 @@
       };
       args = inputs;
 
-      mkHost = host:
+      mkHost =
+        host:
         inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            { _module.args = args // { inherit unstable; }; }
+            {
+              _module.args = args // {
+                inherit unstable;
+              };
+            }
             inputs.disko.nixosModules.disko
             ./hosts/${host}/configuration.nix
           ];
         };
-      mkHome = user: host: type:
+      mkHome =
+        user: host: type:
         inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            { _module.args = args // { inherit unstable; }; }
+            {
+              _module.args = args // {
+                inherit unstable;
+              };
+            }
             ./hosts/${host}/home.nix
             ./hm/base.nix
             ./hm/${type}.nix
@@ -58,7 +72,8 @@
             }
           ];
         };
-      mkBaseEnv = pkgs:
+      mkBaseEnv =
+        pkgs:
         pkgs.buildEnv {
           name = "common-docker-env";
 
@@ -82,9 +97,14 @@
             pkgs.lz4
             pkgs.neovim
           ];
-          pathsToLink = [ "/bin" "/etc" "/share" ];
+          pathsToLink = [
+            "/bin"
+            "/etc"
+            "/share"
+          ];
         };
-    in flake-utils.lib.eachSystemPassThrough [ system ] (_: {
+    in
+    flake-utils.lib.eachSystemPassThrough [ system ] (_: {
       homeConfigurations = {
         icarus = mkHome "simonas" "icarus" "workstation";
         siMONSTER = mkHome "simas" "siMONSTER" "workstation";
@@ -107,11 +127,15 @@
         };
       };
       defaultTemplate = self.templates.rust;
-    }) // flake-utils.lib.eachSystem [ system ] (_: {
+    })
+    // flake-utils.lib.eachSystem [ system ] (_: {
       packages.radicle-node = pkgs.dockerTools.buildLayeredImage {
         name = "simisimis/radicle-node";
         tag = "latest";
-        contents = [ pkgs.radicle-node (mkBaseEnv pkgs) ];
+        contents = [
+          pkgs.radicle-node
+          (mkBaseEnv pkgs)
+        ];
 
         config = {
           #Entrypoint = [ "${pkgs.radicle-node}/bin/radicle-node" ];

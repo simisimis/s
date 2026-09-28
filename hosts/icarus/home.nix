@@ -95,6 +95,7 @@
 
   home.packages = with pkgs; [
     unstable.taskwarrior3
+    unstable.agent-browser
     zen-browser.packages.x86_64-linux.zen-browser
     blender
     kicad

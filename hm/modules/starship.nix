@@ -1,9 +1,21 @@
-{ lib, pkgs, config, ... }:
 {
-  config.programs.starship = lib.mkIf config.programs.starship.enable {
-    settings = {
+  lib,
+  pkgs,
+  config,
+  jj-starship,
+  ...
+}:
+let
+  jjStarship = jj-starship.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  jjStarshipExe = lib.getExe jjStarship;
+in
+{
+  config = lib.mkIf config.programs.starship.enable {
+    home.packages = [ jjStarship ];
+
+    programs.starship.settings = {
       add_newline = false;
-      format = "$hostname$directory$nix_shell(\\($git_branch$git_commit|$git_status\\))$fill$shlvl$kubernetes$line_break$character";
+      format = "$hostname$directory$nix_shell\${custom.jj}$fill$shlvl$kubernetes$line_break$character";
 
       character = {
         success_symbol = "[≫](bold green) ";
@@ -31,21 +43,13 @@
         symbol = "❄️";
       };
 
-      git_branch.format = "[$symbol$branch](purple)";
-      git_commit.format = "[$hash]($style)";
-      git_status = {
-        format = "([$all_status$ahead_behind]($style))";
-        style = "green";
-        ahead = "[↑$count](blue)";
-        behind = "[↓$count](red)";
-        diverged = "[↑$\\{ahead_count\\}](blue)[↓$\\{behind_count\\}](red)";
-        conflicted = "✗";
-        up_to_date = "✔";
-        untracked = "[…](red)";
-        stashed = "📦";
-        modified = "[+$count](red)";
-        staged = "[¤$count](green)";
-        deleted = "[✗$count](red)";
+      git_branch.disabled = true;
+      git_commit.disabled = true;
+      git_status.disabled = true;
+      custom.jj = {
+        when = "${jjStarshipExe} detect";
+        shell = [ jjStarshipExe ];
+        format = "$output ";
       };
       hostname.format = "[$hostname:](bold yellow)";
 
