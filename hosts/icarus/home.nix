@@ -1,5 +1,12 @@
 # host specific home manager configuration
-{ config, pkgs, unstable, zen-browser, ... }: {
+{
+  config,
+  pkgs,
+  unstable,
+  zen-browser,
+  ...
+}:
+{
   settings = import ./vars.nix;
   nixpkgs.overlays = [ (import ../../overlays) ];
 
@@ -12,8 +19,7 @@
       user.name = config.settings.usr.fullName;
       github.user = config.settings.usr.username;
       alias = {
-        hist =
-          "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        hist = "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
       };
       fetch.prune = true;
       fetch.pruneTags = true;
@@ -59,12 +65,14 @@
     }
     {
       profile.name = "single";
-      profile.outputs = [{
-        criteria = "eDP-1";
-        position = "0,0";
-        status = "enable";
-        scale = 1.0;
-      }];
+      profile.outputs = [
+        {
+          criteria = "eDP-1";
+          position = "0,0";
+          status = "enable";
+          scale = 1.0;
+        }
+      ];
     }
     {
       profile.name = "office";
@@ -104,7 +112,6 @@
     libGL
     subsurface
     mtr
-    bambu-studio
     nodejs-slim_26
     just
     pre-commit
@@ -156,17 +163,15 @@
 
     #saleae-logic
     dioxus-cli
-    radicle-node
+    #radicle-node
     jdk25
 
     #web
     unstable.ledger-live-desktop
 
     #scripts
-    (writeShellScriptBin "brightness"
-      (builtins.readFile ../../scripts/brightness))
-    (writeShellScriptBin "wpa-add"
-      (builtins.readFile ../../scripts/wpa-add-network))
+    (writeShellScriptBin "brightness" (builtins.readFile ../../scripts/brightness))
+    (writeShellScriptBin "wpa-add" (builtins.readFile ../../scripts/wpa-add-network))
   ];
 
   programs.wezterm = {
@@ -297,7 +302,9 @@
   };
 
   programs.ssh = {
-    extraOptionOverrides = { CanonicalizeHostname = "yes"; };
+    extraOptionOverrides = {
+      CanonicalizeHostname = "yes";
+    };
     settings = {
       "*.zeko.io" = {
         User = "nixos";
@@ -359,15 +366,17 @@
       kubectl = "kubecolor";
       k = "kubecolor";
     };
-    plugins = [{
-      name = "fzf-tab";
-      src = pkgs.fetchFromGitHub {
-        owner = "Aloxaf";
-        repo = "fzf-tab";
-        rev = "v1.1.1";
-        sha256 = "sha256-0/YOL1/G2SWncbLNaclSYUz7VyfWu+OB8TYJYm4NYkM=";
-      };
-    }];
+    plugins = [
+      {
+        name = "fzf-tab";
+        src = pkgs.fetchFromGitHub {
+          owner = "Aloxaf";
+          repo = "fzf-tab";
+          rev = "v1.1.1";
+          sha256 = "sha256-0/YOL1/G2SWncbLNaclSYUz7VyfWu+OB8TYJYm4NYkM=";
+        };
+      }
+    ];
   };
   programs.zoxide.enable = true;
   programs.yazi = {
@@ -378,19 +387,31 @@
       open.rules = [
         {
           mime = "text/*";
-          use = [ "edit" "reveal" ];
+          use = [
+            "edit"
+            "reveal"
+          ];
         }
         {
           mime = "image/*";
-          use = [ "image" "reveal" ];
+          use = [
+            "image"
+            "reveal"
+          ];
         }
         {
           mime = "video/*";
-          use = [ "video" "reveal" ];
+          use = [
+            "video"
+            "reveal"
+          ];
         }
         {
           mime = "application/json";
-          use = [ "edit" "reveal" ];
+          use = [
+            "edit"
+            "reveal"
+          ];
         }
         {
           mime = "application/pdf";
@@ -398,32 +419,46 @@
         }
         {
           mime = "*";
-          use = [ "edit" "open" "reveal" ];
+          use = [
+            "edit"
+            "open"
+            "reveal"
+          ];
         }
       ];
       opener = {
-        text = [{
-          run = ''hx "$@" '';
-          for = "linux";
-        }];
-        zathura = [{
-          run = ''zathura "$@"'';
-          block = true;
-        }];
-        image = [{
-          run = ''imv "$@" '';
-          block = true;
-          for = "linux";
-        }];
-        video = [{
-          run = ''mpv "$@" '';
-          block = true;
-          for = "linux";
-        }];
-        reveal = [{
-          run = ''${pkgs.exiftool}/bin/exiftool "$1";'';
-          block = true;
-        }];
+        text = [
+          {
+            run = ''hx "$@" '';
+            for = "linux";
+          }
+        ];
+        zathura = [
+          {
+            run = ''zathura "$@"'';
+            block = true;
+          }
+        ];
+        image = [
+          {
+            run = ''imv "$@" '';
+            block = true;
+            for = "linux";
+          }
+        ];
+        video = [
+          {
+            run = ''mpv "$@" '';
+            block = true;
+            for = "linux";
+          }
+        ];
+        reveal = [
+          {
+            run = ''${pkgs.exiftool}/bin/exiftool "$1";'';
+            block = true;
+          }
+        ];
       };
     };
   };
