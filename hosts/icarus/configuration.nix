@@ -146,7 +146,24 @@ in {
 
   programs.dconf.enable = true;
   programs.nix-ld.enable = true;
+  programs.niri.enable = true;
   services.logind.settings.Login.HandlePowerKey = "suspend";
+
+  # Firmware emits a spurious power key press on resume; the monotonic sleep
+  # pauses during suspend, so the inhibitor covers the first seconds awake.
+  systemd.services.power-key-debounce = {
+    description = "Ignore the power key for a few seconds around suspend";
+    before = [ "sleep.target" ];
+    wantedBy = [ "sleep.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = ''
+        ${pkgs.systemd}/bin/systemd-inhibit --what=handle-power-key --mode=block \
+          --who=power-key-debounce --why="ignore spurious power key press on resume" \
+          ${pkgs.coreutils}/bin/sleep 10
+      '';
+    };
+  };
 
   services.udev.packages = [ pkgs.chrysalis pkgs.trezor-udev-rules ];
 
@@ -193,7 +210,8 @@ in {
   services.dbus.packages = [ pkgs.gcr ];
   services.fprintd.enable = true;
 
-  security.pam.services.hyprlock.fprintAuth = true;
+  # hyprlock drives fprintd itself; pam_fprintd would contend for the reader.
+  security.pam.services.hyprlock.fprintAuth = false;
   security.pam.services.sudo.fprintAuth = true;
   security.pam.services.polkit-1.fprintAuth = true;
   security.pam.services.sddm.fprintAuth = true;

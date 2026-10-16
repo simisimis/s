@@ -36,4 +36,5 @@ final: prev: {
   #    };
   wally-cli = prev.callPackage ./pkgs/wally-cli { };
   ksd = prev.callPackage ./pkgs/ksd { };
+  numbr = prev.callPackage ./pkgs/numbr { };
 }

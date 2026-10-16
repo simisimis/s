@@ -16,8 +16,7 @@
     videoDrivers = [ config.settings.hw.videoDrv ];
     displayManager.startx.enable = true;
     xkb.layout = "us";
-    xkb.options =
-      "altwin:swap_lalt_lwin,terminate:ctrl_alt_bksp,caps:none,eurosign:e";
+    xkb.options = "terminate:ctrl_alt_bksp,ctrl:nocaps,eurosign:e";
     wacom.enable = false;
     #libinput.touchpad.tapping = false;
     windowManager.awesome.enable = true;
@@ -34,7 +33,6 @@
       enable = true;
       extraPortals = [
         xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
         xdg-desktop-portal-hyprland
       ];
       configPackages = [

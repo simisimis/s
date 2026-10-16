@@ -11,7 +11,6 @@
     settings = {
       general = {
         hide_cursor = true;
-        grace = 2;
       };
 
       background = {

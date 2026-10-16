@@ -1,11 +1,18 @@
 # host specific home manager configuration
 {
   config,
+  lib,
   pkgs,
   unstable,
   zen-browser,
   ...
 }:
+let
+  # hyprlock blocks until unlocked.
+  lockCmd = "${pkgs.procps}/bin/pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock &";
+  niriMsg = "${pkgs.niri}/bin/niri msg action";
+  brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
+in
 {
   settings = import ./vars.nix;
   nixpkgs.overlays = [ (import ../../overlays) ];
@@ -29,7 +36,8 @@
   home.homeDirectory = "/home/${config.settings.usr.name}";
 
   services.kanshi.enable = true;
-  services.kanshi.systemdTarget = "hyprland-session.target";
+  # Manage outputs in both Hyprland and Niri sessions.
+  services.kanshi.systemdTarget = "graphical-session.target";
   services.kanshi.settings = [
     {
       profile.name = "singleAR";
@@ -91,6 +99,83 @@
       ];
     }
   ];
+  services.hypridle.enable = lib.mkForce false;
+
+  programs.hyprlock.settings = lib.mkForce {
+    general = {
+      hide_cursor = true;
+      ignore_empty_input = true;
+    };
+
+    auth = {
+      pam.enabled = true;
+      fingerprint = {
+        enabled = true;
+        ready_message = "Scan fingerprint or type password";
+        present_message = "Scanning fingerprint";
+      };
+    };
+
+    background = {
+      color = "rgba(25, 20, 20, 1.0)";
+      path = "screenshot";
+      blur_passes = 2;
+      brightness = 0.5;
+    };
+
+    label = {
+      text = "$FPRINTPROMPT";
+      color = "rgba(222, 222, 222, 1.0)";
+      font_size = 24;
+      font_family = "Noto Sans CJK JP";
+      position = "0, 70";
+      halign = "center";
+      valign = "center";
+    };
+
+    input-field = {
+      size = "300, 50";
+      dots_size = 0.33;
+      dots_spacing = 0.15;
+      outer_color = "rgba(25, 20, 20, 0)";
+      inner_color = "rgba(25, 20, 20, 0.6)";
+      font_color = "rgba(222, 222, 222, 1.0)";
+      placeholder_text = "Password";
+      fail_text = "$FAIL ($ATTEMPTS)";
+    };
+  };
+
+  services.swayidle = {
+    enable = true;
+    systemdTargets = [ "graphical-session.target" ];
+    events = {
+      # swayidle -w delays sleep until this returns.
+      before-sleep = "${lockCmd} ${pkgs.coreutils}/bin/sleep 1";
+      after-resume = "${niriMsg} power-on-monitors";
+      lock = lockCmd;
+    };
+    timeouts = [
+      {
+        timeout = 60;
+        command = "${brightnessctl} set 10% --save";
+        resumeCommand = "${brightnessctl} --restore";
+      }
+      {
+        timeout = 600;
+        command = "${pkgs.systemd}/bin/loginctl lock-session";
+      }
+      {
+        timeout = 1200;
+        command = "${niriMsg} power-off-monitors";
+        resumeCommand = "${niriMsg} power-on-monitors";
+      }
+      {
+        timeout = 3600;
+        command = "${pkgs.systemd}/bin/systemctl suspend";
+      }
+    ];
+  };
+
   services = {
     gpg-agent = {
       defaultCacheTtl = 86400;
@@ -131,6 +216,7 @@
     darktable
     unstable.codex
     unstable.pi-coding-agent
+    unstable.claude-code
     unstable.rtk
     meld
 
@@ -140,6 +226,7 @@
     restic
 
     #dev
+    stdenv.cc
     helm-docs
     kustomize
     ec2-api-tools
@@ -226,6 +313,36 @@
           right = 10,
           top = 10,
           bottom = 10,
+        },
+        -- Let Niri and Zellij own Super/Mod shortcuts.
+        keys = {
+          { key = "-", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "0", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "1", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "2", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "3", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "4", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "5", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "6", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "7", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "8", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "9", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "=", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "[", mods = "SHIFT|SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "]", mods = "SHIFT|SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "c", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "f", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "k", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "m", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "n", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "r", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "t", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "v", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "w", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "{", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "{", mods = "SHIFT|SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "}", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
+          { key = "}", mods = "SHIFT|SUPER", action = wezterm.action.DisableDefaultAssignment },
         },
       }
     '';

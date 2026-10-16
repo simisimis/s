@@ -1,25 +1,34 @@
 # hm workstation
-{ lib, config, unstable, pkgs, ... }:
+{
+  lib,
+  config,
+  unstable,
+  pkgs,
+  ...
+}:
 let
   plasticityVersion = "25.2.11";
   plasticityNew = pkgs.plasticity.overrideAttrs (oldAttrs: {
     version = "${plasticityVersion}";
     src = pkgs.fetchurl {
-      url =
-        "https://github.com/nkallen/plasticity/releases/download/v${plasticityVersion}/Plasticity-${plasticityVersion}-1.x86_64.rpm";
+      url = "https://github.com/nkallen/plasticity/releases/download/v${plasticityVersion}/Plasticity-${plasticityVersion}-1.x86_64.rpm";
       hash = "sha256-aqc6CDR3yBOGaRr+VjXQrTXZKvr9kqzaqcu5y30clCA=";
     };
   });
-in {
-  imports =
-    [ ./modules/zellij ./modules/helix ./modules/jujutsu ./modules/hyprland ];
+in
+{
+  imports = [
+    ./modules/zellij
+    ./modules/helix
+    ./modules/jujutsu
+    ./modules/hyprland
+    ./modules/niri
+  ];
 
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     # start wayland
     blueman
-    hyprlock
-    hypridle
     waybar
     wdisplays
     mako # notification daemon
@@ -43,8 +52,7 @@ in {
     slurp
     grim
     (writeShellScriptBin "trimgrim" (builtins.readFile ../scripts/trimgrim))
-    (writeShellScriptBin "cal-tooltip"
-      (builtins.readFile ../scripts/cal-tooltip))
+    (writeShellScriptBin "cal-tooltip" (builtins.readFile ../scripts/cal-tooltip))
     (writeShellScriptBin "browser" (builtins.readFile ../scripts/browser))
     (writeShellScriptBin "plasticity" ''
       exec ${plasticityNew}/bin/Plasticity --ozone-platform=wayland --use-gl=egl
@@ -58,10 +66,10 @@ in {
     nemo
     nushell
     pinentry-gnome3
+    numbr
 
     #web
-    (pkgs.wrapFirefox
-      (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
+    (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
     (brave.override { commandLineArgs = [ "--ozone-platform-hint=auto" ]; })
 
     #media
@@ -103,8 +111,8 @@ in {
     wasm-bindgen-cli
     # rustup
     #rnix-lsp
-    (python312.withPackages (ps:
-      with ps; [
+    (python312.withPackages (
+      ps: with ps; [
         pyserial
         west
         intelhex
@@ -117,7 +125,8 @@ in {
         flake8
         setuptools
         shapely
-      ]))
+      ]
+    ))
     gitflow
 
     #unstable.prusa-slicer
@@ -187,129 +196,147 @@ in {
   programs.waybar = {
     enable = true;
     systemd.enable = true;
-    settings = [{
-      "height" = 30;
-      "modules-left" = [ "hyprland/workspaces" ];
-      "modules-right" = [
-        "network"
-        "network#wl"
-        "backlight"
-        "cpu"
-        "memory"
-        "pulseaudio"
-        "hyprland/language"
-        "custom/date"
-        "bluetooth"
-        "tray"
-        "battery"
-        "custom/power"
-      ];
-      "hyprland/workspaces" = {
-        format = " {icon} ";
-        on-scroll-up =
-          "hyprctl dispatch 'hl.dsp.focus({ workspace = \"-1\" })'";
-        on-scroll-down =
-          "hyprctl dispatch 'hl.dsp.focus({ workspace = \"+1\" })'";
+    settings = [
+      {
+        "height" = 30;
+        "modules-left" = [
+          "hyprland/workspaces"
+          "niri/workspaces"
+        ];
+        "modules-right" = [
+          "network"
+          "network#wl"
+          "backlight"
+          "cpu"
+          "memory"
+          "pulseaudio"
+          "hyprland/language"
+          "niri/language"
+          "custom/date"
+          "bluetooth"
+          "tray"
+          "battery"
+          "custom/power"
+        ];
+        "hyprland/workspaces" = {
+          format = " {icon} ";
+          on-scroll-up = "hyprctl dispatch 'hl.dsp.focus({ workspace = \"-1\" })'";
+          on-scroll-down = "hyprctl dispatch 'hl.dsp.focus({ workspace = \"+1\" })'";
 
-        format-icons = {
-          "1" = "🖋";
-          "2" = "";
-          "3" = "";
-          "4" = "";
-          "5" = "";
-          "6" = "";
-          "active" = "";
-          "default" = "";
+          format-icons = {
+            "1" = "🖋";
+            "2" = "";
+            "3" = "";
+            "4" = "";
+            "5" = "";
+            "6" = "";
+            "active" = "";
+            "default" = "";
+          };
+          persistent-workspaces = {
+            "1" = [ ];
+            "2" = [ ];
+            "3" = [ ];
+            "4" = [ ];
+            "5" = [ ];
+            "6" = [ ];
+          };
         };
-        persistent-workspaces = {
-          "1" = [ ];
-          "2" = [ ];
-          "3" = [ ];
-          "4" = [ ];
-          "5" = [ ];
-          "6" = [ ];
+        "backlight" = {
+          format = "{percent}% {icon}";
+          format-icons = [
+            ""
+            ""
+          ];
+          on-scroll-up = "brightnessctl s +1%";
+          on-scroll-down = "brightnessctl s 1%-";
         };
-      };
-      "backlight" = {
-        format = "{percent}% {icon}";
-        format-icons = [ "" "" ];
-        on-scroll-up = "brightnessctl s +1%";
-        on-scroll-down = "brightnessctl s 1%-";
-      };
-      "cpu" = {
-        format = "{usage}% 🧠";
-        tooltip = false;
-      };
-      "memory" = { format = "{}% "; };
-      "battery" = {
-        states = {
-          warning = 30;
-          critical = 15;
+        "cpu" = {
+          format = "{usage}% 🧠";
+          tooltip = false;
         };
-        format = "{icon} ";
-        format-charging = "{capacity}% ";
-        format-plugged = "{capacity}% ";
-        format-alt = "{capacity}% {icon} ";
-        format-icons = [ "" "" "" "" "" ];
-      };
-      "network" = {
-        interface = "eth*";
-        format-ethernet = "🖧";
-        format-linked = "{ifname} (No IP) 🖧";
-        format-disconnected = "Disconnected 🖧";
-        tooltip = false;
-        format-alt = "ip:{ipaddr}🖧";
-      };
-      "network#wl" = {
-        interface = "wlp*";
-        format-wifi = "({signalStrength}%) ";
-        format-linked = "{ifname} (No IP) ";
-        format-disconnected = "Disconnected ⚠";
-        tooltip = false;
-        format-alt = "{essid} ip:{ipaddr}";
-      };
-      "pulseaudio" = {
-        format = "{volume}% {icon} {format_source}";
-        format-bluetooth = "{volume}% {icon} {format_source}";
-        format-bluetooth-muted = " {icon} {format_source}";
-        format-muted = " {format_source}";
-        format-source = "{volume}% ";
-        format-source-muted = "";
-        format-icons = {
-          headphone = "";
-          hands-free = "";
-          headset = "";
-          phone = "";
-          portable = "";
-          car = "";
-          default = [ "" "" "" ];
+        "memory" = {
+          format = "{}% ";
         };
-        on-click = "pavucontrol";
-      };
-      "tray" = {
-        icon-size = 21;
-        spacing = 10;
-      };
-      "bluetooth" = {
-        format-on = "";
-        format-connected = " {device_alias}";
-        format-off = "";
-        format-disabled = "";
-        on-click-right = "${lib.getExe' pkgs.blueman "blueman-manager"}";
-      };
-      "custom/date" = {
-        format = "{}";
-        return-type = "json";
-        interval = 60;
-        exec = "cal-tooltip";
-      };
-      "custom/power" = {
-        format = "🔌";
-        on-click =
-          "swaynag -m'Are you sure?' -b 'Suspend' 'systemctl suspend; pkill swaynag'";
-        tooltip = false;
-      };
-    }];
+        "battery" = {
+          states = {
+            warning = 30;
+            critical = 15;
+          };
+          format = "{icon} ";
+          format-charging = "{capacity}% ";
+          format-plugged = "{capacity}% ";
+          format-alt = "{capacity}% {icon} ";
+          format-icons = [
+            ""
+            ""
+            ""
+            ""
+            ""
+          ];
+        };
+        "network" = {
+          interface = "eth*";
+          format-ethernet = "🖧";
+          format-linked = "{ifname} (No IP) 🖧";
+          format-disconnected = "Disconnected 🖧";
+          tooltip = false;
+          format-alt = "ip:{ipaddr}🖧";
+        };
+        "network#wl" = {
+          interface = "wlp*";
+          format-wifi = "({signalStrength}%) ";
+          format-linked = "{ifname} (No IP) ";
+          format-disconnected = "Disconnected ⚠";
+          tooltip = false;
+          format-alt = "{essid} ip:{ipaddr}";
+        };
+        "pulseaudio" = {
+          format = "{volume}% {icon} {format_source}";
+          format-bluetooth = "{volume}% {icon} {format_source}";
+          format-bluetooth-muted = " {icon} {format_source}";
+          format-muted = " {format_source}";
+          format-source = "{volume}% ";
+          format-source-muted = "";
+          format-icons = {
+            headphone = "";
+            hands-free = "";
+            headset = "";
+            phone = "";
+            portable = "";
+            car = "";
+            default = [
+              ""
+              ""
+              ""
+            ];
+          };
+          on-click = "pavucontrol";
+        };
+        "tray" = {
+          icon-size = 21;
+          spacing = 10;
+        };
+        "bluetooth" = {
+          format-on = "";
+          format-connected = " {device_alias}";
+          format-off = "";
+          format-disabled = "";
+          on-click-right = "${lib.getExe' pkgs.blueman "blueman-manager"}";
+        };
+        "custom/date" = {
+          format = "{}";
+          return-type = "json";
+          interval = 60;
+          exec = "cal-tooltip";
+        };
+        "custom/power" = {
+          format = "🔌";
+          on-click = "swaynag -m'Are you sure?' -b 'Suspend' 'systemctl suspend; pkill swaynag'";
+          tooltip = false;
+        };
+      }
+    ];
     style = ''
       * {
           border: none;
@@ -548,7 +575,9 @@ in {
     }
   '';
   dconf.settings = {
-    "org/gnome/desktop/interface" = { color-scheme = "prefer-dark"; };
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
   };
 
   gtk = {
@@ -556,8 +585,12 @@ in {
     font.name = "Noto Sans";
     theme.name = "Adwaita-dark";
     theme.package = pkgs.gnome-themes-extra;
-    gtk3.extraConfig = { gtk-application-prefer-dark-theme = true; };
-    gtk4.extraConfig = { gtk-application-prefer-dark-theme = true; };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
   };
 
   qt = {

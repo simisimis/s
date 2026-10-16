@@ -48,7 +48,11 @@ in
       git_status.disabled = true;
       custom.jj = {
         when = "${jjStarshipExe} detect";
-        shell = [ jjStarshipExe ];
+        shell = [
+          jjStarshipExe
+          "--no-jj-id"
+          "--no-git-id"
+        ];
         format = "$output ";
       };
       hostname.format = "[$hostname:](bold yellow)";
