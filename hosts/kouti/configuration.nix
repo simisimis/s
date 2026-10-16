@@ -10,7 +10,7 @@ in {
 
   imports = [
     ../../nixos/base.nix
-    ../../modules/settings.nix
+    ../../modules/vars-schema.nix
     ./hardware-configuration.nix
     ../../modules/k3s
   ];

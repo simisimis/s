@@ -19,7 +19,7 @@ in {
   imports = [
     ../../nixos/base.nix
     ../../nixos/workstation.nix
-    ../../modules/settings.nix
+    ../../modules/vars-schema.nix
     ./hardware-configuration.nix
   ];
 

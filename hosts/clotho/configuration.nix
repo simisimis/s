@@ -13,7 +13,7 @@ in {
 
   imports = [
     ../../nixos/base.nix
-    ../../modules/settings.nix
+    ../../modules/vars-schema.nix
     ../../modules/k3s
     ./hardware-configuration.nix
     ./disko-config.nix

@@ -62,7 +62,7 @@
             ./hosts/${host}/home.nix
             ./hm/base.nix
             ./hm/${type}.nix
-            ./modules/settings.nix
+            ./modules/vars-schema.nix
             {
               home = {
                 username = user;
