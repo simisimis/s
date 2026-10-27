@@ -1,11 +1,17 @@
 # kouti host specific configuration
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   initrdUnlockShell = pkgs.writeShellScript "initrd-zfs-unlock-shell" ''
     echo "Waiting for initrd password prompts"
     exec ${config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent
   '';
-in {
+in
+{
   settings = import ./vars.nix;
 
   imports = [
@@ -40,8 +46,6 @@ in {
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIKCyMzo4Y29R3xAo4RIfGmPvNGedP9Bg5ABDtBryDKz"
   ];
 
-  #boot.kernelPackages = pkgs.linuxPackages_6_6;
-
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
@@ -57,17 +61,13 @@ in {
     wireless = {
       enable = true; # Enables wireless support via wpa_supplicant.
       interfaces = [ "wlp1s0" ];
-      networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; })
-        config.settings.hw.wifi);
+      networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; }) config.settings.hw.wifi);
     };
 
     firewall = {
-      enable = false;
-
+      enable = true;
       trustedInterfaces = [ "tailscale0" ];
-      allowedUDPPorts = [ config.services.tailscale.port 8472 ];
-      allowedTCPPorts = [ 1400 6443 2379 2380 ];
-      checkReversePath = "loose";
+      allowedTCPPorts = [ 1400 ];
     };
 
   };
@@ -77,7 +77,6 @@ in {
     cilium-cli
     kubectl
     kubernetes-helm
-    cloudflared
     home-manager
     tailscale
     pv
@@ -88,16 +87,25 @@ in {
 
   # List services that you want to enable:
   services.resolved.enable = true;
-  services.tailscale.enable = true;
-  #services.tailscale.permitCertUid = "traefik";
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+    # Keep tailscaled from managing iptables. Its netfilter mode also sets
+    # net.ipv4.conf.all.src_valid_mark=1, which makes the kernel drop
+    # Cilium Envoy -> same-node pod replies (Gateway API 503s).
+    extraSetFlags = [ "--netfilter-mode=off" ];
+  };
 
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;
   services.syncthing = {
     enable = true;
+    openDefaultPorts = true;
     settings = {
       folders = {
-        "papyrus" = { path = config.services.syncthing.dataDir + "/papyrus"; };
+        "papyrus" = {
+          path = config.services.syncthing.dataDir + "/papyrus";
+        };
       };
     };
   };
@@ -105,4 +113,3 @@ in {
   # Virtualization
   virtualisation.docker.enable = true;
 }
-

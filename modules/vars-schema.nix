@@ -143,18 +143,6 @@ with lib;
             description = "set of ssids/pwds";
           };
         };
-        traefik = {
-          cloudflareKey = mkOption {
-            type = with types; uniq str;
-            description = "API token for cloudflare";
-          };
-        };
-        cloudflared = {
-          tunnelCredentials = mkOption {
-            default = { };
-            description = "Cloudflare tunnel credentials";
-          };
-        };
         authelia = {
           jwtSecret = mkOption { type = with types; uniq str; };
           storageEncryptionKey = mkOption { type = with types; uniq str; };
@@ -193,7 +181,9 @@ with lib;
             description = "bitwarden cli session ID";
           };
         };
-        immich = { dbPass = mkOption { type = with types; uniq str; }; };
+        immich = {
+          dbPass = mkOption { type = with types; uniq str; };
+        };
       };
 
       profile = mkOption {
@@ -220,4 +210,3 @@ with lib;
     };
   };
 }
-

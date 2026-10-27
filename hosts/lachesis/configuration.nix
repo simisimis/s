@@ -2,13 +2,20 @@
 #    Clotho (spins the thread of life)
 #    Lachesis (measures it)
 #    Atropos (cuts it)
-{ config, lib, pkgs, unstable, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  unstable,
+  ...
+}:
 let
   initrdUnlockShell = pkgs.writeShellScript "initrd-zfs-unlock-shell" ''
     echo "Waiting for initrd password prompts"
     exec ${config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent
   '';
-in {
+in
+{
   settings = import ./vars.nix;
 
   imports = [
@@ -54,9 +61,18 @@ in {
     firewall = {
       enable = true;
 
-      allowedUDPPorts = [ 8472 config.services.tailscale.port 51820 ];
-      allowedTCPPorts = [ 1400 6443 2379 2380 ];
-      checkReversePath = "loose";
+      allowedUDPPorts = [
+        8472
+        config.services.tailscale.port
+        51820
+      ];
+      allowedTCPPorts = [
+        1400
+        6443
+        2379
+        2380
+      ];
+      # checkReversePath is set to false by modules/k3s
     };
 
   };
@@ -65,7 +81,6 @@ in {
   environment.systemPackages = with pkgs; [
     kubectl
     kubernetes-helm
-    cloudflared
     home-manager
     tailscale
     pv
@@ -85,7 +100,9 @@ in {
   ];
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;
-  services.syncthing = { enable = false; };
+  services.syncthing = {
+    enable = false;
+  };
 
   # Virtualization
   virtualisation.docker.enable = true;

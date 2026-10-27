@@ -1,13 +1,16 @@
-{ config, pkgs, lib, ... }: {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
   services.etcd = with config.settings.services.etcd; {
     enable = true;
-    listenClientUrls =
-      [ "http://${hosts.${config.settings.hw.hostName}}:2379" ];
+    listenClientUrls = [ "http://${hosts.${config.settings.hw.hostName}}:2379" ];
     listenPeerUrls = [ "http://${hosts.${config.settings.hw.hostName}}:2380" ];
-    initialAdvertisePeerUrls =
-      [ "http://${hosts.${config.settings.hw.hostName}}:2380" ];
-    initialCluster =
-      lib.mapAttrsToList (name: value: "${name}=http://${value}:2380") hosts;
+    initialAdvertisePeerUrls = [ "http://${hosts.${config.settings.hw.hostName}}:2380" ];
+    initialCluster = lib.mapAttrsToList (name: value: "${name}=http://${value}:2380") hosts;
     initialClusterState = "existing";
     initialClusterToken = "${config.settings.services.k3s.token}";
   };
@@ -29,15 +32,43 @@
       "--flannel-backend=none" # Disable k3s default CNI (Flannel)
       "--disable-network-policy" # Let Cilium handle network policies
       "--disable-cloud-controller"
-      "--disable=kube-proxy" # Let Cilium handle kube-proxy duties with eBPF
+      "--disable-kube-proxy" # Let Cilium handle kube-proxy duties with eBPF
       #"--disable=coredns"
       "--disable-helm-controller" # manage helm charts differently
-      ("--datastore-endpoint=" + (lib.concatStringsSep ","
-        (lib.mapAttrsToList (_: v: "http://${v}:2379")
-          config.settings.services.etcd.hosts)))
+      (
+        "--datastore-endpoint="
+        + (lib.concatStringsSep "," (
+          lib.mapAttrsToList (_: v: "http://${v}:2379") config.settings.services.etcd.hosts
+        ))
+      )
 
     ];
     clusterInit = (config.settings.hw.hostName == "clotho");
+  };
+  # Host firewall openings required by k3s + Cilium (kube-proxy replacement,
+  # VXLAN tunnel, Gateway API). etcd is reached over tailscale0 only, which the
+  # host configs mark as trusted.
+  networking.firewall = {
+    # Pod and overlay traffic that terminates on the host: kube-apiserver,
+    # kubelet, node-exporter, Hubble, Cilium metrics.
+    trustedInterfaces = [
+      "cilium_host"
+      "cilium_net"
+      "cilium_vxlan"
+      "lxc+"
+    ];
+    allowedTCPPorts = [
+      6443 # kube-apiserver
+      10250 # kubelet
+      4240 # cilium health checks
+      4244 # hubble server
+    ];
+    allowedUDPPorts = [ 8472 ]; # cilium vxlan
+    # Must be off, not "loose": NixOS's rpfilter rule uses --validmark, so the
+    # lookup for Cilium's 0x200-marked proxy replies lands in Cilium's
+    # "local default dev lo" table and gets dropped (Gateway API 503s).
+    # Cilium already disables rp_filter on its own interfaces.
+    checkReversePath = false;
   };
   systemd.tmpfiles.rules = [
     "L+ /sbin/zfs - - - - ${pkgs.zfs}/bin/zfs"

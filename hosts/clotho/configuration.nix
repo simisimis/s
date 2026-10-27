@@ -2,13 +2,19 @@
 #    Clotho (spins the thread of life)
 #    Lachesis (measures it)
 #    Atropos (cuts it)
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   initrdUnlockShell = pkgs.writeShellScript "initrd-zfs-unlock-shell" ''
     echo "Waiting for initrd password prompts"
     exec ${config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent
   '';
-in {
+in
+{
   settings = import ./vars.nix;
 
   imports = [
@@ -60,8 +66,7 @@ in {
     wireless = {
       enable = false;
       interfaces = [ "wlp1s0" ];
-      networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; })
-        config.settings.hw.wifi);
+      networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; }) config.settings.hw.wifi);
       extraConfig = ''
         ctrl_interface=/run/wpa_supplicant
         ctrl_interface_group=wheel
@@ -69,12 +74,9 @@ in {
     };
 
     firewall = {
-      enable = false;
-
+      enable = true;
       trustedInterfaces = [ "tailscale0" ];
-      allowedUDPPorts = [ config.services.tailscale.port 8472 ];
-      allowedTCPPorts = [ 1400 6443 2379 2380 ];
-      checkReversePath = "loose";
+      allowedTCPPorts = [ 1400 ];
     };
 
   };
@@ -86,7 +88,6 @@ in {
     kubernetes-helm
     helmfile
     cilium-cli
-    cloudflared
     pinentry-curses
     home-manager
     tailscale
@@ -101,7 +102,14 @@ in {
     #settings = { General = { Experimental = true; }; };
   };
 
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+    # Keep tailscaled from managing iptables. Its netfilter mode also sets
+    # net.ipv4.conf.all.src_valid_mark=1, which makes the kernel drop
+    # Cilium Envoy -> same-node pod replies (Gateway API 503s).
+    extraSetFlags = [ "--netfilter-mode=off" ];
+  };
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
@@ -112,7 +120,9 @@ in {
   ];
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;
-  services.syncthing = { enable = false; };
+  services.syncthing = {
+    enable = false;
+  };
 
   # Virtualization
   virtualisation.docker.enable = false;
