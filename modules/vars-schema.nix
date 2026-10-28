@@ -71,6 +71,14 @@ with lib;
           type = with types; uniq str;
           description = "don't be lazy. define it";
         };
+        role = mkOption {
+          default = "headless";
+          type = types.enum [
+            "headless"
+            "workstation"
+          ];
+          description = "Selects hm/<role>.nix for the host's Home Manager config";
+        };
         videoDrv = mkOption {
           default = "mesa";
           type = with types; uniq str;

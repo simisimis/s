@@ -33,43 +33,58 @@
         inherit system;
         config = nixpkgsConfig;
       };
+      lib = inputs.nixpkgs.lib;
       args = inputs;
 
+      # Hosts are discovered from hosts/<name>/. A host gets a NixOS config when
+      # it has configuration.nix and a Home Manager config when it has home.nix.
+      hostDirs = lib.attrNames (
+        lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./hosts)
+      );
+      hostsWith = file: builtins.filter (host: builtins.pathExists ./hosts/${host}/${file}) hostDirs;
+      hostVars = host: import ./hosts/${host}/vars.nix;
+
       mkHost =
-        host:
-        inputs.nixpkgs.lib.nixosSystem {
+        hostname:
+        lib.nixosSystem {
           inherit system;
           modules = [
             {
               _module.args = args // {
-                inherit unstable;
+                inherit unstable hostname;
               };
             }
             inputs.disko.nixosModules.disko
-            ./hosts/${host}/configuration.nix
+            ./hosts/${hostname}/configuration.nix
           ];
         };
       mkHome =
-        user: host: type:
+        hostname:
+        let
+          role = (hostVars hostname).hw.role or "headless";
+        in
         inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
             {
               _module.args = args // {
-                inherit unstable;
+                inherit unstable hostname;
               };
             }
-            ./hosts/${host}/home.nix
+            ./hosts/${hostname}/home.nix
             ./hm/base.nix
-            ./hm/${type}.nix
+            ./hm/${role}.nix
             ./modules/vars-schema.nix
-            {
-              home = {
-                username = user;
-                homeDirectory = "/home/${user}";
-                stateVersion = "26.05";
-              };
-            }
+            (
+              { config, ... }:
+              {
+                home = {
+                  username = config.settings.usr.name;
+                  homeDirectory = "/home/${config.settings.usr.name}";
+                  stateVersion = "26.05";
+                };
+              }
+            )
           ];
         };
       mkBaseEnv =
@@ -105,21 +120,8 @@
         };
     in
     flake-utils.lib.eachSystemPassThrough [ system ] (_: {
-      homeConfigurations = {
-        icarus = mkHome "simonas" "icarus" "workstation";
-        siMONSTER = mkHome "simas" "siMONSTER" "workstation";
-        kouti = mkHome "simas" "kouti" "headless";
-        clotho = mkHome "simas" "clotho" "headless";
-        lachesis = mkHome "simas" "lachesis" "headless";
-        devops = mkHome "simonas" "devops" "headless";
-      };
-      nixosConfigurations = {
-        siMONSTER = mkHost "siMONSTER";
-        icarus = mkHost "icarus";
-        kouti = mkHost "kouti";
-        clotho = mkHost "clotho";
-        lachesis = mkHost "lachesis";
-      }; # nixosConfigurations
+      homeConfigurations = lib.genAttrs (hostsWith "home.nix") mkHome;
+      nixosConfigurations = lib.genAttrs (hostsWith "configuration.nix") mkHost;
       templates = {
         rust = {
           path = ./templates/rust;
