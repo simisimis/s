@@ -181,10 +181,6 @@ in
   programs.ssh = {
     enable = true;
     settings = {
-      "192.168.178.100" = {
-        User = "simas";
-        IdentityFile = config.settings.usr.ssh.backute.identityFile;
-      };
       "github.com" = {
         User = "git";
         identityFile = config.settings.usr.ssh.github.identityFile;

@@ -9,24 +9,18 @@
   ...
 }:
 let
+  keys = import ../../modules/keys.nix;
   initrdUnlockShell = pkgs.writeShellScript "initrd-zfs-unlock-shell" ''
     echo "Waiting for initrd password prompts"
     exec ${config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent
   '';
 in
 {
-  settings = import ./vars.nix;
-
   imports = [
-    ../../nixos/base.nix
-    ../../modules/vars-schema.nix
     ../../modules/k3s
     ./hardware-configuration.nix
     ./disko-config.nix
   ];
-
-  nix.settings.trusted-users = [ "@wheel" ];
-  nixpkgs.overlays = [ (import ../../overlays) ];
 
   boot.kernel.sysctl = {
     "net.core.wmem_max" = 7500000;
@@ -45,9 +39,7 @@ in
         enable = true;
         port = 2222;
         hostKeys = [ /etc/secrets/initrd/initrd-openssh-key ];
-        authorizedKeys = [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDS2T9+Qp59L9WbAI4/tT4YgP3V4N8rLVPkLxlYDvrZ+Wz0CHzzCSWP6DsD//UIKsVkf+gG4w320mx/kj8rL+qaj6xnMheL/Pt8S4i7gt3fAknoyj9PvSY00cis8g9bWYq1kESls33zase6eaR0NAAwg+6ujc6sAGN9/ipp5ivzExo74slp0EgQpS6VAWyhxa1XOSm5iOT1poA+SSVSdWvIYcL0IiCdTMlU06MP15tHzyA8IeFLvD7WwNQjAcQmoxrxYE9+QnkOJkAkY0TyPDV47ub4VqOM3nCNWsL9MSFh9GGFNr6c6w4Xr67vm2cZFwQ2Qq4//jpXvH8hHfTbNdrN"
-        ];
+        authorizedKeys = [ keys.initrd ];
       };
     };
   };
@@ -58,8 +50,6 @@ in
   boot.zfs.forceImportRoot = false;
 
   networking = {
-    hostId = config.settings.hw.hostId;
-    hostName = config.settings.hw.hostName;
     interfaces.enp3s0.useDHCP = true;
     interfaces.wlp1s0.useDHCP = true;
 
@@ -111,12 +101,8 @@ in
     extraSetFlags = [ "--netfilter-mode=off" ];
   };
 
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
-  ];
   users.users."${config.settings.usr.name}".openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIKCyMzo4Y29R3xAo4RIfGmPvNGedP9Bg5ABDtBryDKz"
+    keys.icarus
   ];
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;

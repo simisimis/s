@@ -1,25 +1,29 @@
-{ config, lib, pkgs, unstable, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  unstable,
+  ...
+}:
 let
-  zfsCompatibleKernelPackages = lib.filterAttrs (name: kernelPackages:
+  keys = import ../../modules/keys.nix;
+  zfsCompatibleKernelPackages = lib.filterAttrs (
+    name: kernelPackages:
     (builtins.match "linux_[0-9]+_[0-9]+" name) != null
     && (builtins.tryEval kernelPackages).success
-    && (!kernelPackages.${config.boot.zfs.package.kernelModuleAttribute}.meta.broken))
-    pkgs.linuxKernel.packages;
-  latestKernelPackage = lib.last
-    (lib.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version))
-      (builtins.attrValues zfsCompatibleKernelPackages));
-in {
-  settings = import ./vars.nix;
-
+    && (!kernelPackages.${config.boot.zfs.package.kernelModuleAttribute}.meta.broken)
+  ) pkgs.linuxKernel.packages;
+  latestKernelPackage = lib.last (
+    lib.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)) (
+      builtins.attrValues zfsCompatibleKernelPackages
+    )
+  );
+in
+{
   imports = [
-    ../../nixos/base.nix
-    ../../nixos/workstation.nix
-    ../../modules/vars-schema.nix
     ./hardware-configuration.nix
     ./disko-config.nix
   ];
-  nixpkgs.overlays = [ (import ../../overlays) ];
-  nix.settings.trusted-users = [ "@wheel" ];
   nix.settings.access-tokens = [
     "github.com=${config.settings.platform.github.accessToken}"
   ];
@@ -55,22 +59,19 @@ in {
     200 wg_table
   '';
   networking = {
-    hostId = config.settings.hw.hostId;
-    hostName = config.settings.hw.hostName;
     interfaces.wlp194s0.useDHCP = true;
     interfaces.eth0.useDHCP = true;
 
     wireless = {
       enable = true; # Enables wireless support via wpa_supplicant.
       interfaces = [ "wlp194s0" ];
-      networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; })
-        config.settings.hw.wifi) // {
-          "SPACES" = {
-            extraConfig = ''
-              key_mgmt=NONE
-            '';
-          };
+      networks = (lib.mapAttrs (name: value: { pskRaw = "${value}"; }) config.settings.hw.wifi) // {
+        "SPACES" = {
+          extraConfig = ''
+            key_mgmt=NONE
+          '';
         };
+      };
 
       userControlled = true;
     };
@@ -99,7 +100,10 @@ in {
     firewall = {
       enable = true;
       trustedInterfaces = [ "tailscale0" ];
-      allowedUDPPorts = [ config.services.tailscale.port 51820 ];
+      allowedUDPPorts = [
+        config.services.tailscale.port
+        51820
+      ];
       allowedTCPPorts = [ ];
       checkReversePath = "loose";
     };
@@ -130,9 +134,10 @@ in {
     storageDriver = "zfs";
   };
   users.users."${config.settings.usr.name}" = {
-    extraGroups = [ "trezord" "seat" "wpa_supplicant" ];
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJr0kbjhI/GRS7eAy9CaJJzxELhGgOzZTWOOzKUpgCAO"
+    extraGroups = [
+      "trezord"
+      "seat"
+      "wpa_supplicant"
     ];
   };
 
@@ -165,7 +170,10 @@ in {
     };
   };
 
-  services.udev.packages = [ pkgs.chrysalis pkgs.trezor-udev-rules ];
+  services.udev.packages = [
+    pkgs.chrysalis
+    pkgs.trezor-udev-rules
+  ];
 
   services.trezord.enable = true;
   services.tailscale.enable = true;
@@ -182,7 +190,14 @@ in {
         "bluez5.enable-sbc-xq" = true;
         "bluez5.enable-msbc" = true;
         "bluez5.enable-hw-volume" = true;
-        "bluez5.roles" = [ "a2dp_sink" "a2dp_source" "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" ];
+        "bluez5.roles" = [
+          "a2dp_sink"
+          "a2dp_source"
+          "hsp_hs"
+          "hsp_ag"
+          "hfp_hf"
+          "hfp_ag"
+        ];
       };
     };
   };
@@ -190,13 +205,11 @@ in {
   services.syncthing = {
     enable = true;
     user = config.settings.usr.name;
-    configDir =
-      "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
+    configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
     settings = {
       folders = {
         "papyrus" = {
-          path =
-            "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
+          path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
         };
       };
     };
@@ -217,17 +230,19 @@ in {
   security.pam.services.sddm.fprintAuth = true;
 
   security.sudo.enable = true;
-  security.sudo.extraRules = [{
-    groups = [ "wheel" ];
-    commands = [
-      {
-        command = "${pkgs.systemd}/bin/systemctl restart *";
-        options = [ "NOPASSWD" ];
-      }
-      {
-        command = "${pkgs.systemd}/bin/journalctl *";
-        options = [ "NOPASSWD" ];
-      }
-    ];
-  }];
+  security.sudo.extraRules = [
+    {
+      groups = [ "wheel" ];
+      commands = [
+        {
+          command = "${pkgs.systemd}/bin/systemctl restart *";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "${pkgs.systemd}/bin/journalctl *";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 }

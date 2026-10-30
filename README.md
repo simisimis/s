@@ -9,12 +9,12 @@ A nix flake for:
 ## Examples
 ### NixOS
 ```bash
-$ sudo nixos-rebuild switch --flake git+ssh://git@github.com/simisimis/s#lavirinthos
+$ sudo nixos-rebuild switch --flake git+ssh://git@github.com/simisimis/s#icarus
 ```
 
 ### Home Manager
 ```bash
-$ home-manager switch --flake git+ssh://git@github.com/simisimis/s#lavirinthos
+$ home-manager switch --flake git+ssh://git@github.com/simisimis/s#icarus
 ```
 
 ### Dev shell

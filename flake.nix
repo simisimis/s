@@ -42,8 +42,9 @@
         lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./hosts)
       );
       hostsWith = file: builtins.filter (host: builtins.pathExists ./hosts/${host}/${file}) hostDirs;
-      hostVars = host: import ./hosts/${host}/vars.nix;
+      hostRole = host: (import ./hosts/${host}/vars.nix).hw.role or "headless";
 
+      # Wiring shared by every NixOS host: layers, vars, overlays, identity.
       mkHost =
         hostname:
         lib.nixosSystem {
@@ -55,36 +56,68 @@
               };
             }
             inputs.disko.nixosModules.disko
-            ./hosts/${hostname}/configuration.nix
-          ];
-        };
-      mkHome =
-        hostname:
-        let
-          role = (hostVars hostname).hw.role or "headless";
-        in
-        inputs.home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [
-            {
-              _module.args = args // {
-                inherit unstable hostname;
-              };
-            }
-            ./hosts/${hostname}/home.nix
-            ./hm/base.nix
-            ./hm/${role}.nix
+            ./nixos/base.nix
+            ./nixos/${hostRole hostname}.nix
             ./modules/vars-schema.nix
+            ./hosts/${hostname}/configuration.nix
             (
               { config, ... }:
               {
-                home = {
-                  username = config.settings.usr.name;
-                  homeDirectory = "/home/${config.settings.usr.name}";
-                  stateVersion = "26.05";
-                };
+                settings = import ./hosts/${hostname}/vars.nix;
+                nixpkgs.overlays = [ (import ./overlays) ];
+                nix.settings.trusted-users = [ "@wheel" ];
+                networking.hostName = config.settings.hw.hostName;
+                networking.hostId = config.settings.hw.hostId;
               }
             )
+          ];
+        };
+
+      # Wiring shared by mkHome and mkProfile: args, vars, overlays, identity.
+      homeCommonModules = name: varsFile: [
+        {
+          _module.args = args // {
+            inherit unstable;
+            hostname = name;
+          };
+        }
+        ./modules/vars-schema.nix
+        (
+          { config, ... }:
+          {
+            settings = import varsFile;
+            nixpkgs.overlays = [ (import ./overlays) ];
+            programs.home-manager.enable = true;
+            home = {
+              username = config.settings.usr.name;
+              homeDirectory = "/home/${config.settings.usr.name}";
+              stateVersion = "26.05";
+            };
+          }
+        )
+      ];
+      mkHome =
+        hostname:
+        inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = homeCommonModules hostname ./hosts/${hostname}/vars.nix ++ [
+            ./hosts/${hostname}/home.nix
+            ./hm/base.nix
+            ./hm/${hostRole hostname}.nix
+          ];
+        };
+      # A profile is a Home Manager config without a NixOS host (non-NixOS
+      # machine), so it composes the headless and devops layers explicitly.
+      mkProfile =
+        name:
+        inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = homeCommonModules name ./profiles/${name}/vars.nix ++ [
+            ./profiles/${name}/home.nix
+            ./hm/base.nix
+            ./hm/headless.nix
+            ./hm/devops.nix
+            { targets.genericLinux.enable = true; }
           ];
         };
       mkBaseEnv =
@@ -120,7 +153,9 @@
         };
     in
     flake-utils.lib.eachSystemPassThrough [ system ] (_: {
-      homeConfigurations = lib.genAttrs (hostsWith "home.nix") mkHome;
+      homeConfigurations = lib.genAttrs (hostsWith "home.nix") mkHome // {
+        devops = mkProfile "devops";
+      };
       nixosConfigurations = lib.genAttrs (hostsWith "configuration.nix") mkHost;
       templates = {
         rust = {

@@ -1,9 +1,5 @@
 # siMONSTER specific home manager configuration
 { config, pkgs, unstable, ... }: {
-  settings = import ./vars.nix;
-  # import overlays
-  nixpkgs.overlays = [ (import ../../overlays) ];
-  programs.home-manager.enable = true;
   programs.diff-so-fancy.enable = true;
   programs.git = {
     settings = {
@@ -18,8 +14,6 @@
       fetch.pruneTags = true;
     };
   };
-  home.username = config.settings.usr.name;
-  home.homeDirectory = "/home/${config.settings.usr.name}";
 
   services.kanshi.enable = true;
   services.kanshi.settings = [{

@@ -14,10 +14,6 @@ let
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
-  settings = import ./vars.nix;
-  nixpkgs.overlays = [ (import ../../overlays) ];
-
-  programs.home-manager.enable = true;
   programs.diff-so-fancy.enable = true;
   programs.git = {
     signing.key = "FDD52A4151D7E8E4";
@@ -32,8 +28,6 @@ in
       fetch.pruneTags = true;
     };
   };
-  home.username = config.settings.usr.name;
-  home.homeDirectory = "/home/${config.settings.usr.name}";
 
   services.kanshi.enable = true;
   # Manage outputs in both Hyprland and Niri sessions.
@@ -156,7 +150,7 @@ in
     };
     timeouts = [
       {
-        timeout = 60;
+        timeout = 120;
         command = "${brightnessctl} set 10% --save";
         resumeCommand = "${brightnessctl} --restore";
       }

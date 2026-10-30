@@ -40,14 +40,6 @@ with lib;
           type = with types; uniq str;
         };
         ssh = {
-          gitea.identityFile = mkOption {
-            default = "~/.ssh/id_rsa_gitea_src_host";
-            type = with types; uniq str;
-          };
-          backute.identityFile = mkOption {
-            default = "~/.ssh/id_rsa_backute_src_host";
-            type = with types; uniq str;
-          };
           siMONSTER.identityFile = mkOption {
             default = "~/.ssh/id_rsa_src_host";
             type = with types; uniq str;
