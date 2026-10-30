@@ -155,16 +155,6 @@ in
     ];
   };
 
-  services = {
-    gpg-agent = {
-      defaultCacheTtl = 86400;
-      maxCacheTtl = 86400;
-      maxCacheTtlSsh = 86400;
-      defaultCacheTtlSsh = 86400;
-    };
-  };
-  fonts.fontconfig.enable = true;
-
   home.packages = with pkgs; [
     unstable.taskwarrior3
     unstable.agent-browser
@@ -207,92 +197,6 @@ in
     (writeShellScriptBin "wpa-add" (builtins.readFile ../../scripts/wpa-add-network))
   ];
 
-  programs.wezterm = {
-    enable = true;
-    colorSchemes = {
-      simColors = {
-        ansi = [
-          "#2e3436"
-          "#fc3e3e"
-          "#66b31e"
-          "#f6d922"
-          "#5183c4"
-          "#c36ccf"
-          "#19a5a7"
-          "#d3d7cf"
-        ];
-        brights = [
-          "#555753"
-          "#f06464"
-          "#8ae234"
-          "#fce94f"
-          "#729fcf"
-          "#c164b6"
-          "#429bf1"
-          "#eeeeec"
-        ];
-        background = "#3f3f3f";
-        foreground = "#dedede";
-        cursor_bg = "#949cbb";
-        cursor_border = "#949cbb";
-        cursor_fg = "#303446";
-        selection_bg = "#737994";
-        selection_fg = "#303446";
-      };
-    };
-    extraConfig = ''
-      local os = require "os";
-      return {
-        default_ssh_auth_sock = os.getenv 'SSH_AUTH_SOCK',
-        enable_kitty_keyboard = true,
-        enable_tab_bar = false,
-        harfbuzz_features = {"calt=0", "cv01", "cv02", "cv04", "ss01", "ss03", "ss04", "cv31", "cv08", "cv30", "cv27"},
-        font = wezterm.font('Fira Code', { weight = 'Light'}),
-        font_size = 12,
-        color_scheme = "simColors",
-        -- #Scrollback
-        -- #scrollback_lines = 10000,
-
-        -- Window
-        window_padding = {
-          left = 10,
-          right = 10,
-          top = 10,
-          bottom = 10,
-        },
-        -- Let Niri and Zellij own Super/Mod shortcuts.
-        keys = {
-          { key = "-", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "0", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "1", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "2", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "3", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "4", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "5", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "6", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "7", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "8", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "9", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "=", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "[", mods = "SHIFT|SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "]", mods = "SHIFT|SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "c", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "f", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "k", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "m", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "n", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "r", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "t", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "v", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "w", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "{", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "{", mods = "SHIFT|SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "}", mods = "SUPER", action = wezterm.action.DisableDefaultAssignment },
-          { key = "}", mods = "SHIFT|SUPER", action = wezterm.action.DisableDefaultAssignment },
-        },
-      }
-    '';
-  };
   programs.alacritty = {
     enable = true;
     settings = {
@@ -346,24 +250,6 @@ in
       window.opacity = 1;
     };
   };
-  services.mako = {
-    enable = true;
-    settings = {
-      anchor = "bottom-right";
-      font = "Fira Code 12";
-      background-color = "#44485b";
-      text-color = "#c0caf5";
-      width = 350;
-      margin = "0,20,20";
-      padding = "10";
-      border-size = 2;
-      border-color = "#414868";
-      border-radius = 5;
-      default-timeout = 5000;
-      group-by = "summary";
-    };
-  };
-
   programs.ssh = {
     extraOptionOverrides = {
       CanonicalizeHostname = "yes";
@@ -419,89 +305,5 @@ in
       # }
     '';
   };
-  programs.yazi = {
-    enable = true;
-    enableZshIntegration = true;
-    package = unstable.yazi;
-    settings = {
-      open.rules = [
-        {
-          mime = "text/*";
-          use = [
-            "edit"
-            "reveal"
-          ];
-        }
-        {
-          mime = "image/*";
-          use = [
-            "image"
-            "reveal"
-          ];
-        }
-        {
-          mime = "video/*";
-          use = [
-            "video"
-            "reveal"
-          ];
-        }
-        {
-          mime = "application/json";
-          use = [
-            "edit"
-            "reveal"
-          ];
-        }
-        {
-          mime = "application/pdf";
-          use = "zathura";
-        }
-        {
-          mime = "*";
-          use = [
-            "edit"
-            "open"
-            "reveal"
-          ];
-        }
-      ];
-      opener = {
-        text = [
-          {
-            run = ''hx "$@" '';
-            for = "linux";
-          }
-        ];
-        zathura = [
-          {
-            run = ''zathura "$@"'';
-            block = true;
-          }
-        ];
-        image = [
-          {
-            run = ''imv "$@" '';
-            block = true;
-            for = "linux";
-          }
-        ];
-        video = [
-          {
-            run = ''mpv "$@" '';
-            block = true;
-            for = "linux";
-          }
-        ];
-        reveal = [
-          {
-            run = ''${pkgs.exiftool}/bin/exiftool "$1";'';
-            block = true;
-          }
-        ];
-      };
-    };
-  };
-  programs.yt-dlp.enable = true;
   programs.obs-studio.enable = true;
 }
