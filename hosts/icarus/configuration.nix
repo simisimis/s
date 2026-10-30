@@ -7,17 +7,6 @@
 }:
 let
   keys = import ../../modules/keys.nix;
-  zfsCompatibleKernelPackages = lib.filterAttrs (
-    name: kernelPackages:
-    (builtins.match "linux_[0-9]+_[0-9]+" name) != null
-    && (builtins.tryEval kernelPackages).success
-    && (!kernelPackages.${config.boot.zfs.package.kernelModuleAttribute}.meta.broken)
-  ) pkgs.linuxKernel.packages;
-  latestKernelPackage = lib.last (
-    lib.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)) (
-      builtins.attrValues zfsCompatibleKernelPackages
-    )
-  );
 in
 {
   imports = [
@@ -27,29 +16,6 @@ in
   nix.settings.access-tokens = [
     "github.com=${config.settings.platform.github.accessToken}"
   ];
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
-
-  services.seatd.enable = true;
-
-  services.zfs = {
-    trim.enable = true;
-    autoScrub.enable = true;
-    autoSnapshot = {
-      enable = true;
-      hourly = 0;
-      daily = 2;
-      weekly = 1;
-      monthly = 0;
-      frequent = 0;
-    };
-  };
-
-  boot.kernelPackages = latestKernelPackage;
-  boot.zfs.package = pkgs.zfs_unstable;
 
   environment.etc."iproute2/rt_tables.d/wg.conf".text = ''
     200 wg_table
@@ -116,8 +82,6 @@ in
     unstable.llama-cpp-vulkan
   ];
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
   #hardware.video.hidpi.enable = true;
   hardware.ledger.enable = true;
 
@@ -142,7 +106,6 @@ in
     };
   };
 
-  programs.dconf.enable = true;
   programs.nix-ld.enable = true;
   programs.niri.enable = true;
   services.logind.settings.Login.HandlePowerKey = "suspend";
@@ -193,18 +156,6 @@ in
     };
   };
 
-  services.syncthing = {
-    enable = true;
-    user = config.settings.usr.name;
-    configDir = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.configDir}";
-    settings = {
-      folders = {
-        "papyrus" = {
-          path = "/home/${config.settings.usr.name}/${config.settings.services.syncthing.dataDir}";
-        };
-      };
-    };
-  };
   services.llama-cpp = {
     enable = false;
     model = "/home/${config.settings.usr.name}/dev/llm/Qwen3.5-9B-Q4_K_M.gguf";
@@ -221,19 +172,4 @@ in
   security.pam.services.sddm.fprintAuth = true;
 
   security.sudo.enable = true;
-  security.sudo.extraRules = [
-    {
-      groups = [ "wheel" ];
-      commands = [
-        {
-          command = "${pkgs.systemd}/bin/systemctl restart *";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "${pkgs.systemd}/bin/journalctl *";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
 }
