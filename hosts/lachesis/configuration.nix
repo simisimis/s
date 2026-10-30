@@ -27,16 +27,10 @@ in
       enable = true;
 
       allowedUDPPorts = [
-        8472
         config.services.tailscale.port
         51820
       ];
-      allowedTCPPorts = [
-        1400
-        6443
-        2379
-        2380
-      ];
+      allowedTCPPorts = [ 1400 ];
     };
 
   };
