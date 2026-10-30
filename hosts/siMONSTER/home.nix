@@ -17,6 +17,7 @@
     #saleae-logic
 
     unstable.prusa-slicer
+    unstable.llmfit
     #minecraft
     #airshipper
   ];
