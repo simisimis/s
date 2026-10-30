@@ -39,6 +39,11 @@ with lib;
           default = "simonas@narbuto.lt";
           type = with types; uniq str;
         };
+        signingKey = mkOption {
+          default = "";
+          type = with types; uniq str;
+          description = "GPG key id for git commit signing; empty disables";
+        };
         ssh = {
           siMONSTER.identityFile = mkOption {
             default = "~/.ssh/id_rsa_src_host";

@@ -18,9 +18,7 @@ let
 in
 {
   imports = [
-    ./modules/zellij
-    ./modules/helix
-    ./modules/jujutsu
+    ./devops.nix
     ./modules/hyprland
     ./modules/niri
   ];
@@ -49,6 +47,7 @@ in
     ethtool
     brightnessctl
     pamixer
+    udiskie
     slurp
     grim
     (writeShellScriptBin "trimgrim" (builtins.readFile ../scripts/trimgrim))
@@ -132,13 +131,20 @@ in
     #unstable.prusa-slicer
   ];
 
+  systemd.user.targets.tray = {
+    Unit = {
+      Description = "Home Manager System Tray";
+      Requires = [ "graphical-session-pre.target" ];
+    };
+  };
   # services
   services.gnome-keyring.enable = true;
   services.gpg-agent.pinentry.package = pkgs.pinentry-gnome3;
+  services.udiskie = {
+    enable = true;
+    tray = "never";
+  };
 
-  programs.zellij.enable = true;
-  programs.helix.enable = true;
-  programs.jujutsu.enable = true;
   programs.zathura.enable = true;
   programs.rofi.enable = true;
   programs.rofi.theme = "Pop-Dark.rasi";

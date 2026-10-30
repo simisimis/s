@@ -14,21 +14,6 @@ let
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
-  programs.diff-so-fancy.enable = true;
-  programs.git = {
-    signing.key = "FDD52A4151D7E8E4";
-    settings = {
-      user.email = config.settings.usr.email;
-      user.name = config.settings.usr.fullName;
-      github.user = config.settings.usr.username;
-      alias = {
-        hist = "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-      };
-      fetch.prune = true;
-      fetch.pruneTags = true;
-    };
-  };
-
   services.kanshi.enable = true;
   # Manage outputs in both Hyprland and Niri sessions.
   services.kanshi.systemdTarget = "graphical-session.target";
@@ -190,23 +175,10 @@ in
     arduino-ide
     libGL
     subsurface
-    mtr
     nodejs-slim_26
-    just
-    pre-commit
     unstable.prusa-slicer
-    grpcurl
-    xh
-    dust
-    actionlint
-    tmate
-    gh
     graphviz
     exiftool
-    dust
-    procs
-    eza
-    tldr
     darktable
     unstable.codex
     unstable.pi-coding-agent
@@ -221,29 +193,9 @@ in
 
     #dev
     stdenv.cc
-    helm-docs
-    kustomize
-    ec2-api-tools
-    awscli2
-    #eksctl
-    #eks-node-viewer
-    #ssm-session-manager-plugin
-    kubernetes-helm
-    kubecolor
-    krew
-    unstable.helmfile
-    ksd
-    #(google-cloud-sdk.withExtraComponents
-    #  [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     doctl
-    kubectx
-    kubectl
-    k9s
-    stern
-    unstable.terraform
 
     #saleae-logic
-    dioxus-cli
     #radicle-node
     jdk25
 
@@ -432,17 +384,12 @@ in
     };
   };
   programs.zsh = {
-    cdpath = [ "~/dev" ];
     initContent = ''
-      source <(kubectl completion zsh)
       export JAVA_HOME="${pkgs.jdk25}"
       export BW_SESSION="${config.settings.services.vaultwarden.sessionId}"
       #export JIRA_API_TOKEN=""
       #export AWS_PROFILE=""
       export LD_LIBRARY_PATH="${pkgs.libGL}/lib:/run/opengl-driver/lib"
-
-      # make completion work with kubecolor
-      compdef kubecolor=kubectl
 
       # todo () {
       #   local description="$*" # get all arguments
@@ -471,25 +418,7 @@ in
       #   aws ssm start-session --target $INSTANCEID --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters "$PARAMETERS" 
       # }
     '';
-    shellAliases = {
-      kns = "kubens";
-      kctx = "kubectx";
-      kubectl = "kubecolor";
-      k = "kubecolor";
-    };
-    plugins = [
-      {
-        name = "fzf-tab";
-        src = pkgs.fetchFromGitHub {
-          owner = "Aloxaf";
-          repo = "fzf-tab";
-          rev = "v1.1.1";
-          sha256 = "sha256-0/YOL1/G2SWncbLNaclSYUz7VyfWu+OB8TYJYm4NYkM=";
-        };
-      }
-    ];
   };
-  programs.zoxide.enable = true;
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;

@@ -1,20 +1,5 @@
 # siMONSTER specific home manager configuration
 { config, pkgs, unstable, ... }: {
-  programs.diff-so-fancy.enable = true;
-  programs.git = {
-    settings = {
-      user.email = config.settings.usr.email;
-      user.name = config.settings.usr.fullName;
-      github.user = config.settings.usr.username;
-      alias = {
-        hist =
-          "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-      };
-      fetch.prune = true;
-      fetch.pruneTags = true;
-    };
-  };
-
   services.kanshi.enable = true;
   services.kanshi.settings = [{
     profile.name = "office";

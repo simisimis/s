@@ -1,6 +1,16 @@
 # hm base
-{ config, pkgs, unstable, ... }: {
-  imports = [ ./modules/starship.nix ];
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
+  imports = [
+    ./modules/starship.nix
+    ./modules/helix
+    ./modules/jujutsu
+  ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -10,9 +20,7 @@
     bitwarden-cli
     usbutils
     screen
-    pamixer
     gopass
-    udiskie
     pfetch
     jq
     bottom
@@ -27,17 +35,7 @@
     };
   };
   programs.gpg.enable = true;
-  systemd.user.targets.tray = {
-    Unit = {
-      Description = "Home Manager System Tray";
-      Requires = [ "graphical-session-pre.target" ];
-    };
-  };
   # services
-  services.udiskie = {
-    enable = true;
-    tray = "never";
-  };
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
@@ -54,16 +52,33 @@
   };
   programs.bat = {
     enable = true;
-    config = { theme = "TwoDark"; };
+    config = {
+      theme = "TwoDark";
+    };
+  };
+  programs.helix.enable = true;
+  programs.jujutsu.enable = true;
+  programs.diff-so-fancy = {
+    enable = true;
+    enableGitIntegration = true;
   };
   programs.git = {
     enable = true;
+    signing.key = lib.mkIf (config.settings.usr.signingKey != "") config.settings.usr.signingKey;
     settings = {
+      user.email = config.settings.usr.email;
+      user.name = config.settings.usr.fullName;
+      github.user = config.settings.usr.username;
       hub.protocol = "https";
       color.ui = true;
       pull.rebase = true;
       commit.gpgSign = true;
       init.defaultBranch = "main";
+      fetch.prune = true;
+      fetch.pruneTags = true;
+      alias = {
+        hist = "log --color --pretty=format:'%Cred%h%Creset - %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+      };
     };
   };
 
@@ -125,7 +140,6 @@
       GIT_EDITOR = EDITOR;
       # java apps on wayland like android-studio or arduino
       _JAVA_AWT_WM_NONREPARENTING = 1;
-      LIBVA_DRIVER_NAME = "iHD";
     };
     # envExtra
     # profileExtra
