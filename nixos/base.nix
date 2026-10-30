@@ -1,4 +1,11 @@
-{ config, lib, pkgs, unstable, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  unstable,
+  ...
+}:
+{
 
   nix.extraOptions = ''
     keep-outputs = false
@@ -11,8 +18,16 @@
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.firewall.enable = lib.mkDefault true;
-  #networking.firewall.allowedTCPPorts = [ 8384 22000 ];
-  #networking.firewall.allowedUDPPorts = [ 22000 21027 ];
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
+
+  boot.loader.systemd-boot.enable = lib.mkDefault true;
+  boot.loader.systemd-boot.configurationLimit = lib.mkDefault 5;
+  boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
+  boot.zfs.forceImportRoot = lib.mkDefault false;
+
+  services.openssh.enable = lib.mkDefault true;
+  services.openssh.settings.PasswordAuthentication = lib.mkDefault false;
+  services.tailscale.enable = lib.mkDefault true;
 
   # Set your time zone.
   time.timeZone = "Europe/Athens";
@@ -20,22 +35,11 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  services.pulseaudio.enable = false;
-
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
   services.syncthing = {
     overrideFolders = true;
     settings = {
 
-      devices = (lib.mapAttrs (name: value: { id = "${value}"; })
-        config.settings.services.syncthing.ids);
+      devices = (lib.mapAttrs (name: value: { id = "${value}"; }) config.settings.services.syncthing.ids);
       folders = {
         "papyrus" = {
           # Name of folder in Syncthing, also the folder ID
@@ -53,29 +57,24 @@
       home = "/home/${config.settings.usr.name}";
       isNormalUser = true;
       group = "users";
-      extraGroups = [ "wheel" "audio" "video" "docker" "input" "dialout" ];
+      extraGroups = [
+        "wheel"
+        "audio"
+        "video"
+        "docker"
+        "input"
+        "dialout"
+      ];
       useDefaultShell = true;
       hashedPassword = config.settings.usr.pwdHash;
     };
   };
-
-  fonts.packages = with pkgs; [
-    noto-fonts
-    meslo-lg
-    fira-mono
-    fira-code
-    fira-code-symbols
-    nerd-fonts.droid-sans-mono
-  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     tcpdump
     #system
-    mesa-demos
-    libinput
-    wev
     sshfs
     lsof
     wget
@@ -89,6 +88,9 @@
     gnupg
     inetutils
     pciutils
+    pv
+    home-manager
+    tailscale
 
     #utils
     zip
@@ -99,13 +101,6 @@
     fd
     tree
     unstable.procs
-
-    linuxPackages.v4l2loopback
-
-    #fonts
-    meslo-lg
-    noto-fonts
-
   ];
 
   environment.variables = {

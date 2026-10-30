@@ -50,10 +50,6 @@ in
 
   boot.kernelPackages = latestKernelPackage;
   boot.zfs.package = pkgs.zfs_unstable;
-  boot.zfs.forceImportRoot = false;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   environment.etc."iproute2/rt_tables.d/wg.conf".text = ''
     200 wg_table
@@ -99,7 +95,6 @@ in
 
     firewall = {
       enable = true;
-      trustedInterfaces = [ "tailscale0" ];
       allowedUDPPorts = [
         config.services.tailscale.port
         51820
@@ -113,10 +108,8 @@ in
     gcr
     fprintd
     polkit_gnome
-    tailscale
     dmidecode
     libva-utils
-    home-manager
     docker-compose
     chrysalis
     vulkan-tools
@@ -176,8 +169,6 @@ in
   ];
 
   services.trezord.enable = true;
-  services.tailscale.enable = true;
-  services.openssh.enable = true;
   services.openssh.openFirewall = true;
 
   services.fwupd.enable = true;

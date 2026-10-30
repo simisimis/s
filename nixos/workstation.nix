@@ -1,14 +1,41 @@
-{ config, unstable, ... }: {
+{ config, pkgs, unstable, ... }: {
   # Extra kernel modules
   # Register a v4l2loopback device at boot
   boot.kernelModules = [ "v4l2loopback" ];
   # Extra kernel modules
   boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
+  services.pulseaudio.enable = false;
+
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
+  fonts.packages = with pkgs; [
+    noto-fonts
+    meslo-lg
+    fira-mono
+    fira-code
+    fira-code-symbols
+    nerd-fonts.droid-sans-mono
+  ];
+
   environment.systemPackages = with unstable; [
     linuxPackages.v4l2loopback
     chrysalis
-  ];
+  ] ++ (with pkgs; [
+    mesa-demos
+    libinput
+    wev
+
+    #fonts
+    meslo-lg
+    noto-fonts
+  ]);
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;

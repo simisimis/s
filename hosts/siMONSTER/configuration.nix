@@ -1,7 +1,6 @@
 # siMONSTER host specific configuration
 { config, lib, pkgs, ... }:
 let
-  keys = import ../../modules/keys.nix;
   zfsCompatibleKernelPackages = lib.filterAttrs (name: kernelPackages:
     (builtins.match "linux_[0-9]+_[0-9]+" name) != null
     && (builtins.tryEval kernelPackages).success
@@ -10,13 +9,10 @@ let
   latestKernelPackage = lib.last
     (lib.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version))
       (builtins.attrValues zfsCompatibleKernelPackages));
-  initrdUnlockShell = pkgs.writeShellScript "initrd-zfs-unlock-shell" ''
-    echo "Waiting for initrd password prompts"
-    exec ${config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent
-  '';
 in {
   imports = [
     ./hardware-configuration.nix
+    ../../nixos/initrd-unlock.nix
   ];
 
   # Narrower than the "@wheel" default set by mkHost; mkForce keeps it exact.
@@ -26,34 +22,13 @@ in {
   # Use the systemd-boot EFI boot loader.
   boot.kernelPackages = latestKernelPackage;
   boot.zfs.package = pkgs.zfs_unstable;
-  boot.zfs.forceImportRoot = false;
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd = {
-    kernelModules = [ "r8169" ];
-    secrets = { "/etc/secrets/initrd/initrd-openssh-key" = null; };
-    systemd = {
-      extraBin.initrd-unlock = "${initrdUnlockShell}";
-      users.root.shell = initrdUnlockShell;
-    };
-    network = {
-      enable = true;
-      ssh = {
-        enable = true;
-        port = 2222;
-        hostKeys = [ /etc/secrets/initrd/initrd-openssh-key ];
-        authorizedKeys = [ keys.initrd ];
-      };
-    };
-  };
+  boot.initrd.kernelModules = [ "r8169" ];
 
   networking.interfaces.enp5s0.useDHCP = true;
   networking.interfaces.enp5s1.useDHCP = false;
   networking.firewall = {
     enable = true;
-    trustedInterfaces = [ "tailscale0" ];
     allowedUDPPorts = [ config.services.tailscale.port ];
   };
 
@@ -77,8 +52,6 @@ in {
   };
   security.pam.services.swaylock = { };
   #virtualisation.virtualbox.host.enableExtensionPack = true;
-  services.tailscale.enable = true;
-  services.openssh.enable = true;
 
   services.udev.extraRules = ''
     # saleae logic analyser
